@@ -6,11 +6,13 @@ import net.sourceforge.stripes.action.ActionBeanContext;
 public abstract class AbstractActionBean implements ActionBean {
 	private ActionBeanContext context;
 
+	@Override
 	public final ActionBeanContext getContext() {
-		return context;
+		return this.context;
 	}
 
-	public final void setContext(ActionBeanContext context) {
+	@Override
+	public final void setContext(final ActionBeanContext context) {
 		this.context = context;
 	}
 }

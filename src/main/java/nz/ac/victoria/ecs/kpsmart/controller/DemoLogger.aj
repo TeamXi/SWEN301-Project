@@ -7,7 +7,7 @@ import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.ActionBean;
 
 public final aspect DemoLogger {
-	private pointcut actions() : execution(Resolution ActionBean+.*());
+	private final pointcut actions() : execution(Resolution ActionBean+.*());
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	before() : actions() {
