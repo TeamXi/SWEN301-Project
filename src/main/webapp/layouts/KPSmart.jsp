@@ -22,6 +22,9 @@
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown">Enter Event <b class="caret"></b></a>
 									<ul class="dropdown-menu">
 										<li><a href="${pageContext.request.contextPath }/event/mail">Mail Delivery</a>
+										<li><a href="${pageContext.request.contextPath }/event/customer">Customer Price Update</a></li>
+										<li><a href="${pageContext.request.contextPath }/event/transport">Transport Cost Update</a></li>
+										<li><a href="${pageContext.request.contextPath }/event/discontinued">Transport Discontinued</a></li>
 									</ul>
 								</li>
 							</ul>
@@ -33,7 +36,9 @@
 			</div>
 			
 			<div class="container-fluid">
-				<stripes:layout-component name="content" />
+				<div class="row-fluid">
+					<stripes:layout-component name="content" />
+				</div>
 			</div>
 		</body>
 	</html>

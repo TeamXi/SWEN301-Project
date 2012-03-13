@@ -5,6 +5,10 @@ import net.sourceforge.stripes.action.ActionBeanContext;
 
 public abstract class AbstractActionBean implements ActionBean {
 	private ActionBeanContext context;
+	
+	public AbstractActionBean() {
+		// Inject with Guice
+	}
 
 	@Override
 	public final ActionBeanContext getContext() {
