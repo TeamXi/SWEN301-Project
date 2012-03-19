@@ -14,22 +14,28 @@
 			<div id="menu" class="navbar navbar-fixed-top">
 				<div class="navbar-inner">
 					<div class="container-fluid">
-						<a href="${pageContext.request.contextPath}/home" class="brand">KPSmart</a>
+						<a href="${pageContext.request.contextPath}/dashboard" class="brand">KPSmart</a>
 						<div class="nav-collapse">
 							<ul class="nav">
-								<li><a href="${pageContext.request.contextPath}/home">Home</a></li>
+								<li><a href="${pageContext.request.contextPath}/dashboard">Home</a></li>
+								<li><a href="${pageContext.request.contextPath }/event/mail">Mail Delivery</a>
 								<li class="dropdown">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown">Enter Event <b class="caret"></b></a>
+									<a href="${pageContext.request.contextPath }/event/route#list" class="dropdown-toggle" data-toggle="dropdown">View Routes<b class="caret"></b></a>
 									<ul class="dropdown-menu">
-										<li><a href="${pageContext.request.contextPath }/event/mail">Mail Delivery</a>
-										<li><a href="${pageContext.request.contextPath }/event/customer">Customer Price Update</a></li>
-										<li><a href="${pageContext.request.contextPath }/event/transport">Transport Cost Update</a></li>
-										<li><a href="${pageContext.request.contextPath }/event/discontinued">Transport Discontinued</a></li>
+										<li><a href="${pageContext.request.contextPath }/event/route#new">New</a></li>
 									</ul>
 								</li>
 							</ul>
 							
-							<p class="navbar-text pull-right">You are logged in as ...</p>
+							<ul class="nav pull-right">
+								<li class="dropdown">
+									<a href="" class="dropdown-toggle" data-toggle="dropdown">Log in<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+										<li><a href="">Manager</a></li>
+										<li><a href="">Clerk</a></li>
+									</ul>
+								</li>
+							</ul>
 						</div>
 					</div>
 				</div>
