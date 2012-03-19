@@ -4,6 +4,7 @@ import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.HandlesEvent;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.MailDeliveryEvent;
 
 @UrlBinding("/event/{$event}")
 public final class EventActionBean extends AbstractActionBean {
