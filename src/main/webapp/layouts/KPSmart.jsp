@@ -8,9 +8,12 @@
 		<head>
 			<title><stripes:layout-component name="title" /></title>
 			<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.css" />
+			<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css" />
+			<stripes:layout-component name="styles" />
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jQuery-1.7.0.min.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/main.js"></script>
+			<stripes:layout-component name="scripts" />
 		</head>
 		
 		<body>
@@ -51,7 +54,7 @@
 			
 
 			
-			<div class="container-fluid">
+			<div class="container">
 				<div class="row-fluid">
 					<stripes:layout-component name="content" />
 				</div>

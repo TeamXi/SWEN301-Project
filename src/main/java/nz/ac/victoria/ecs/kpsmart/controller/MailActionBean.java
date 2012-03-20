@@ -2,26 +2,51 @@ package nz.ac.victoria.ecs.kpsmart.controller;
 
 import net.sourceforge.stripes.action.DefaultHandler;
 import net.sourceforge.stripes.action.ForwardResolution;
+import net.sourceforge.stripes.action.HandlesEvent;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
+import net.sourceforge.stripes.ajax.JavaScriptResolution;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
+import nz.ac.victoria.ecs.kpsmart.state.manipulation.StateManipulator;
 
 @UrlBinding("/event/mail?{$event}")
 public class MailActionBean extends AbstractActionBean {
 	
-	private String source = "This";
+	private String source;
 	
 	private String destination;
 
-	private int priority;
+	private Priority priority;
 	
 	private float weight;
 	
 	private float volume;
 	
-	
 	@DefaultHandler
 	public Resolution defaultEvent() {
 		return new ForwardResolution("/views/event/mail.jsp");
+	}
+	
+	@HandlesEvent("new")
+	public Resolution newMailDelivery() {
+		MailDelivery delivery = processDelivery();
+		if(delivery != null) {
+			getStateManipulator().saveMailDelivery(delivery);
+			return new JavaScriptResolution("OK");
+		}
+		else {
+			return new JavaScriptResolution("ERROR");
+		}
+	}
+	
+	private MailDelivery processDelivery() {
+		MailDelivery delivery = new MailDelivery();
+		delivery.setVolume(volume);
+		delivery.setWeight(weight);
+		delivery.setPriority(priority);
+		// TODO: Magic path finding
+		return delivery;
 	}
 	
 	/**
@@ -55,15 +80,15 @@ public class MailActionBean extends AbstractActionBean {
 	/**
 	 * @return the priority
 	 */
-	public int getPriority() {
-		return priority;
+	public String getPriority() {
+		return priority.toString();
 	}
 
 	/**
 	 * @param priority the priority to set
 	 */
-	public void setPriority(int priority) {
-		this.priority = priority;
+	public void setPriority(String priority) {
+		this.priority = Priority.valueOf(priority);
 	}
 
 	/**
