@@ -6,7 +6,7 @@ import net.sourceforge.stripes.action.HandlesEvent;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 
-@UrlBinding("/{$event}")
+@UrlBinding("/dashboard")
 public final class HomeActionBean extends AbstractActionBean {
 	@DefaultHandler @HandlesEvent("home")
 	public Resolution homeAction() {
