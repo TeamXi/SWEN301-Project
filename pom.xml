@@ -38,9 +38,14 @@
 			<version>1.6.11</version>
 		</dependency>
 		<dependency>
-			<groupId>hibernate</groupId>
-			<artifactId>hibernate</artifactId>
-			<version>3.0.5</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>4.1.1.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>4.1.1.Final</version>
 		</dependency>
 
 		<dependency>
@@ -74,6 +79,11 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<version>10.8.2.2</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>

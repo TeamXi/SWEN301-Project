@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 
@@ -15,7 +14,6 @@ public final class TransportDiscontinuedEvent extends Event {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	
-	@ManyToMany
 	private Route route;
 
 	public long getId() {
@@ -33,6 +31,11 @@ public final class TransportDiscontinuedEvent extends Event {
 	public void setRoute(Route route) {
 		this.route = route;
 	}
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public String toString() {

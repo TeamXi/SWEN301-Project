@@ -4,11 +4,12 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 
 @Entity
 public final class MailDelivery implements Serializable {
@@ -19,7 +20,7 @@ public final class MailDelivery implements Serializable {
 	@ManyToMany
 	private List<Route> route;
 	
-	@OneToMany
+	@Enumerated(EnumType.STRING)
 	private Priority priority;
 	
 	private float weight;

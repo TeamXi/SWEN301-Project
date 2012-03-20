@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
@@ -22,7 +21,6 @@ public final class MailDeliveryEvent extends Event {
 	@ManyToMany
 	private List<Route> route;
 	
-	@OneToMany
 	private Priority priority;
 	
 	private float weight;

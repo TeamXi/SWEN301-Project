@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 
@@ -15,7 +14,6 @@ public final class TransportCostUpdateEvent extends Event {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	
-	@ManyToMany
 	private Route route;
 	
 	
@@ -54,6 +52,11 @@ public final class TransportCostUpdateEvent extends Event {
 	public void setNewVolumeUnitCost(float newVolumeUnitCost) {
 		this.newVolumeUnitCost = newVolumeUnitCost;
 	}
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public String toString() {
