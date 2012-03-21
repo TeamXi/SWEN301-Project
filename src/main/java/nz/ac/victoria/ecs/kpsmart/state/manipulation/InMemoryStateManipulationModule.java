@@ -3,7 +3,7 @@ package nz.ac.victoria.ecs.kpsmart.state.manipulation;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 
-public final class InMemoryStatManiplationModule extends AbstractModule {
+public final class InMemoryStateManipulationModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
