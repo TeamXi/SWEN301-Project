@@ -26,6 +26,14 @@ public final class MailDelivery implements Serializable {
 	private float weight;
 	
 	private float volume;
+	
+	public boolean isInternational() {
+		for (Route r : this.route)
+			if (!r.isInternational())
+				return false;
+		
+		return true;
+	}
 
 	public long getId() {
 		return id;

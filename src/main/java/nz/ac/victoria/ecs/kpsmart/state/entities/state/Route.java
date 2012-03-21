@@ -43,6 +43,10 @@ public final class Route implements Serializable {
 	private int duration;
 	
 	private boolean disabled;
+	
+	public boolean isInternational() {
+		return this.startPoint.isInternational() || this.endPoint.isInternational();
+	}
 
 	public long getId() {
 		return id;
