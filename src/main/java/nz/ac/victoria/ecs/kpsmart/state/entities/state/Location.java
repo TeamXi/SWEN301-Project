@@ -18,6 +18,8 @@ public final class Location implements Serializable {
 	private double latitude;
 	
 	private double longitude;
+	
+	private boolean international;
 
 	public long getId() {
 		return id;
@@ -59,7 +61,8 @@ public final class Location implements Serializable {
 	@Override
 	public String toString() {
 		return "Location [id=" + id + ", name=" + name + ", latitude="
-				+ latitude + ", longitude=" + longitude + "]";
+				+ latitude + ", longitude=" + longitude + ", international="
+				+ international + "]";
 	}
 
 	@Override
@@ -67,6 +70,7 @@ public final class Location implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + (international ? 1231 : 1237);
 		long temp;
 		temp = Double.doubleToLongBits(latitude);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -87,6 +91,8 @@ public final class Location implements Serializable {
 		Location other = (Location) obj;
 		if (id != other.id)
 			return false;
+		if (international != other.international)
+			return false;
 		if (Double.doubleToLongBits(latitude) != Double
 				.doubleToLongBits(other.latitude))
 			return false;
@@ -99,5 +105,13 @@ public final class Location implements Serializable {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	public boolean isInternational() {
+		return international;
+	}
+
+	public void setInternational(boolean international) {
+		this.international = international;
 	}
 }
