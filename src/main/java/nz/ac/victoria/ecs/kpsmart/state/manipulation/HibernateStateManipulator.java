@@ -25,16 +25,24 @@ public final class HibernateStateManipulator implements StateManipulator {
 
 	@Override
 	public void saveMailDelivery(final MailDelivery delivery) {
+		this.entityManager.getTransaction().begin();
 		this.entityManager.merge(delivery);
+		this.entityManager.flush();
+		this.entityManager.getTransaction().commit();
 	}
 
 	@Override
 	public Collection<Location> getAllLocations() {
-		CriteriaQuery<Location> cb = this.entityManager.getCriteriaBuilder().createQuery(Location.class);
-		Root<Location> root = cb.from(Location.class);
-		cb.select(root);
-		
-		return this.entityManager.createQuery(cb).getResultList();
+		try {
+			this.entityManager.getTransaction().begin();
+			CriteriaQuery<Location> cb = this.entityManager.getCriteriaBuilder().createQuery(Location.class);
+			Root<Location> root = cb.from(Location.class);
+			cb.select(root);
+			
+			return this.entityManager.createQuery(cb).getResultList();
+		} finally {
+			this.entityManager.getTransaction().commit();
+		}
 	}
 
 }
