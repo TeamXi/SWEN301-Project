@@ -7,7 +7,6 @@ import javax.servlet.ServletContextListener;
 
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.HibernateStateManipulationModule;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.InMemoryStateManipulationModule;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.InMemoryStateManipulator;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;

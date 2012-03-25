@@ -42,7 +42,7 @@ public final class Route implements Serializable {
 	
 	private int duration;
 	
-	private boolean disabled;
+	private Bool disabled;
 	
 	public boolean isInternational() {
 		return this.startPoint.isInternational() || this.endPoint.isInternational();
@@ -115,7 +115,8 @@ public final class Route implements Serializable {
 		result = prime * result + Float.floatToIntBits(carrierWeightUnitCost);
 		result = prime * result + Float.floatToIntBits(customerVolumeUnitCost);
 		result = prime * result + Float.floatToIntBits(customerWeightUnitCost);
-		result = prime * result + (disabled ? 1231 : 1237);
+		result = prime * result
+				+ ((disabled == null) ? 0 : disabled.hashCode());
 		result = prime * result + duration;
 		result = prime * result
 				+ ((endPoint == null) ? 0 : endPoint.hashCode());
@@ -241,10 +242,10 @@ public final class Route implements Serializable {
 	}
 
 	public boolean isDisabled() {
-		return disabled;
+		return disabled == Bool.True;
 	}
 
 	public void setDisabled(boolean disabled) {
-		this.disabled = disabled;
+		this.disabled = disabled ? Bool.True : Bool.False;
 	}
 }

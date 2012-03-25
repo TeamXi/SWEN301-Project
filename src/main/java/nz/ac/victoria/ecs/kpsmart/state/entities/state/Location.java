@@ -3,6 +3,8 @@ package nz.ac.victoria.ecs.kpsmart.state.entities.state;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +21,8 @@ public final class Location implements Serializable {
 	
 	private double longitude;
 	
-	private boolean international;
+	@Enumerated(EnumType.STRING)
+	private Bool international;
 
 	public long getId() {
 		return id;
@@ -62,7 +65,7 @@ public final class Location implements Serializable {
 	public String toString() {
 		return "Location [id=" + id + ", name=" + name + ", latitude="
 				+ latitude + ", longitude=" + longitude + ", international="
-				+ international + "]";
+				+ international.name() + "]";
 	}
 
 	@Override
@@ -70,7 +73,8 @@ public final class Location implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + (international ? 1231 : 1237);
+		result = prime * result
+				+ ((international == null) ? 0 : international.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(latitude);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -108,10 +112,10 @@ public final class Location implements Serializable {
 	}
 
 	public boolean isInternational() {
-		return international;
+		return international == Bool.True;
 	}
 
 	public void setInternational(boolean international) {
-		this.international = international;
+		this.international = international ? Bool.True : Bool.False;
 	}
 }
