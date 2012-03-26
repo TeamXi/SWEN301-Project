@@ -3,3 +3,10 @@
 body {
 	padding-top: 90px;
 }
+
+input.validate-error, textarea.validate-error, select.validate-error {
+  border-color: #e9322d;
+  -webkit-box-shadow: 0 0 6px #f8b9b7;
+  -moz-box-shadow: 0 0 6px #f8b9b7;
+  box-shadow: 0 0 6px #f8b9b7;
+}

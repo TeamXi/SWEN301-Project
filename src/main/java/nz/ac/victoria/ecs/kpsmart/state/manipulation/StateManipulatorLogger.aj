@@ -43,6 +43,12 @@ public final aspect StateManipulatorLogger {
 		LoggerFactory.getLogger(signature.getDeclaringType()).info("Getting all locations");
 	}
 	
+	after() returning(Collection<Location> locations) : getAllLocations() {
+		MethodSignature signature = (MethodSignature) thisJoinPoint.getSignature();
+		
+		LoggerFactory.getLogger(signature.getDeclaringType()).debug("Got locations: {}", locations);
+	}
+	
 	// ------------------------------------
 	
 	private pointcut exceptions() : execution(* StateManipulator.*(..));

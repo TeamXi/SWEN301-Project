@@ -13,7 +13,6 @@ public abstract class AbstractActionBean implements ActionBean {
 	private ActionBeanContext context;
 	
 	@Inject
-	@Named("memory")
 	private StateManipulator stateManipulator;
 	
 	public StateManipulator getStateManipulator() {

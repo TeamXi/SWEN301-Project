@@ -81,6 +81,11 @@
 			<version>3.0.1</version>
 		</dependency>
 		<dependency>
+			<groupId>json-taglib</groupId>
+			<artifactId>json-taglib</artifactId>
+			<version>0.4.1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
 			<version>10.8.2.2</version>
@@ -95,6 +100,13 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<repositories>
+		<repository>
+			<id>json-taglib</id>
+			<url>http://www.mvnsearch.org/maven2</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>
@@ -178,3 +190,4 @@
 		</pluginManagement>
 	</build>
 </project>
+
