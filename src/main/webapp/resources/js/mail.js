@@ -1,15 +1,24 @@
-function submitMailDeliveryForm(form) {
-	var values = {};
-	$(form).children("input").each(function(index, child) {
-		values[child.name] = child.value;
+function submitMailDeliveryForm(id) {
+	
+	if(!validateMailDeliveryForm(document.getElementById(id))) return;
+	
+	submitForm($("#newMailForm"), "mail?new", function(data){
+		var returnObj = eval(data);
+		var status = returnObj.status;
+		
+		if(!status){
+			for(var error in returnObj.validation){
+				validationError(
+						$("input[name='"+returnObj.validation[error].name+"']"),
+						returnObj.validation[error].message
+				);
+			}
+		}else{
+			$('#mailDelivered').modal('show');
+			
+		}
+		
 	});
-	$.post("mail?new", values, function(data) {
-		alert(data);
-	});
-}
-
-function isNumber(n) {
-	return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 function validateMailDeliveryForm(form) {
@@ -27,30 +36,7 @@ function validateMailDeliveryForm(form) {
 	return ok;
 }
 
-function validateNumberField(element, name) {
-	var isValidNumber = isNumber(element.value);
-	if(!isValidNumber || element.value <= 0) {
-		if(!isValidNumber) {
-			validationError(element, name+" must be a number");
-		}
-		else {
-			validationError(element, name+" must be larger than zero");
-		}
-		return false;
-	}
-	return true;
-}
 
-function validationError(element, message) {
-	$(element).before('<div class="alert alert-error fade in validate-error-message">'+
-			'<a class="close" data-dismiss="alert">&times;</a>'+
-			message+
-		'</div>');
-	$(element).addClass('validate-error')
-			  .focus(function() {
-		$(element).removeClass('validate-error');
-	});
-}
 function validateLocationField(element) {
 	if(!isValidLocation(element.value)) {
 		validationError(element, '"'+element.value+'" is not a valid location');
@@ -108,4 +94,6 @@ $(document).ready(function() {
 			$(child).addClass('domestic-priority');
 		}
 	});
+	
+	$('#mailDelivered').modal({show:false, keyboard:true, backdrop: true});
 });

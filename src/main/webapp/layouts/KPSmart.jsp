@@ -13,6 +13,7 @@
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jQuery-1.7.0.min.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/main.js"></script>
+
 			<stripes:layout-component name="scripts" />
 		</head>
 		
@@ -27,10 +28,17 @@
 								<c:if test="<%= isClerk() %>">
 									<li><a href="${pageContext.request.contextPath}/event/mail">Mail Delivery</a>
 									<li class="dropdown">
-										<a href="${pageContext.request.contextPath}/event/route#list" class="dropdown-toggle" data-toggle="dropdown">View Routes<b class="caret"></b></a>
+										<a href="${pageContext.request.contextPath}/event/route#list" class="dropdown-toggle" data-toggle="dropdown">Routes<b class="caret"></b></a>
 										<ul class="dropdown-menu">
 											<li><a href="${pageContext.request.contextPath}/event/route#list">List</a></li>
 											<li><a href="${pageContext.request.contextPath}/event/route#new">New</a></li>
+										</ul>
+									</li>
+									<li class="dropdown">
+										<a href="${pageContext.request.contextPath}/event/carrier#list" class="dropdown-toggle" data-toggle="dropdown">Carriers<b class="caret"></b></a>
+										<ul class="dropdown-menu">
+											<li><a href="${pageContext.request.contextPath}/event/carrier#list">List</a></li>
+											<li><a href="${pageContext.request.contextPath}/event/carrier#new">New</a></li>
 										</ul>
 									</li>
 								</c:if>

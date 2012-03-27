@@ -1,14 +1,19 @@
 package nz.ac.victoria.ecs.kpsmart.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sourceforge.stripes.action.DefaultHandler;
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.HandlesEvent;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 import net.sourceforge.stripes.ajax.JavaScriptResolution;
+import nz.ac.victoria.ecs.kpsmart.resolutions.FormValidationResolution;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.StateManipulator;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 
 @UrlBinding("/event/mail?{$event}")
 public class MailActionBean extends AbstractActionBean {
@@ -32,23 +37,53 @@ public class MailActionBean extends AbstractActionBean {
 	public Resolution newMailDelivery() {
 		MailDelivery delivery = processDelivery();
 		if(delivery != null) {
-			getStateManipulator().saveMailDelivery(delivery);
-			return new JavaScriptResolution("OK");
+			return new FormValidationResolution(true, null, null);
 		}
 		else {
-			return new JavaScriptResolution("ERROR");
+			return new FormValidationResolution(false,new String[]{"destination"},new String[]{"There is no route from "+source+" to "+destination});
 		}
 	}
 	
 	private MailDelivery processDelivery() {
-		MailDelivery delivery = new MailDelivery();
-		delivery.setVolume(volume);
-		delivery.setWeight(weight);
-		delivery.setPriority(priority);
-		// TODO: Magic path finding
+		do{
+			MailDelivery delivery = new MailDelivery();
+			
+			List<Route> route = findRoute(source,destination);
+			
+			if(route == null) break;
+			
+			delivery.setVolume(volume);
+			delivery.setWeight(weight);
+			delivery.setPriority(priority);
+			delivery.setRoute(route);
+			
 		return delivery;
+		
+		}while(false);
+		
+		return null;
 	}
 	
+	private List<Route> findRoute(String sourceName, String destinationName) {
+		Boolean routeIsValid = (((int)(Math.random() * 2)) == 1);
+		System.out.println(routeIsValid);
+		if(routeIsValid){
+			Route route = new Route();
+			Location locations[] = getStateManipulator().getAllLocations().toArray(new Location[]{});
+			Location source = locations[0];
+			Location dest = locations[1];
+			route.setStartPoint(source);
+			route.setEndPoint(dest);
+			
+			List<Route> routes = new ArrayList<Route>();
+			
+
+			routes.add(route);
+			return routes;
+		}
+		return null;
+	}
+
 	/**
 	 * @return the source
 	 */
