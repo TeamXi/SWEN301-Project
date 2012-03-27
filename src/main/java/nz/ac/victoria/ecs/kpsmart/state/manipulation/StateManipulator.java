@@ -78,7 +78,7 @@ public interface StateManipulator {
 	/**
 	 * Save a carrier back to the datasource.
 	 * 
-	 * @param carier	The carier to save
+	 * @param carier	The carrier to save
 	 */
 	public void saveCarrier(final Carrier carier);
 
@@ -88,4 +88,11 @@ public interface StateManipulator {
 	 * @param location	The location to save
 	 */
 	public void saveLocation(Location location);
+	
+	/**
+	 * Get all the carriers known to the datasource.
+	 * 
+	 * @return	A collection of the carriers. Order is not guaranteed.
+	 */
+	public Collection<Carrier> getAllCarriers();
 }

@@ -89,4 +89,11 @@ public final class HibernateStateManipulator implements StateManipulator {
 		this.session.flush();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<Carrier> getAllCarriers() {
+		return (Collection<Carrier>) this.session.createCriteria(Carrier.class)
+				.list();
+	}
+
 }

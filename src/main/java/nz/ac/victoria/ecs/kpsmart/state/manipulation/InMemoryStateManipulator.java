@@ -79,4 +79,10 @@ public final class InMemoryStateManipulator implements StateManipulator {
 		
 	}
 
+	@Override
+	public Collection<Carrier> getAllCarriers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
