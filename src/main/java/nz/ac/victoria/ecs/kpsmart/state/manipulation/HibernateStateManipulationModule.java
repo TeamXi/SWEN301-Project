@@ -16,7 +16,8 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans;
 
-import org.hibernate.ejb.Ejb3Configuration;
+import org.hibernate.Session;
+import org.hibernate.cfg.Configuration;
 
 import com.google.inject.AbstractModule;
 
@@ -45,13 +46,15 @@ public final class HibernateStateManipulationModule extends AbstractModule {
 		try {
 			Properties p = new Properties();
 			p.load(this.getClass().getClassLoader().getResourceAsStream("hibernate.properties"));
-			final Ejb3Configuration configuration = new Ejb3Configuration();
+			final Configuration configuration = new Configuration();
 			configuration.addProperties(p);
 			
 			for (final Class<?> c : annotatedClasses)
 				configuration.addAnnotatedClass(c);
 			
-			bind(EntityManager.class).toInstance(configuration.buildEntityManagerFactory().createEntityManager());
+			Session session = configuration.buildSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			bind(Session.class).toInstance(session);
 		} catch (IOException e) {
 			throw new RuntimeException("Could not load the hibernate properties file", e);
 		}

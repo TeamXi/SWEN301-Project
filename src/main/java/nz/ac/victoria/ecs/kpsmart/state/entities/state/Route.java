@@ -9,6 +9,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -21,10 +22,13 @@ public final class Route implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private TransportMeans transportMeans;
 	
+	@ManyToOne
 	private Location startPoint;
 	
+	@ManyToOne
 	private Location endPoint;
 	
+	@ManyToOne
 	private Carrier carrier;
 	
 	private float carrierWeightUnitCost;
@@ -42,6 +46,7 @@ public final class Route implements Serializable {
 	
 	private int duration;
 	
+	@Enumerated(EnumType.STRING)
 	private Bool disabled;
 	
 	public boolean isInternational() {

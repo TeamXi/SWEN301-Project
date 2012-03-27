@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
 
 public final aspect StateManipulatorLogger {
 	private pointcut getMailDeliveryByID(long id) : execution(MailDelivery StateManipulator.getMailDelivery(long)) && args(id);
@@ -49,6 +51,14 @@ public final aspect StateManipulatorLogger {
 		LoggerFactory.getLogger(signature.getDeclaringType()).debug("Got locations: {}", locations);
 	}
 	
+	private pointcut getLocationForName(String name) : execution(Location StateManipulator.getLocationForName(String)) && args(name);
+	
+	before(String name) : getLocationForName(name) {
+		MethodSignature signature = (MethodSignature) thisJoinPoint.getSignature();
+		
+		LoggerFactory.getLogger(signature.getDeclaringType()).info("Get a location by it's name: {}", name);
+	}
+	
 	// ------------------------------------
 	
 	private pointcut exceptions() : execution(* StateManipulator.*(..));
@@ -56,5 +66,50 @@ public final aspect StateManipulatorLogger {
 	after() throwing(Exception e) : exceptions() {
 		MethodSignature signature = (MethodSignature) thisJoinPoint.getSignature();
 		LoggerFactory.getLogger(signature.getDeclaringType()).error("Error occured with the data backend", e);
+	}
+	
+	// ------------------------------------
+	
+	private pointcut getAllRoutes() : execution(Collection<Route> StateManipulator.getAllRoutes());
+	
+	before() : getAllRoutes() {
+		MethodSignature signature = (MethodSignature) thisJoinPoint.getSignature();
+		
+		LoggerFactory.getLogger(signature.getDeclaringType()).info("Getting all routes");
+	}
+	
+	private pointcut getAllRoutesWithPoint(Location location) : 
+		execution(Carrier StateManipulator.getAllRoutesWithPoint(Location)) && args(location);
+	
+	before(Location location) : getAllRoutesWithPoint(location) {
+		MethodSignature signature = (MethodSignature) thisJoinPoint.getSignature();
+		
+		LoggerFactory.getLogger(signature.getDeclaringType()).info("Getting all locations with a point of: {}", location);
+	}
+	
+	private pointcut saveRoute(Route route) : execution(void StateManipulator.saveRoute(Route)) && args(route);
+	
+	before(Route route) : saveRoute(route) {
+		MethodSignature signature = (MethodSignature) thisJoinPoint.getSignature();
+		
+		LoggerFactory.getLogger(signature.getDeclaringType()).info("Saving route: {}", route);
+	}
+	
+	// ----------------------------------------
+	
+	private pointcut getCarrier(long id) : execution(Carrier StateManipulator.getCarrier(long)) && args(id);
+	
+	before(long id) : getCarrier(id) {
+		MethodSignature signature = (MethodSignature) thisJoinPoint.getSignature();
+		
+		LoggerFactory.getLogger(signature.getDeclaringType()).info("Getting carrier for id: {}", id);
+	}
+	
+	private pointcut saveCarrier(Carrier carrier) : execution(void StateManipulator.saveCarrier(Carrier)) && args(carrier);
+	
+	before(Carrier carrier) : saveCarrier(carrier) {
+		MethodSignature signature = (MethodSignature) thisJoinPoint.getSignature();
+		
+		LoggerFactory.getLogger(signature.getDeclaringType()).info("Saving carrier: {}", carrier);
 	}
 }

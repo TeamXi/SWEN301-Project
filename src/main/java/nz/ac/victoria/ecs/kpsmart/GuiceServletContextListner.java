@@ -27,6 +27,8 @@ public final class GuiceServletContextListner implements ServletContextListener 
 		};
 		
 		injectors.push(new History(Guice.createInjector(modules), modules));
+		
+		new Data().createData();
 	}
 	
 	public static void overloadModules(Module... modules) {
