@@ -2,7 +2,6 @@ function submitNewCarrierForm(id) {
 	if(!validateCarrierForm(document.getElementById(id))) return;
 	
 	submitForm($("#newCarrierForm"), "carrier?new", function(data){
-
 			var returnObj = eval(data);
 			var status = returnObj.status;
 			
@@ -14,9 +13,12 @@ function submitNewCarrierForm(id) {
 					);
 				}
 			}else{
-					$('#carrierAdded').modal('show');
+				$('#carrierAdded').modal('show');
+				
+				$.get("carrier?listfragment", function (data) {
+					$("#carrierListContainer").html(data);
+				});
 			}
-
 	});
 }
 
@@ -33,7 +35,7 @@ function validateCarrierForm(form) {
 	
 	return ok;
 }
+
 $(document).ready(function() {
 	$('#carrierAdded').modal({show:false, keyboard:true, backdrop: true});
-	
 });

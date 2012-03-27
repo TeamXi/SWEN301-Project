@@ -1,0 +1,19 @@
+<%@ page language="java" contentType="text/html; charset=US-ASCII" pageEncoding="US-ASCII"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<div class="span12">
+	<h1>Carriers</h1>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<td>Name</td>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach var="carrier" items="${actionBean.stateManipulator.allCarriers}">
+				<tr>
+					<td><c:out value="${carrier.name}"/></td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
+</div>

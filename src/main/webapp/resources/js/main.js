@@ -20,3 +20,16 @@ function submitForm(form, url, callback) {
 function show(obj){
 	alert(JSON.stringify(obj, null, "\t"));
 }
+
+$(document).ready(function() {
+	var checkWindowHash = function () {
+		$(".switch-container > *").hide();
+		$(".switch-container > *[data-window-hash='"+window.location.hash.substring(1)+"']").show();
+	};
+	
+	$(window).bind('hashchange', function() {
+		checkWindowHash();
+	});
+	
+	checkWindowHash();
+});
