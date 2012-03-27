@@ -3,6 +3,8 @@ package nz.ac.victoria.ecs.kpsmart.state.entities.log;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,6 +23,7 @@ public final class MailDeliveryEvent extends Event {
 	@ManyToMany
 	private List<Route> route;
 	
+	@Enumerated(EnumType.STRING)
 	private Priority priority;
 	
 	private float weight;

@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 
@@ -14,8 +15,8 @@ public final class TransportCostUpdateEvent extends Event {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	
+	@ManyToOne
 	private Route route;
-	
 	
 	private float newWeightUnitCost;
 	
