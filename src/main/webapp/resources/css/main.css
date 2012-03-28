@@ -45,3 +45,12 @@ input.validate-error, textarea.validate-error, select.validate-error {
 .switch-container > *{
 	display: none;
 }
+
+tr .row-hover-controls {
+	float: right;
+	opacity: 0;
+}
+
+tr:hover .row-hover-controls {
+	opacity: 1;
+}

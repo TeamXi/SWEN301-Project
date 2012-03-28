@@ -11,7 +11,10 @@
 		<tbody>
 			<c:forEach var="carrier" items="${actionBean.stateManipulator.allCarriers}">
 				<tr>
-					<td><c:out value="${carrier.name}"/></td>
+					<td>
+						<c:out value="${carrier.name}"/>
+						<span class="row-hover-controls"><a onclick="updateCarrier('${carrier.id}')">update</a> <a onclick="alert('delete')">delete</a></span>
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>

@@ -17,6 +17,8 @@ public class CarrierInfoActionBean extends AbstractActionBean {
 	
 	private String name;
 	
+	private long carrierId;
+	
 	@DefaultHandler
 	public Resolution defaultEvent() {
 		return new ForwardResolution("/views/event/carrier.jsp");
@@ -37,6 +39,20 @@ public class CarrierInfoActionBean extends AbstractActionBean {
 		return new FormValidationResolution(true,null,null);
 
 	}
+	
+	@HandlesEvent("updateform")
+	public Resolution updateForm() {
+		name = getStateManipulator().getCarrier(carrierId).getName();
+		return new ForwardResolution("/views/event/updateForm.jsp");
+	}
+	
+	@HandlesEvent("update")
+	public Resolution submitupdate() {
+		Carrier carrier = getStateManipulator().getCarrier(carrierId);
+		carrier.setName(name);
+		getStateManipulator().saveCarrier(carrier);
+		return new FormValidationResolution(true, null, null);
+	}
 
 	/**
 	 * @return the name
@@ -50,5 +66,19 @@ public class CarrierInfoActionBean extends AbstractActionBean {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * @return the carrier id
+	 */
+	public long getCarrierId() {
+		return carrierId;
+	}
+
+	/**
+	 * @param carrierId the carrier id to set
+	 */
+	public void setCarrierId(long carrierId) {
+		this.carrierId = carrierId;
 	}
 }

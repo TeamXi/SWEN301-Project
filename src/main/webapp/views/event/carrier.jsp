@@ -28,22 +28,35 @@
 	
 					</stripes:form>
 				</div>
-	
-				<div class="modal fade" id="carrierAdded">
-					<div class="modal-header">
-						<a class="close" data-dismiss="modal">×</a>
-						<h3>Carrier added!</h3>
-					</div>
-					<div class="modal-body">
-						<p>Carrier added successfully</p>
-					</div>
-					<div class="modal-footer">
-						<a href="#" class="btn btn-primary" data-dismiss="modal">Ok</a>
-					</div>
-				</div>
 			</div>
 			<div id="carrierListContainer" data-window-hash="list">
 				<jsp:include page="carrierList.jsp"></jsp:include>
+			</div>
+		</div>
+		<div class="modal fade" id="updateCarrierModal">
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal">×</a>
+				<h3>Update carrier</h3>
+			</div>
+			<div class="modal-body">
+				<div id="updateFormContainer">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#list" class="btn btn-primary" data-dismiss="modal">Cancel</a>
+				<a href="#list" class="btn btn-primary" onclick="submitUpdateModal()">Update</a>
+			</div>
+		</div>
+		<div class="modal fade" id="carrierAdded">
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal">×</a>
+				<h3>Carrier added!</h3>
+			</div>
+			<div class="modal-body">
+				<p>Carrier added successfully</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-primary" data-dismiss="modal">Ok</a>
 			</div>
 		</div>
 	</stripes:layout-component>
