@@ -81,6 +81,13 @@ public interface StateManipulator {
 	 * @param carier	The carrier to save
 	 */
 	public void saveCarrier(final Carrier carier);
+	
+	/**
+	 * Delete the specified carrier from the datasource
+	 * 	
+	 * @param carrier	The carrier to delete
+	 */
+	public void deleteCarrier(final Carrier carrier);
 
 	/**
 	 * Save a location to the database

@@ -56,7 +56,10 @@ public final class HibernateStateManipulator implements StateManipulator {
 
 	@Override
 	public Carrier getCarrier(long id) {
-		return (Carrier) this.session.get(Carrier.class, id);
+//		return (Carrier) this.session.get(Carrier.class, id);
+		return (Carrier) this.session.createCriteria(Carrier.class)
+				.add(Restrictions.ne("disabled", true))
+				.uniqueResult();
 	}
 
 	@Override
@@ -64,11 +67,18 @@ public final class HibernateStateManipulator implements StateManipulator {
 		this.session.merge(carier);
 		this.session.flush();
 	}
+	
+	@Override
+	public void deleteCarrier(Carrier carrier) {
+		carrier.setDisabled(true);
+		saveCarrier(carrier);
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Route> getAllRoutesWithPoint(Location location) {
 		return (Collection<Route>) this.session.createCriteria(Route.class)
+				.add(Restrictions.ne("disabled", true))
 				.add( Restrictions.disjunction()
 						.add(Restrictions.eq("startPoint", location))
 						.add(Restrictions.eq("endPoint", location))
@@ -93,6 +103,7 @@ public final class HibernateStateManipulator implements StateManipulator {
 	@Override
 	public Collection<Carrier> getAllCarriers() {
 		return (Collection<Carrier>) this.session.createCriteria(Carrier.class)
+				.add(Restrictions.ne("disabled", true))
 				.list();
 	}
 
