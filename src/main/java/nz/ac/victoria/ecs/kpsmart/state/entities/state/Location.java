@@ -24,7 +24,7 @@ public final class Location extends StorageEntity implements Serializable {
 	private LocationPK primaryKey = new LocationPK();
 	
 	@Enumerated(EnumType.STRING)
-	private Bool international;
+	private Bool international = Bool.True;
 	
 	@Embeddable
 	public static final class LocationPK implements Serializable {
