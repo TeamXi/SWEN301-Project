@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
 @Entity
-public final class MailDelivery implements Serializable {
+public final class MailDelivery extends StorageEntity implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;

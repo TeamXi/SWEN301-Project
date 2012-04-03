@@ -6,7 +6,7 @@ package nz.ac.victoria.ecs.kpsmart.state.entities.state;
  * @author hodderdani
  *
  */
-enum Bool {
+public enum Bool {
 	True,
 	False
 }

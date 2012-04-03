@@ -61,6 +61,21 @@ public interface StateManipulator {
 	public Collection<Route> getAllRoutesWithPoint(Location location);
 	
 	/**
+	 * Get a route by it's unique ID
+	 * 
+	 * @param id	The ID of the route
+	 * @return	The route identified by this id, or null if no route was found.
+	 */
+	public Route getRouteByID(long id);
+	
+	/**
+	 * Delete the given route from the datasource
+	 * 
+	 * @param route	The route to delete.
+	 */
+	public void deleteRoute(Route route);
+	
+	/**
 	 * Save a route to the backend
 	 * 
 	 * @param route

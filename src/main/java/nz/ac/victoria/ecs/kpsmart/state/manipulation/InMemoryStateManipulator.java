@@ -91,4 +91,16 @@ public final class InMemoryStateManipulator implements StateManipulator {
 		
 	}
 
+	@Override
+	public Route getRouteByID(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteRoute(Route route) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

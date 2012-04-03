@@ -3,13 +3,16 @@ package nz.ac.victoria.ecs.kpsmart.state.manipulation;
 import java.io.IOException;
 import java.util.Properties;
 
-import javax.persistence.EntityManager;
-
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.CustomerPriceUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityUpdateEvent.CarrierUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityUpdateEvent.LocationUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityUpdateEvent.RouteUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.MailDeliveryEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.TransportCostUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.TransportDiscontinuedEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
@@ -34,13 +37,20 @@ public final class HibernateStateManipulationModule extends AbstractModule {
 				MailDeliveryEvent.class,
 				TransportCostUpdateEvent.class,
 				TransportDiscontinuedEvent.class,
+				CustomerPriceUpdateEvent.class,
+				CarrierUpdateEvent.class,
+				RouteUpdateEvent.class,
+				LocationUpdateEvent.class,
+				CustomerPriceUpdateEvent.class,
 				
 				Carrier.class,
 				Location.class,
 				MailDelivery.class,
 				Priority.class,
 				Route.class,
-				TransportMeans.class
+				TransportMeans.class,
+				CustomerPrice.class,
+				DomesticCustomerPrice.class
 		};
 		
 		try {

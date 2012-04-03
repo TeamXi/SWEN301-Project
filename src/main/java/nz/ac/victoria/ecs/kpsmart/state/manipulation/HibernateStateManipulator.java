@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.PersistenceContext;
 
 import nz.ac.victoria.ecs.kpsmart.InjectOnContruct;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.Bool;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
@@ -43,7 +44,7 @@ public final class HibernateStateManipulator implements StateManipulator {
 	@Override
 	public List<Route> getAllRoute() {
 		return (List<Route>) this.session.createCriteria(Route.class)
-				.add(Restrictions.ne("disabled", true))
+				.add(Restrictions.eq("disabled", Bool.False))
 				.addOrder(Order.asc("id"))
 				.list();
 	}
@@ -58,7 +59,7 @@ public final class HibernateStateManipulator implements StateManipulator {
 	public Carrier getCarrier(long id) {
 //		return (Carrier) this.session.get(Carrier.class, id);
 		return (Carrier) this.session.createCriteria(Carrier.class)
-				.add(Restrictions.ne("disabled", true))
+				.add(Restrictions.eq("disabled", Bool.False))
 				.uniqueResult();
 	}
 
@@ -78,7 +79,7 @@ public final class HibernateStateManipulator implements StateManipulator {
 	@Override
 	public Collection<Route> getAllRoutesWithPoint(Location location) {
 		return (Collection<Route>) this.session.createCriteria(Route.class)
-				.add(Restrictions.ne("disabled", true))
+				.add(Restrictions.ne("disabled", Bool.True))
 				.add( Restrictions.disjunction()
 						.add(Restrictions.eq("startPoint", location))
 						.add(Restrictions.eq("endPoint", location))
@@ -103,8 +104,23 @@ public final class HibernateStateManipulator implements StateManipulator {
 	@Override
 	public Collection<Carrier> getAllCarriers() {
 		return (Collection<Carrier>) this.session.createCriteria(Carrier.class)
-				.add(Restrictions.ne("disabled", true))
+				.add(Restrictions.eq("disabled", Bool.False))
 				.list();
 	}
+
+	@Override
+	public Route getRouteByID(long id) {
+		return (Route) this.session.createCriteria(Route.class)
+				.add(Restrictions.eq("id", id))
+				.uniqueResult();
+	}
+
+	@Override
+	public void deleteRoute(Route route) {
+		route.setDisabled(true);
+		saveRoute(route);
+	}
+	
+	
 
 }

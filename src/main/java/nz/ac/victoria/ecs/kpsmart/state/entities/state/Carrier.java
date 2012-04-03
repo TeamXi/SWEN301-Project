@@ -10,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public final class Carrier implements Serializable {
+public final class Carrier extends StorageEntity implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
@@ -18,7 +18,7 @@ public final class Carrier implements Serializable {
 	private String name;
 	
 	@Enumerated(EnumType.STRING)
-	private Bool disabled;
+	private Bool disabled = Bool.False;
 
 	public String getName() {
 		return name;

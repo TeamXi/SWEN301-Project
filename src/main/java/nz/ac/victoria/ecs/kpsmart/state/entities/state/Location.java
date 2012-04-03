@@ -2,6 +2,7 @@ package nz.ac.victoria.ecs.kpsmart.state.entities.state;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -13,19 +14,24 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(uniqueConstraints=@UniqueConstraint(columnNames={"name"}))
-public final class Location implements Serializable {
-	@Id
+public final class Location extends StorageEntity implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	
 	private String name;
 	
-	private double latitude;
-	
-	private double longitude;
+	@Id
+	private LocationPK primaryKey = new LocationPK();
 	
 	@Enumerated(EnumType.STRING)
 	private Bool international;
+	
+	@Embeddable
+	public static final class LocationPK implements Serializable {
+		private double latitude;
+		
+		private double longitude;
+	}
 
 	public long getId() {
 		return id;
@@ -44,19 +50,19 @@ public final class Location implements Serializable {
 	}
 
 	public double getLatitude() {
-		return latitude;
+		return getPrimaryKey().latitude;
 	}
 
 	public void setLatitude(double latitude) {
-		this.latitude = latitude;
+		this.getPrimaryKey().latitude = latitude;
 	}
 
 	public double getLongitude() {
-		return longitude;
+		return getPrimaryKey().longitude;
 	}
 
 	public void setLongitude(double longitude) {
-		this.longitude = longitude;
+		this.getPrimaryKey().longitude = longitude;
 	}
 	
 	/**
@@ -67,7 +73,7 @@ public final class Location implements Serializable {
 	@Override
 	public String toString() {
 		return "Location [id=" + id + ", name=" + name + ", latitude="
-				+ latitude + ", longitude=" + longitude + ", international="
+				+ getPrimaryKey().latitude + ", longitude=" + getPrimaryKey().longitude + ", international="
 				+ international.name() + "]";
 	}
 
@@ -79,9 +85,9 @@ public final class Location implements Serializable {
 		result = prime * result
 				+ ((international == null) ? 0 : international.hashCode());
 		long temp;
-		temp = Double.doubleToLongBits(latitude);
+		temp = Double.doubleToLongBits(getPrimaryKey().latitude);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(longitude);
+		temp = Double.doubleToLongBits(getPrimaryKey().longitude);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
@@ -100,11 +106,11 @@ public final class Location implements Serializable {
 			return false;
 		if (international != other.international)
 			return false;
-		if (Double.doubleToLongBits(latitude) != Double
-				.doubleToLongBits(other.latitude))
+		if (Double.doubleToLongBits(getPrimaryKey().latitude) != Double
+				.doubleToLongBits(other.getPrimaryKey().latitude))
 			return false;
-		if (Double.doubleToLongBits(longitude) != Double
-				.doubleToLongBits(other.longitude))
+		if (Double.doubleToLongBits(getPrimaryKey().longitude) != Double
+				.doubleToLongBits(other.getPrimaryKey().longitude))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -120,5 +126,13 @@ public final class Location implements Serializable {
 
 	public void setInternational(boolean international) {
 		this.international = international ? Bool.True : Bool.False;
+	}
+
+	public LocationPK getPrimaryKey() {
+		return primaryKey;
+	}
+
+	public void setPrimaryKey(LocationPK primaryKey) {
+		this.primaryKey = primaryKey;
 	}
 }

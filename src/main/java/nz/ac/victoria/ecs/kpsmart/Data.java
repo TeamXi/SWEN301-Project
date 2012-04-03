@@ -67,14 +67,14 @@ final class Data {
 		
 		Route r2 = new Route();
 		try {
-			r1.setCarrier(sm.getCarrier(1));
+			r2.setCarrier(sm.getCarrier(1));
 			r2.setCarrierVolumeUnitCost((float) 8.0);
 			r2.setCarrierWeightUnitCost((float)8.9);
 			r2.setDisabled(false);
 			r2.setDuration(1);
 			r2.setEndPoint(sm.getLocationForName("Auckland"));
 			r2.setFrequency(6);
-			r1.setStartPoint(sm.getLocationForName("Wellington"));
+			r2.setStartPoint(sm.getLocationForName("Wellington"));
 			r2.setStartingTime(new SimpleDateFormat("y-m-d h:m:s").parse("2012-03-27 11:45:18"));
 			r2.setTransportMeans(TransportMeans.Air);
 		} catch (ParseException e) {

@@ -10,9 +10,6 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 
 @Entity
 public final class CustomerPriceUpdateEvent extends Event {
-
-	
-
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
