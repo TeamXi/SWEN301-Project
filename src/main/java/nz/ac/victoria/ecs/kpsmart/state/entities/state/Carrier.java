@@ -3,8 +3,6 @@ package nz.ac.victoria.ecs.kpsmart.state.entities.state;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,9 +15,6 @@ public final class Carrier extends StorageEntity implements Serializable {
 	
 	private String name;
 	
-	@Enumerated(EnumType.STRING)
-	private Bool disabled = Bool.False;
-
 	public String getName() {
 		return name;
 	}
@@ -77,21 +72,5 @@ public final class Carrier extends StorageEntity implements Serializable {
 	public String toString() {
 		return "Carrier [id=" + id + ", name=" + name + ", disabled="
 				+ (disabled == Bool.True ? "true" : "false") + "]";
-	}
-
-	public Bool getDisabled() {
-		return disabled;
-	}
-
-	public void setDisabled(Bool disabled) {
-		this.disabled = disabled;
-	}
-	
-	public boolean isDisabled() {
-		return disabled == Bool.True;
-	}
-	
-	public void setDisabled(final boolean disabled) {
-		this.disabled = disabled ? Bool.True : Bool.False;
 	}
 }

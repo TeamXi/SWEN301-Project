@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
 
 /**
  * @author hodderdani
@@ -56,7 +58,7 @@ public final class InMemoryStateManipulator implements StateManipulator {
 	}
 
 	@Override
-	public void saveCarrier(Carrier carier) {
+	public void saveCarrier(StorageEntity carier) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -86,7 +88,7 @@ public final class InMemoryStateManipulator implements StateManipulator {
 	}
 
 	@Override
-	public void deleteCarrier(Carrier carrier) {
+	public void deleteCarrier(StorageEntity carrier) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -99,6 +101,30 @@ public final class InMemoryStateManipulator implements StateManipulator {
 
 	@Override
 	public void deleteRoute(Route route) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void save(StorageEntity entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(StorageEntity entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public DomesticCustomerPrice getDomesticCustomerPrice() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void save(DomesticCustomerPrice domesticPrice) {
 		// TODO Auto-generated method stub
 		
 	}

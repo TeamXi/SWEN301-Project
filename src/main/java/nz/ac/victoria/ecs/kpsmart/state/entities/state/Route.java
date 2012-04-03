@@ -33,9 +33,6 @@ public final class Route extends StorageEntity implements Serializable {
 	
 	private int duration;
 	
-	@Enumerated(EnumType.STRING)
-	private Bool disabled;
-	
 	@Embeddable
 	public static final class RoutePK implements Serializable {
 		@Enumerated(EnumType.STRING)
@@ -48,7 +45,7 @@ public final class Route extends StorageEntity implements Serializable {
 		private Location endPoint;
 		
 		@ManyToOne
-		private Carrier carrier;
+		private StorageEntity carrier;
 	}
 	
 	public boolean isInternational() {
@@ -87,11 +84,11 @@ public final class Route extends StorageEntity implements Serializable {
 		this.getPrimaryKey().endPoint = endPoint;
 	}
 
-	public Carrier getCarrier() {
+	public StorageEntity getCarrier() {
 		return getPrimaryKey().carrier;
 	}
 
-	public void setCarrier(Carrier carrier) {
+	public void setCarrier(StorageEntity carrier) {
 		this.getPrimaryKey().carrier = carrier;
 	}
 	
@@ -220,14 +217,6 @@ public final class Route extends StorageEntity implements Serializable {
 
 	public void setDuration(int duration) {
 		this.duration = duration;
-	}
-
-	public boolean isDisabled() {
-		return disabled == Bool.True;
-	}
-
-	public void setDisabled(boolean disabled) {
-		this.disabled = disabled ? Bool.True : Bool.False;
 	}
 
 	public RoutePK getPrimaryKey() {

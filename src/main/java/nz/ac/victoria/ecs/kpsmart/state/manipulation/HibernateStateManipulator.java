@@ -8,9 +8,11 @@ import javax.persistence.PersistenceContext;
 import nz.ac.victoria.ecs.kpsmart.InjectOnContruct;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Bool;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -64,13 +66,13 @@ public final class HibernateStateManipulator implements StateManipulator {
 	}
 
 	@Override
-	public void saveCarrier(Carrier carier) {
+	public void saveCarrier(StorageEntity carier) {
 		this.session.merge(carier);
 		this.session.flush();
 	}
 	
 	@Override
-	public void deleteCarrier(Carrier carrier) {
+	public void deleteCarrier(StorageEntity carrier) {
 		carrier.setDisabled(true);
 		saveCarrier(carrier);
 	}
@@ -119,6 +121,31 @@ public final class HibernateStateManipulator implements StateManipulator {
 	public void deleteRoute(Route route) {
 		route.setDisabled(true);
 		saveRoute(route);
+	}
+
+	@Override
+	public void save(StorageEntity entity) {
+		this.session.save(entity);
+		this.session.flush();
+	}
+
+	@Override
+	public void delete(StorageEntity entity) {
+		this.session.delete(entity);
+		this.session.flush();
+	}
+
+	@Override
+	public DomesticCustomerPrice getDomesticCustomerPrice() {
+		return (DomesticCustomerPrice) this.session.createCriteria(DomesticCustomerPrice.class)
+					.uniqueResult();
+	}
+
+	@Override
+	public void save(DomesticCustomerPrice domesticPrice) {
+		this.session.createQuery("DELETE FROM "+DomesticCustomerPrice.class.getSimpleName())
+				.executeUpdate();
+		this.session.save(domesticPrice);
 	}
 	
 	

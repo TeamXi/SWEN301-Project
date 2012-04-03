@@ -1,9 +1,6 @@
 package nz.ac.victoria.ecs.kpsmart.state.entities.log;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
@@ -11,20 +8,8 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 @Entity
 public final class TransportDiscontinuedEvent extends Event {
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
-	
 	@ManyToOne
 	private Route route;
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
 
 	public Route getRoute() {
 		return route;

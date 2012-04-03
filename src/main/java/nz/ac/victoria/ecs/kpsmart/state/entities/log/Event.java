@@ -3,6 +3,10 @@ package nz.ac.victoria.ecs.kpsmart.state.entities.log;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -12,9 +16,14 @@ import javax.persistence.TemporalType;
  * @author hodderdani
  *
  */
+@MappedSuperclass
 public abstract class Event implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timestamp;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	protected long id;
 	
 	public Event() {}
 	
@@ -64,5 +73,13 @@ public abstract class Event implements Serializable {
 		} else if (!timestamp.equals(other.timestamp))
 			return false;
 		return true;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 }

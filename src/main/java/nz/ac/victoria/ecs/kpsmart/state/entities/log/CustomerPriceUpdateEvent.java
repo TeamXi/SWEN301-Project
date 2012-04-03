@@ -1,21 +1,15 @@
 package nz.ac.victoria.ecs.kpsmart.state.entities.log;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 
 @Entity
 public final class CustomerPriceUpdateEvent extends Event {
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
-	
 	@ManyToOne
-	private Route route;
+	private CustomerPrice currentPrice;
 	
 	private float newWeightUnitCost;
 	
@@ -37,22 +31,14 @@ public final class CustomerPriceUpdateEvent extends Event {
 		this.newVolumeUnitCost = newVolumeUnitCost;
 	}
 
-	public Route getRoute() {
-		return route;
+	public CustomerPrice getCurrentPrice() {
+		return currentPrice;
 	}
 
-	public void setRoute(Route route) {
-		this.route = route;
+	public void setCurrentPrice(CustomerPrice price) {
+		this.currentPrice = price;
 	}
 
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-	
 	/**
 	 * 
 	 */
@@ -60,7 +46,7 @@ public final class CustomerPriceUpdateEvent extends Event {
 
 	@Override
 	public String toString() {
-		return "CustomerPriceUpdateEvent [id=" + id + ", route=" + route
+		return "CustomerPriceUpdateEvent [id=" + id + ", route=" + currentPrice
 				+ ", newWeightUnitCost=" + newWeightUnitCost
 				+ ", newVolumeUnitCost=" + newVolumeUnitCost + "]";
 	}
@@ -72,7 +58,7 @@ public final class CustomerPriceUpdateEvent extends Event {
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + Float.floatToIntBits(newVolumeUnitCost);
 		result = prime * result + Float.floatToIntBits(newWeightUnitCost);
-		result = prime * result + ((route == null) ? 0 : route.hashCode());
+		result = prime * result + ((currentPrice == null) ? 0 : currentPrice.hashCode());
 		return result;
 	}
 
@@ -93,10 +79,10 @@ public final class CustomerPriceUpdateEvent extends Event {
 		if (Float.floatToIntBits(newWeightUnitCost) != Float
 				.floatToIntBits(other.newWeightUnitCost))
 			return false;
-		if (route == null) {
-			if (other.route != null)
+		if (currentPrice == null) {
+			if (other.currentPrice != null)
 				return false;
-		} else if (!route.equals(other.route))
+		} else if (!currentPrice.equals(other.currentPrice))
 			return false;
 		return true;
 	}
