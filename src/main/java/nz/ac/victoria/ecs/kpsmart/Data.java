@@ -26,7 +26,7 @@ final class Data {
 		{
 			c1.setName("a");
 		}
-		sm.saveCarrier(c1);
+		sm.save(c1);
 		
 		/*
 		 * 
@@ -34,15 +34,15 @@ final class Data {
 		 * 
 		 */
 		Location l1 = createLocation(true, 42.988576, 12.414551, "Rome");
-		sm.saveLocation(l1);
+		sm.save(l1);
 		Location l2 = createLocation(false, -41.013066, 174.605713, "Wellington");
-		sm.saveLocation(l2);
+		sm.save(l2);
 		Location l3 = createLocation(false, -36.694851, 175.155029, "Auckland");
-		sm.saveLocation(l3);
+		sm.save(l3);
 		Location l4 = createLocation(true, 42.654162, 23.365173, "Sofia");
-		sm.saveLocation(l4);
+		sm.save(l4);
 		Location l5 = createLocation(true, 52.749594, 5.998535, "Amsterdam");
-		sm.saveLocation(l5);
+		sm.save(l5);
 		/*
 		 * 
 		 * Routes

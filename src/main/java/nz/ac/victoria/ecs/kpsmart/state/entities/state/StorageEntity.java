@@ -1,5 +1,6 @@
 package nz.ac.victoria.ecs.kpsmart.state.entities.state;
 
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;

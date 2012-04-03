@@ -45,7 +45,7 @@ public final class Route extends StorageEntity implements Serializable {
 		private Location endPoint;
 		
 		@ManyToOne
-		private StorageEntity carrier;
+		private Carrier carrier;
 	}
 	
 	public boolean isInternational() {
@@ -84,11 +84,11 @@ public final class Route extends StorageEntity implements Serializable {
 		this.getPrimaryKey().endPoint = endPoint;
 	}
 
-	public StorageEntity getCarrier() {
+	public Carrier getCarrier() {
 		return getPrimaryKey().carrier;
 	}
 
-	public void setCarrier(StorageEntity carrier) {
+	public void setCarrier(Carrier carrier) {
 		this.getPrimaryKey().carrier = carrier;
 	}
 	
