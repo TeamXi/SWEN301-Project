@@ -11,6 +11,8 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.log.TransportDiscontinuedEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
+import nz.ac.victoria.ecs.kpsmart.state.manipulation.LogManipulator;
+import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReadOnlyLogManipulator;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReadOnlyStateManipulator;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.StateManipulator;
 
@@ -30,6 +32,9 @@ import com.google.inject.Inject;
 public class EntityManager {
 	@Inject
 	private StateManipulator manipulator;
+	
+	@Inject(optional=true)
+	private LogManipulator log;
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
@@ -122,6 +127,15 @@ public class EntityManager {
 		logger.debug("Getting read only state manipulator");
 		
 		return manipulator;
+	}
+	
+	/**
+	 * Return the current log manipulator
+	 * 
+	 * @return	The read only copy of the log, or null if logging is diabled.
+	 */
+	public ReadOnlyLogManipulator getLog() {
+		return log;
 	}
 	
 	public static final class Module extends AbstractModule {
