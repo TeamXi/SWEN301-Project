@@ -62,6 +62,7 @@ public final class HibernateStateManipulator implements StateManipulator {
 //		return (Carrier) this.session.get(Carrier.class, id);
 		return (Carrier) this.session.createCriteria(Carrier.class)
 				.add(Restrictions.eq("disabled", Bool.False))
+				.add(Restrictions.eq("id", id))
 				.uniqueResult();
 	}
 
@@ -93,6 +94,7 @@ public final class HibernateStateManipulator implements StateManipulator {
 	public Location getLocationForName(String name) {
 		return (Location) this.session.createCriteria(Location.class)
 				.add(Restrictions.eq("name", name))
+				.add(Restrictions.ne("disabled", Bool.True))
 				.uniqueResult();
 	}
 
@@ -114,6 +116,7 @@ public final class HibernateStateManipulator implements StateManipulator {
 	public Route getRouteByID(long id) {
 		return (Route) this.session.createCriteria(Route.class)
 				.add(Restrictions.eq("id", id))
+				.add(Restrictions.ne("disabled", Bool.True))
 				.uniqueResult();
 	}
 
