@@ -5,6 +5,7 @@ import java.util.Stack;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.HibernateStateManipulationModule;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.InMemoryStateManipulationModule;
 
@@ -23,7 +24,8 @@ public final class GuiceServletContextListner implements ServletContextListener 
 	public static void init() {
 		Module[] modules = {
 				new HibernateStateManipulationModule(),
-				new InMemoryStateManipulationModule()
+				new InMemoryStateManipulationModule(),
+				new EntityManager.Module()
 		};
 		
 		injectors.push(new History(Guice.createInjector(modules), modules));

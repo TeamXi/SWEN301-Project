@@ -1,8 +1,5 @@
 package nz.ac.victoria.ecs.kpsmart.integration;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import nz.ac.victoria.ecs.kpsmart.InjectOnContruct;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.CustomerPriceUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.DomesticCustomerPriceUpdateEvent;
@@ -17,6 +14,10 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReadOnlyStateManipulator;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.StateManipulator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 
 /**
@@ -121,5 +122,12 @@ public class EntityManager {
 		logger.debug("Getting read only state manipulator");
 		
 		return manipulator;
+	}
+	
+	public static final class Module extends AbstractModule {
+		@Override
+		protected void configure() {
+			bind(EntityManager.class);
+		}
 	}
 }
