@@ -11,6 +11,7 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
 
@@ -78,17 +79,17 @@ public final class HibernateStateManipulator implements StateManipulator {
 		saveCarrier(carrier);
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Collection<Route> getAllRoutesWithPoint(Location location) {
-		return (Collection<Route>) this.session.createCriteria(Route.class)
-				.add(Restrictions.ne("disabled", Bool.True))
-				.add( Restrictions.disjunction()
-						.add(Restrictions.eq("startPoint", location))
-						.add(Restrictions.eq("endPoint", location))
-				)
-				.list();
-	}
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public Collection<Route> getAllRoutesWithPoint(Location location) {
+//		return (Collection<Route>) this.session.createCriteria(Route.class)
+//				.add(Restrictions.ne("disabled", Bool.True))
+//				.add( Restrictions.disjunction()
+//						.add(Restrictions.eq("startPoint", location))
+//						.add(Restrictions.eq("endPoint", location))
+//				)
+//				.list();
+//	}
 
 	@Override
 	public Location getLocationForName(String name) {
@@ -150,7 +151,22 @@ public final class HibernateStateManipulator implements StateManipulator {
 				.executeUpdate();
 		this.session.save(domesticPrice);
 	}
-	
-	
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<Route> getAllRoutesForPriority(Priority priority) {
+		return (Collection<Route>) this.session.createCriteria(Route.class)
+					.add(Restrictions.in("transportMeans", priority.ValidTransportMeans))
+					.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<Route> getRoutesBetween(Location start, Location end, Priority priority) {
+		return (Collection<Route>) this.session.createCriteria(Route.class)
+					.add(Restrictions.eq("startpoint", start))
+					.add(Restrictions.eq("endPoint", end))
+					.add(Restrictions.in("transportMeans", priority.ValidTransportMeans))
+					.list();
+	}
 }

@@ -7,6 +7,7 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 
 /**
@@ -47,12 +48,38 @@ public interface ReadOnlyStateManipulator {
 	public List<Route> getAllRoute();
 	
 	/**
+	 * Get all the routes applicable for the given priority.
+	 * 
+	 * @param priority	The priority to use
+	 * @return	The collection of all routes for this priority
+	 */
+	public Collection<Route> getAllRoutesForPriority(Priority priority);
+	
+	/**
 	 * Get all the routes with one of, either the start or end, points at the given location
 	 * 
 	 * @param location	The location which the route should originate from, or end at.
 	 * @return	A collection of routes matching the criteria. Order is not guaranteed.
 	 */
-	public Collection<Route> getAllRoutesWithPoint(Location location);
+//	public Collection<Route> getAllRoutesWithPoint(Location location);
+	
+	/**
+	 * Get all routes starting at the given location
+	 * 
+	 * @param location	The location to start at
+	 * @return	A collection of every route starting at the given location
+	 */
+//	public Collection<Route> getAllRoutesStartAt(Location location);
+	
+	/**
+	 * Get all the routes that start at the start point, end at the end point, and are applicable for the given priority.
+	 * 
+	 * @param start	The start point.
+	 * @param end	The end point.
+	 * @param priority	The priority to search for
+	 * @return	All the routes that match the criteria
+	 */
+	public Collection<Route> getRoutesBetween(Location start, Location end, Priority priority);
 	
 	/**
 	 * Get a route by it's unique ID

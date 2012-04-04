@@ -77,7 +77,7 @@ public interface StateManipulator extends ReadOnlyStateManipulator {
 
 	/**
 	 * Delete an entity from the datasource
-	 * 
+	 * 	
 	 * @param entity	The entity to delete
 	 */
 	public void delete(StorageEntity entity);

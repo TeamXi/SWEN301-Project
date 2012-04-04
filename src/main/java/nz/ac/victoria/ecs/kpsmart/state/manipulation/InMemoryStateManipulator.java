@@ -13,6 +13,7 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
 
@@ -61,12 +62,6 @@ public final class InMemoryStateManipulator implements StateManipulator {
 	public void saveCarrier(StorageEntity carier) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public Collection<Route> getAllRoutesWithPoint(Location location) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -127,6 +122,19 @@ public final class InMemoryStateManipulator implements StateManipulator {
 	public void save(DomesticCustomerPrice domesticPrice) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Collection<Route> getAllRoutesForPriority(Priority priority) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<Route> getRoutesBetween(Location start, Location end,
+			Priority priority) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
