@@ -30,7 +30,7 @@
 					<a href="#" class="btn btn-primary" onclick="submitUpdateModal()">Update</a>
 				</div>
 			</div>
-			<div class="modal fade" id="addCarrierModal">
+			<div class="modal fade" id="addCarrierModal"> <!--  TODO: use common modal -->
 				<div class="modal-header">
 					<a class="close" data-dismiss="modal">×</a>
 					<h3>Add carrier</h3>
@@ -50,8 +50,8 @@
 					</stripes:form>
 				</div>
 				<div class="modal-footer">
-					<a href="#" class="btn btn-primary" data-dismiss="modal">Cancel</a>
-					<a href="#" class="btn btn-primary" onclick="submitAddModal()">Add</a>
+					<a href="#" class="btn btn-primary btn-warning" data-dismiss="modal">Cancel</a>
+					<a href="#" class="btn btn-primary btn-success" onclick="submitAddModal()">Create carrier</a>
 				</div>
 			</div>
 		</div>

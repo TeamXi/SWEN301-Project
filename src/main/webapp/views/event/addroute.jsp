@@ -49,7 +49,7 @@
 			<br />
 			<select id="newLocationMapLocationResults">
 			</select>
-			Is international: <input type="checkbox" checked=true" id="newLocationMapLocationIsInternational" />
+			Is international: <input type="checkbox" checked="checked" id="newLocationMapLocationIsInternational" />
 			<div id="newLocationMap"></div>
 		</div>
 	

@@ -79,7 +79,7 @@ function hideEmptyModal() {
 
 function configureMailModal() {
 	setEmptyModalTitle("New mail delivery");
-	setEmptyModalOkButton("Create", createNewMail);
+	setEmptyModalOkButton("Submit", createNewMail);
 	setEmptyModalCancelButton(true);
 	$("#emptyModalSuccessMessage").html("Mail added!");
 }
