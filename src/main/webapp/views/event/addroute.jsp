@@ -31,7 +31,7 @@
 	
 
 		<div id="newLocationMapWrapper">
-			<input type="text" id="newLocationMapLocationName"></input> <button onclick="searchNewLocation()">search</button>
+			<input type="text" id="newLocationMapLocationName"></input> <button class="btn" onclick="searchNewLocation()">search</button>
 			<br />
 			<select id="newLocationMapLocationResults">
 			</select>
