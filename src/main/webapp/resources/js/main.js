@@ -101,7 +101,7 @@ function initilizeLocationData(callback) {
 	if(locationDataDirty) {
 		$.get(kSiteRoot+"/event/location?list&format=json", function(data) {
 			response = eval(data);
-			names = new Array();
+			names = [];
 			
 			for(var n=0;n<response.length;n++) {
 				var location = response[n];

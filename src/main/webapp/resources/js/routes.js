@@ -120,7 +120,7 @@ function searchNewLocation() {
 
 function addMarker(map, marker) {
 	if(!map.markers) {
-		map.markers = new Array();
+		map.markers = [];
 	}
 	map.markers.push(marker);
 }
@@ -130,7 +130,7 @@ function clearMarkers(map) {
 		for(var i=0; i < map.markers.length; i++){
 			map.markers[i].setMap(null);
 		}
-		map.markers = new Array();
+		map.markers = [];
 	}
 }
 
