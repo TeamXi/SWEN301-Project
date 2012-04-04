@@ -1,4 +1,4 @@
-package nz.ac.victoria.ecs.kpsmart.reoutefinder;
+package nz.ac.victoria.ecs.kpsmart.routefinder;
 
 import java.util.List;
 
