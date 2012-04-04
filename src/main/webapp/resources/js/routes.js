@@ -47,7 +47,7 @@ function validateRouteForm(form) {
 
 function validateRouteLocationField(element) {
 	if(!isValidLocation(element.value)) {
-		validationError(element, '"'+element.value+'" is not a valid location. Would you like to <a class="inject-form-element" onclick="showNewLocationMap(\''+element.value+'\', this.formElement);">create it</a>?');
+		validationError(element, '"'+element.value+'" is not a valid location.'+(element.value?' Would you like to <a class="inject-form-element" onclick="showNewLocationMap(\''+element.value+'\', this.formElement);">create it</a>?':''));
 		return false;
 	}
 	return true;
