@@ -2877,13 +2877,12 @@ button.btn.small, input[type="submit"].btn.small {
   filter: alpha(opacity=80);
 }
 .modal {
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   z-index: 1050;
-  max-height: 500px;
-  overflow: auto;
-  width: 560px;
+  width: 580px;
+  overflow: visible;
   margin: -250px 0 0 -280px;
   background-color: #ffffff;
   border: 1px solid #999;
@@ -2910,7 +2909,7 @@ button.btn.small, input[type="submit"].btn.small {
   top: -25%;
 }
 .modal.fade.in {
-  top: 50%;
+  top: 40%;
 }
 .modal-header {
   padding: 9px 15px;

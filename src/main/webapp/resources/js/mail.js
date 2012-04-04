@@ -1,8 +1,8 @@
 function submitMailDeliveryForm(id) {
+	var form = document.getElementById(id);
+	if(!validateMailDeliveryForm(form)) return;
 	
-	if(!validateMailDeliveryForm(document.getElementById(id))) return;
-	
-	submitForm($("#newMailForm"), "mail?new", function(data){
+	submitForm(form, "/kpsmart/event/mail?new", function(data){
 		var returnObj = eval(data);
 		var status = returnObj.status;
 		
@@ -14,18 +14,25 @@ function submitMailDeliveryForm(id) {
 				);
 			}
 		}else{
-			$('#mailDelivered').modal('show');
-			
+			$("#emptyModalSuccessMessage").fadeIn(500,function(){
+				setTimeout(function () {
+					$("#emptyModalSuccessMessage").fadeOut(500);
+				}, 1000);
+			});
 		}
 		
 	});
 }
 
+function createNewMail(){
+	submitMailDeliveryForm('newMailForm');
+}
+
 function validateMailDeliveryForm(form) {
 	var ok = true;
-	$('.validate-error-message', form).each(function(index, child) {$(child).remove();});
-	ok &= validateLocationField(form.elements['source']);
-	ok &= validateLocationField(form.elements['destination']);
+	removeValidationMessages(form);
+	ok &= validateMailLocationField(form.elements['source']);
+	ok &= validateMailLocationField(form.elements['destination']);
 	if(form.elements['priority'].value == "placeholder") {
 		ok = false;
 		validationError(form.elements['priority'], "Please select a priority");
@@ -37,31 +44,13 @@ function validateMailDeliveryForm(form) {
 }
 
 
-function validateLocationField(element) {
+function validateMailLocationField(element) {
 	if(!isValidLocation(element.value)) {
 		validationError(element, '"'+element.value+'" is not a valid location');
 		return false;
 	}
 	return true;
 	
-}
-
-function isValidLocation(name) {
-	for(var n=0;n<locationList.length;n++) {
-		if(locationList[n].name.toLowerCase() == name.toLowerCase()) {
-			return true;
-		}
-	}
-	return false;
-}
-
-function isLocationInternational(name) {
-	for(var n=0;n<locationList.length;n++) {
-		if(locationList[n].name.toLowerCase() == name.toLowerCase()) {
-			return locationList[n].international;
-		}
-	}
-	return undefined;
 }
 
 function updateMailPriorityDropdown() {
@@ -80,12 +69,14 @@ function updateMailPriorityDropdown() {
 }
 
 $(document).ready(function() {
-	$(".portEntry").each(function(index, child) {
-					   $(child).typeahead({source: locationNames})
-					   		   .blur(function () {
-						   setTimeout(updateMailPriorityDropdown, 200);
-					   });
-				   });
+	initilizeLocationData(function () {
+		initilizePortEntryTypeahead(function (child) {
+			$(child).blur(function () {
+				setTimeout(updateMailPriorityDropdown, 200);
+			});
+		});
+	});
+	
 	$("#newMailForm select[name='priority'] option[value!='placeholder']").each(function(index, child) {
 		if(child.value.match('^International')) {
 			$(child).addClass('international-priority');

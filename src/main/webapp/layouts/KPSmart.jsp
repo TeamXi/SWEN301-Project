@@ -10,6 +10,9 @@
 			<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.css" />
 			<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css" />
 			<stripes:layout-component name="styles" />
+			<script type="text/javascript">
+				var kSiteRoot = "${pageContext.request.contextPath}";
+			</script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jQuery-1.7.0.min.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/main.js"></script>
@@ -26,19 +29,19 @@
 							<ul class="nav">
 								<li><a href="${pageContext.request.contextPath}/dashboard">Dashboard</a></li>
 								<c:if test="<%= isClerk() %>">
-									<li><a href="${pageContext.request.contextPath}/event/mail">Mail Delivery</a>
+									<li><a href="javascript:showMailModal();">Mail Delivery</a>
 									<li class="dropdown">
-										<a href="${pageContext.request.contextPath}/event/route#list" class="dropdown-toggle" data-toggle="dropdown">Routes<b class="caret"></b></a>
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown">Routes<b class="caret"></b></a>
 										<ul class="dropdown-menu">
-											<li><a href="${pageContext.request.contextPath}/event/route#list">List</a></li>
-											<li><a href="${pageContext.request.contextPath}/event/route#new">New</a></li>
+											<li><a href="${pageContext.request.contextPath}/event/route">List</a></li>
+											<li><a id="menu-newRouteDropdown" href="${pageContext.request.contextPath}/event/route#new">New</a></li>
 										</ul>
 									</li>
 									<li class="dropdown">
-										<a href="${pageContext.request.contextPath}/event/carrier#list" class="dropdown-toggle" data-toggle="dropdown">Carriers<b class="caret"></b></a>
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown">Carriers<b class="caret"></b></a>
 										<ul class="dropdown-menu">
-											<li><a href="${pageContext.request.contextPath}/event/carrier#list">List</a></li>
-											<li><a href="${pageContext.request.contextPath}/event/carrier#new">New</a></li>
+											<li><a href="${pageContext.request.contextPath}/event/carrier">List</a></li>
+											<li><a id="menu-newCarrierDropdown" href="${pageContext.request.contextPath}/event/carrier#new">New</a></li>
 										</ul>
 									</li>
 								</c:if>
@@ -60,8 +63,21 @@
 				</div>
 			</div>
 			
+			<div class="modal fade" id="emptyLayoutModal">
+				<div class="modal-header">
+					<a class="close" data-dismiss="modal">×</a>
+					<h3 id="emptyLayoutModalTitle"></h3>
+				</div>
+				<div class="modal-body">
+					<div id="emptyLayoutModalBody">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<a href="#" class="btn btn-warning" id="emptyLayoutModalCancel">Cancel</a>
+					<a href="#" class="btn btn-success" id="emptyLayoutModalSubmit"></a>
+				</div>
+			</div>
 
-			
 			<div class="container">
 				<div class="row-fluid">
 					<stripes:layout-component name="content" />

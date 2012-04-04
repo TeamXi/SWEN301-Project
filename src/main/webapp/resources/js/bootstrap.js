@@ -1471,6 +1471,7 @@
   "use strict"
 
   var Typeahead = function ( element, options ) {
+	element.typeahead = this
     this.$element = $(element)
     this.options = $.extend({}, $.fn.typeahead.defaults, options)
     this.matcher = this.options.matcher || this.matcher

@@ -10,27 +10,6 @@ input.validate-error, textarea.validate-error, select.validate-error {
   -moz-box-shadow: 0 0 6px #f8b9b7;
   box-shadow: 0 0 6px #f8b9b7;
 }
-.successMessage{
-	display: none;
-	padding: 25px;
-	position: fixed;
-	top: 20%;
-	left: 50%;
-	text-align: center;
-	width: 300px;
-	margin-left: -150px;
-	color: #666;
-	font-size: 25px;
-	line-height: 1.3;
-	background: #f8ffe8; /* Old browsers */
-	background: -moz-linear-gradient(top, #f8ffe8 0%, #e3f5ab 33%, #b7df2d 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8ffe8), color-stop(33%,#e3f5ab), color-stop(100%,#b7df2d)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #f8ffe8 0%,#e3f5ab 33%,#b7df2d 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #f8ffe8 0%,#e3f5ab 33%,#b7df2d 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #f8ffe8 0%,#e3f5ab 33%,#b7df2d 100%); /* IE10+ */
-	background: linear-gradient(top, #f8ffe8 0%,#e3f5ab 33%,#b7df2d 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8ffe8', endColorstr='#b7df2d',GradientType=0 ); /* IE6-9 */
-}
 .smoothEdge{
 	border-radius: 15px;
 	-moz-border-radius: 15px;
@@ -53,4 +32,26 @@ tr .row-hover-controls {
 
 tr:hover .row-hover-controls {
 	opacity: 1;
+}
+
+.smallMargin {
+	margin: 5px;
+}
+.alertSpacer{
+	height: 40px;
+	margin: -15px 0px 10px 0px;
+}
+#newLocationMap{
+	height: 350px;
+	width: 100%;
+}
+#newRouteCarouselWindow{
+	overflow: hidden;
+}
+#newRouteCarousel{
+	width: 1160px;
+}
+#newRouteCarousel > div{
+	width: 580px;
+	float: left;
 }

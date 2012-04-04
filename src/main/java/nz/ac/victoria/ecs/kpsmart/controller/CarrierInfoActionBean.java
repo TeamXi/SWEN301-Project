@@ -5,12 +5,10 @@ import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.HandlesEvent;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
-import net.sourceforge.stripes.ajax.JavaScriptResolution;
 import nz.ac.victoria.ecs.kpsmart.resolutions.FormValidationResolution;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityDeleteEvent.CarrierDeleteEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityUpdateEvent.CarrierUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.StateManipulator;
 
 @UrlBinding("/event/carrier?{$event}")
 public class CarrierInfoActionBean extends AbstractActionBean {
@@ -31,10 +29,11 @@ public class CarrierInfoActionBean extends AbstractActionBean {
 	
 	@HandlesEvent("new")
 	public Resolution newCarrierInfo() {
-		
 		Carrier newCarrier = new Carrier();
-		newCarrier.setName(name);
-		getStateManipulator().saveCarrier(newCarrier);
+		configureCarrier(newCarrier);
+		CarrierUpdateEvent event = new CarrierUpdateEvent();
+		event.setEntity(newCarrier);
+		getEntityManager().performEvent(event);
 		
 		return new FormValidationResolution(true,null,null);
 
@@ -43,15 +42,31 @@ public class CarrierInfoActionBean extends AbstractActionBean {
 	@HandlesEvent("updateform")
 	public Resolution updateForm() {
 		name = getStateManipulator().getCarrier(carrierId).getName();
-		return new ForwardResolution("/views/event/updateForm.jsp");
+		return new ForwardResolution("/views/event/carrierUpdateForm.jsp");
 	}
 	
 	@HandlesEvent("update")
 	public Resolution submitupdate() {
 		Carrier carrier = getStateManipulator().getCarrier(carrierId);
-		carrier.setName(name);
-		getStateManipulator().saveCarrier(carrier);
+		configureCarrier(carrier);
+		CarrierUpdateEvent event = new CarrierUpdateEvent();
+		event.setEntity(carrier);
+		getEntityManager().performEvent(event);
 		return new FormValidationResolution(true, null, null);
+	}
+	
+	@HandlesEvent("delete")
+	public Resolution deleteCarrier() {
+		CarrierDeleteEvent event = new CarrierDeleteEvent();
+		event.setEntity(getStateManipulator().getCarrier(carrierId));
+		getEntityManager().performEvent(event);
+		return new FormValidationResolution(true, null, null);
+	}
+	
+	protected Carrier configureCarrier(Carrier carrier) {
+		carrier.setName(name);
+		
+		return carrier;
 	}
 
 	/**

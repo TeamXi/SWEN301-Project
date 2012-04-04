@@ -20,9 +20,19 @@ function validationError(element, message) {
 	$(element).before('<div class="alert alert-error fade in validate-error-message">'+
 			'<a class="close" data-dismiss="alert">&times;</a>'+
 			message+
-		'</div>');
+		'</div>')
+		.prev()
+		.find(".inject-form-element")
+		.each(function (index, child) {
+			child.formElement = element;
+		});
 	$(element).addClass('validate-error')
 			  .focus(function() {
 		$(element).removeClass('validate-error');
 	});
+}
+
+function removeValidationMessages(form) {
+	$('.validate-error-message', form).each(function (index, child) {$(child).remove();});
+	$('.validate-error', form).each(function (index, child) {$(child).removeClass('validate-error');});
 }

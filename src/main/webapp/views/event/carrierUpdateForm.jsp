@@ -7,4 +7,6 @@
 
 	<stripes:label for="name">Name</stripes:label>
 	<stripes:text name="name" value="${actionBean.name}"/>
+	
+	<stripes:submit name="submit" style="visibility:hidden"></stripes:submit>
 </stripes:form>

@@ -1,9 +1,3 @@
-function submitNewCarrierForm(id) {
-	submitCarrierForm(document.getElementById(id), "carrier?new", function () {
-		$('#carrierAdded').modal('show');
-	});
-}
-
 function submitCarrierForm(element, url, callback) {
 	if(!validateCarrierForm(element)) return;
 	
@@ -18,28 +12,58 @@ function submitCarrierForm(element, url, callback) {
 						returnObj.validation[error].message
 				);
 			}
-		}else{
-			callback();
+		} else{
+			callback(data);
 			
-			$.get("carrier?listfragment", function (data) {
-				$("#carrierListContainer").html(data);
+			updateCarrierList();
+		}
+	});
+}
+
+
+function submitNewCarrierForm(id) {
+	submitCarrierForm(document.getElementById(id), "carrier?new", function (data) {
+		var response = eval(data);
+		
+		if(!response.status) {
+			alert("There was an error adding this carrier.");
+		}
+		else {
+			$("#addCarrierSuccessMessage").fadeIn(500,function(){
+				setTimeout(function () {
+					$("#addCarrierSuccessMessage").fadeOut(500);
+				}, 1000);
 			});
 		}
 	});
 }
 
-function submitUpdateCarrierForm(formId, carrierId) {
-	var element = document.getElementById(formId);
-	
-	if(!validateCarrierForm(element)) return;
-	
-	submitCarrierForm(element, "carrier?update&carrierId="+carrierId, function () {
+function submitAddModal() {
+	document.getElementById('newCarrierForm').submit();
+}
+
+
+function submitUpdateCarrierForm(formId, carrierId) {	// TODO: merge with submitNewCarrierForm?
+	submitCarrierForm(document.getElementById(formId), "carrier?update&carrierId="+carrierId, function (data) {
+		var response = eval(data);
+		
+		if(!response.status) {
+			alert("There was an error updating this carrier.");
+		}
+		
 		$('#updateCarrierModal').modal('hide');
 	});
 }
 
 function submitUpdateModal() {
 	document.getElementById('updateCarrierForm').submit();
+}
+
+
+function updateCarrierList() {
+	$.get("carrier?listfragment", function (data) {
+		$("#carrierListContainer").html(data);
+	});
 }
 
 function updateCarrier(carrierID) {
@@ -49,10 +73,27 @@ function updateCarrier(carrierID) {
 	});
 }
 
+function addCarrier() {
+	$('#addCarrierModal').modal('show');
+}
+
+function deleteCarrier(name, id) {
+	if(confirm("Are you sure you wish to delete " + name + "? If you do this all the routes run by this carrier will be discontinued.")) {
+		$.post("carrier?delete&carrierId="+id, function (data) {
+			var response = eval(data);
+			
+			if(response.status) {
+				updateCarrierList();
+			} else {
+				alert("There was an error deleting this carrier.");
+			}
+		});
+	}
+}
+
 function validateCarrierForm(form) {
 	var ok = true;
-	$('.validate-error-message', form).each(function(index, child) {$(child).remove();});
-
+	removeValidationMessages(form);
 	if(!form.elements['name'].value) {
 		ok = false;
 		validationError(form.elements['name'], "Please enter a name");
@@ -62,7 +103,15 @@ function validateCarrierForm(form) {
 }
 
 $(document).ready(function() {
-	$('#carrierAdded').modal({show:false, keyboard:true, backdrop: true});
+	$('#addCarrierModal').modal({show:false, keyboard:true, backdrop: true});
 	
 	$('#updateCarrierModal').modal({show:false, keyboard:true, backdrop: true});
+	
+	if(window.location.hash == "#new") {
+		addCarrier();
+	}
+	
+	$("#menu-newCarrierDropdown").click(function () {
+		addCarrier();
+	});
 });

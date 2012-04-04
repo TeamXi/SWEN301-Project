@@ -1,11 +1,11 @@
 package nz.ac.victoria.ecs.kpsmart.controller;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import nz.ac.victoria.ecs.kpsmart.InjectOnContruct;
+import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.StateManipulator;
 
 @InjectOnContruct
@@ -14,9 +14,14 @@ public abstract class AbstractActionBean implements ActionBean {
 	
 	@Inject
 	private StateManipulator stateManipulator;
-	
 	public StateManipulator getStateManipulator() {
 		return stateManipulator;
+	}
+	
+	@Inject
+	private EntityManager entityManager;
+	public EntityManager getEntityManager() {
+		return entityManager;
 	}
 	
 	public AbstractActionBean() {
