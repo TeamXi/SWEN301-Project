@@ -2,20 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="stripes"
 	uri="http://stripes.sourceforge.net/stripes.tld"%>
-<%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json"%>
-
-
-<script type="text/javascript">
-			var locationNames = <json:array var="location" items="${actionBean.stateManipulator.allLocations}">
-									<json:property value="${location.name}"/>
-								</json:array>;
-			var locationList =	<json:array var="location" items="${actionBean.stateManipulator.allLocations}">
-									<json:object>
-										<json:property name="name" value="${location.name}"/>
-										<json:property name="international" value="${location.international}"/>
-									</json:object>
-								</json:array>;
-</script>
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/formvalidation.js"></script>
 
