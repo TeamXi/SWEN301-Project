@@ -11,11 +11,14 @@
 			<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css" />
 			<stripes:layout-component name="styles" />
 			<script type="text/javascript">
-				var kSiteRoot = "${pageContext.request.contextPath}";
+				var KPS = {
+					siteRoot: "${pageContext.request.contextPath}",
+				};
 			</script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jQuery-1.7.0.min.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/main.js"></script>
+			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/mail.js"></script>
 
 			<stripes:layout-component name="scripts" />
 		</head>
@@ -29,7 +32,7 @@
 							<ul class="nav">
 								<li><a href="${pageContext.request.contextPath}/dashboard">Dashboard</a></li>
 								<c:if test="<%= isClerk() %>">
-									<li><a href="javascript:showMailModal();">Mail Delivery</a>
+									<li><a href="#" class="new-mail-delivery-link">Mail Delivery</a>
 									<li class="dropdown">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown">Routes<b class="caret"></b></a>
 										<ul class="dropdown-menu">

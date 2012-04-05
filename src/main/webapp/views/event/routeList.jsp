@@ -17,8 +17,8 @@
 				<td>
 					<c:out value="${route.international?'International':'Domestic'}" />
 					<span class="row-hover-controls">
-						<a onclick="updateRoute('${route.id}')">update</a>
-						<a onclick="deleteRoute('from ${route.startPoint.name} to ${route.endPoint.name}', ${route.id})">delete</a> <!-- TODO: escaping? -->
+						<a onclick="KPS.event.route.updateRoute('${route.id}')">update</a>
+						<a onclick="KPS.event.route.deleteRoute('from ${route.startPoint.name} to ${route.endPoint.name}', ${route.id})">delete</a> <!-- TODO: escaping? -->
 					</span>
 				</td>
 			</tr>

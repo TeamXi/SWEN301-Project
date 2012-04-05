@@ -45,6 +45,11 @@ public class CarrierInfoActionBean extends AbstractActionBean {
 		return new ForwardResolution("/views/event/carrierUpdateForm.jsp");
 	}
 	
+	@HandlesEvent("newform")
+	public Resolution newForm() {
+		return new ForwardResolution("/views/event/carrierNewForm.jsp");
+	}
+	
 	@HandlesEvent("update")
 	public Resolution submitupdate() {
 		Carrier carrier = getStateManipulator().getCarrier(carrierId);

@@ -12,7 +12,7 @@
 	
 		<div class="span12">
 			<h1 class="pull-left">Routes</h1>
-			<button class="btn btn-success smallMargin" onclick="addRoute();">Add new</button>
+			<button class="btn btn-success smallMargin" onclick="KPS.event.route.addRoute();">Add new</button>
 		</div>
 		<div id="routeListContainer">
 			<jsp:include page="routeList.jsp"></jsp:include>

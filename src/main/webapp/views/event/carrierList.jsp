@@ -11,7 +11,7 @@
 			<tr>
 				<td>
 					<c:out value="${carrier.name}"/>
-					<span class="row-hover-controls"><a onclick="updateCarrier('${carrier.id}')">update</a> <a onclick="deleteCarrier('${carrier.name}', ${carrier.id})">delete</a></span>
+					<span class="row-hover-controls"><a onclick="KPS.event.carrier.updateCarrier('${carrier.id}')">update</a> <a onclick="KPS.event.carrier.deleteCarrier('${carrier.name}', ${carrier.id})">delete</a></span>
 				</td>
 			</tr>
 		</c:forEach>

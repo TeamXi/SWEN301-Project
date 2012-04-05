@@ -8,9 +8,7 @@
 <div id="newRouteCarouselWindow">
 	<div id="newRouteCarousel">
 		<div id="newRouteFormContainer">
-			<stripes:form id="newRouteForm"
-				action="javascript:submitNewRouteForm('newRouteForm')"
-				onsubmit="return validateRouteForm(this)">
+			<stripes:form id="newRouteForm" action="javascript:KPS.event.route.submitNewForm('newRouteForm')">
 
 				<stripes:label for="source">Source</stripes:label>
 				<stripes:text class="portEntry" name="source" />
@@ -28,16 +26,14 @@
 				<stripes:submit name="submit" style="visibility:hidden"></stripes:submit>
 			</stripes:form>
 		</div>
-	
 
 		<div id="newLocationMapWrapper">
-			<input type="text" id="newLocationMapLocationName"></input> <button class="btn" onclick="searchNewLocation()">search</button>
+			<input type="text" id="newLocationMapLocationName"></input> <button class="btn" onclick="KPS.event.location.search()">search</button>
 			<br />
 			<select id="newLocationMapLocationResults">
 			</select>
 			Is international: <input type="checkbox" checked="checked" id="newLocationMapLocationIsInternational" />
 			<div id="newLocationMap"></div>
 		</div>
-	
 	</div>
 </div>

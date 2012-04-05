@@ -1,117 +1,128 @@
-function submitCarrierForm(element, url, callback) {
-	if(!validateCarrierForm(element)) return;
+KPS.event = KPS.event || {};
+KPS.event.carrier = KPS.event.carrier || {};
+
+(function (cls, $, undefined) {
+	function validateForm(form) {
+		var ok = true;
+		KPS.validation.resetValidation(form);
+		if(!form.elements['name'].value) {
+			ok = false;
+			KPS.validation.validationError(form.elements['name'], "Please enter a name");
+		}
+		
+		return ok;
+	}
 	
-	submitForm($(element), url, function(data){
-		var returnObj = eval(data);
-		var status = returnObj.status;
+	function submitForm(element, url, callback) {
+		if(!validateForm(element)) return;
 		
-		if(!status){
-			for(var error in returnObj.validation){
-				validationError(
-						$("input[name='"+returnObj.validation[error].name+"']"),
-						returnObj.validation[error].message
-				);
-			}
-		} else{
-			callback(data);
+		KPS.util.submitForm($(element), url, function(data){
+			var returnObj = eval(data);
+			var status = returnObj.status;
 			
-			updateCarrierList();
-		}
-	});
-}
-
-
-function submitNewCarrierForm(id) {
-	submitCarrierForm(document.getElementById(id), "carrier?new", function (data) {
-		var response = eval(data);
-		
-		if(!response.status) {
-			alert("There was an error adding this carrier.");
-		}
-		else {
-			$("#addCarrierSuccessMessage").fadeIn(500,function(){
-				setTimeout(function () {
-					$("#addCarrierSuccessMessage").fadeOut(500);
-				}, 1000);
-			});
-		}
-	});
-}
-
-function submitAddModal() {
-	document.getElementById('newCarrierForm').submit();
-}
-
-
-function submitUpdateCarrierForm(formId, carrierId) {	// TODO: merge with submitNewCarrierForm?
-	submitCarrierForm(document.getElementById(formId), "carrier?update&carrierId="+carrierId, function (data) {
-		var response = eval(data);
-		
-		if(!response.status) {
-			alert("There was an error updating this carrier.");
-		}
-		
-		$('#updateCarrierModal').modal('hide');
-	});
-}
-
-function submitUpdateModal() {
-	document.getElementById('updateCarrierForm').submit();
-}
-
-
-function updateCarrierList() {
-	$.get("carrier?listfragment", function (data) {
-		$("#carrierListContainer").html(data);
-	});
-}
-
-function updateCarrier(carrierID) {
-	$('#updateCarrierModal').modal('show');
-	$.get("carrier?updateform&carrierId="+carrierID, function (data) {
-		$("#updateFormContainer").html(data);
-	});
-}
-
-function addCarrier() {
-	$('#addCarrierModal').modal('show');
-}
-
-function deleteCarrier(name, id) {
-	if(confirm("Are you sure you wish to delete " + name + "? If you do this all the routes run by this carrier will be discontinued.")) {
-		$.post("carrier?delete&carrierId="+id, function (data) {
-			var response = eval(data);
-			
-			if(response.status) {
+			if(!status){
+				for(var error in returnObj.validation){
+					KPS.validation.validationError(
+							$("input[name='"+returnObj.validation[error].name+"']"),
+							returnObj.validation[error].message
+					);
+				}
+			} else{
+				callback(data);
+				
 				updateCarrierList();
-			} else {
-				alert("There was an error deleting this carrier.");
 			}
 		});
 	}
-}
-
-function validateCarrierForm(form) {
-	var ok = true;
-	removeValidationMessages(form);
-	if(!form.elements['name'].value) {
-		ok = false;
-		validationError(form.elements['name'], "Please enter a name");
+	
+	cls.submitNewForm = function(id) {
+		submitForm(document.getElementById(id), "carrier?new", function (data) {
+			var response = eval(data);
+			
+			if(!response.status) {
+				alert("There was an error adding this carrier.");
+			}
+			else {
+				$("#carrierSuccessMessage").fadeIn(500,function(){
+					setTimeout(function () {
+						$("#carrierSuccessMessage").fadeOut(500);
+					}, 1000);
+				});
+			}
+		});
+	};
+	
+	cls.submitUpdateForm = function(formId, carrierId) {
+		submitForm(document.getElementById(formId), "carrier?update&carrierId="+carrierId, function (data) {
+			var response = eval(data);
+			
+			if(!response.status) {
+				alert("There was an error updating this carrier.");
+			}
+			
+			$('#updateCarrierModal').modal('hide');
+		});
+	};
+	
+	cls.deleteCarrier = function(name, id) {
+		if(confirm("Are you sure you wish to delete " + name + "? If you do this all the routes run by this carrier will be discontinued.")) {
+			$.post("carrier?delete&carrierId="+id, function (data) {
+				var response = eval(data);
+				
+				if(response.status) {
+					updateCarrierList();
+				} else {
+					alert("There was an error deleting this carrier.");
+				}
+			});
+		}
+	};
+	
+	function configureAddModal() { // TODO: static config
+		KPS.modal.setTitle("Add carrier");
+		KPS.modal.setOkButtonTitle("Create");
+		KPS.modal.setOkButtonAction(function() {
+			cls.submitNewForm('newCarrierForm');
+		});
+		KPS.modal.setCancelButtonAction(true);
 	}
 	
-	return ok;
-}
-
-$(document).ready(function() {
-	$('#addCarrierModal').modal({show:false, keyboard:true, backdrop: true});
-	
-	$('#updateCarrierModal').modal({show:false, keyboard:true, backdrop: true});
-	
-	if(window.location.hash == "#new") {
-		addCarrier();
+	function configureUpdateModal() { // TODO: static config
+		KPS.modal.setTitle("Update carrier");
+		KPS.modal.setOkButtonTitle("Update");
+		KPS.modal.setOkButtonAction(function() {
+			cls.submitUpdateForm('updateCarrierForm');
+		});
+		KPS.modal.setCancelButtonAction(true);
 	}
 	
-	$("#menu-newCarrierDropdown").click(function () {
-		addCarrier();
+	cls.addCarrier = function() {
+		KPS.modal.load("carrier?newform", function (){
+			configureAddModal();
+			KPS.modal.show();
+		});
+	};
+	
+	cls.updateCarrier = function(carrierID) {
+		KPS.modal.load("carrier?updateform&carrierId="+carrierID, function () {
+			configureUpdateModal();
+			KPS.modal.show();
+		});
+	};
+	
+	function updateCarrierList() {
+		$.get("carrier?listfragment", function (data) {
+			$("#carrierListContainer").html(data);
+		});
+	}
+	
+	$(document).ready(function() {
+		if(window.location.hash == "#new") {
+			cls.addCarrier();
+		}
+		
+		$("#menu-newCarrierDropdown").click(function () {
+			cls.addCarrier();
+		});
 	});
-});
+}(KPS.event.carrier, jQuery));
