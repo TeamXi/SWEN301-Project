@@ -6,7 +6,7 @@
 	<stripes:layout-component name="title">Route List</stripes:layout-component>
 	<stripes:layout-component name="content">
 	<stripes:layout-component name="scripts">
-		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/routes.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/route.js"></script>
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 	</stripes:layout-component>
 	

@@ -32,7 +32,7 @@ public class RouteActionBean extends AbstractActionBean {
 	}
 	@HandlesEvent("add")
 	public Resolution addRouteScreen() {
-		return new ForwardResolution("/views/event/addroute.jsp");
+		return new ForwardResolution("/views/event/routeNewForm.jsp");
 	}
 	
 	@HandlesEvent("listfragment")
