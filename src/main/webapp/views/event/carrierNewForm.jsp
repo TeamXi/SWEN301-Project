@@ -7,5 +7,5 @@
 	<stripes:label for="name">Name</stripes:label>
 	<stripes:text name="name"/>
 	
-	<stripes:submit name="submit" style="visibility:hidden"></stripes:submit>
+	<stripes:submit name="submitbutton" style="visibility:hidden"></stripes:submit>
 </stripes:form>

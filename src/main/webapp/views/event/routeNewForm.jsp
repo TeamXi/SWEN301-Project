@@ -23,7 +23,7 @@
 						enum="nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans" />
 				</stripes:select>
 				
-				<stripes:submit name="submit" style="visibility:hidden"></stripes:submit>
+				<stripes:submit name="submitbutton" style="visibility:hidden"></stripes:submit>
 			</stripes:form>
 		</div>
 

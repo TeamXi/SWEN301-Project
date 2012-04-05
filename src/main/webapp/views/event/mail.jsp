@@ -32,5 +32,5 @@
 	<stripes:label for="volume">Volume (cm&sup3;)</stripes:label>
 	<stripes:text name="volume" />
 	
-	<stripes:submit name="submit" style="visibility:hidden"></stripes:submit>
+	<stripes:submit name="submitbutton" style="visibility:hidden"></stripes:submit>
 </stripes:form>

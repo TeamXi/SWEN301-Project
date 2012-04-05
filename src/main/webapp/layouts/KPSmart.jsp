@@ -76,7 +76,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<a href="#" class="btn btn-warning" id="emptyLayoutModalCancel">Cancel</a>
+					<a href="#" class="btn btn-warning" id="emptyLayoutModalCancel"></a>
 					<a href="#" class="btn btn-success" id="emptyLayoutModalSubmit"></a>
 				</div>
 			</div>

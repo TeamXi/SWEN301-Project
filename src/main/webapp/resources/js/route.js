@@ -6,6 +6,27 @@ KPS.util.map = KPS.util.map || {};
 
 (function(cls, $, undefined) {
 	// TODO: el, $el?
+	
+	var addModalConfiguration = {
+			title: "Add route",
+			okButton: {
+				title: "Create route",
+				action: function() {
+					document.getElementById('newRouteForm').submit();
+				}
+			}
+	};
+	var updateModalConfiguration = {
+			title: "Update route",
+			okButton: {
+				title: "Update",
+				action: function() {
+					//document.getElementById('updateRouteForm').submit();
+					// TODO: implement
+				}
+			}
+	};
+	
 	cls.submitNewForm = function() {
 		var form = document.getElementById('newRouteForm');
 		if(!cls.validateForm(form)) return;
@@ -47,9 +68,7 @@ KPS.util.map = KPS.util.map || {};
 	};
 	
 	cls.showNewLocationScreen = function(placeName, element) {
-		KPS.event.location.show(placeName, element, function() {
-			configureAddModal();
-		});
+		KPS.event.location.show(placeName, element);
 	};
 	
 	function validateLocationField(element) {
@@ -60,39 +79,22 @@ KPS.util.map = KPS.util.map || {};
 		return true;
 	}
 	
-	function configureAddModal() { // TODO: use config()
-		KPS.modal.setTitle("Add route");
-		KPS.modal.setOkButtonTitle("Create route");
-		KPS.modal.setOkButtonAction(function() {
-			cls.submitNewForm();
-		});
-		KPS.modal.setCancelButtonAction(true);
-//		$("#emptyModalSuccessMessage").html("Route added!"); // TODO: else
-		KPS.data.locations.load(function () {
-			KPS.data.locations.setupPortEntryTypeahead();
-		});
-	}
-	
-	function configureUpdateModal() { // TODO: use config()
-		KPS.modal.setTitle("Update route");
-		KPS.modal.setOkButtonTitle("Update route"); // TODO: all spelling of buttons
-		KPS.modal.setOkButtonAction(function(){}); // TODO: implement
-		KPS.modal.setCancelButtonAction(true);
-//		$("#emptyModalSuccessMessage").html("Route added!"); // TODO: else
-		KPS.data.locations.load(function () {
-			KPS.data.locations.setupPortEntryTypeahead();
-		});
-	}
-	
 	cls.addRoute = function(){
-		KPS.modal.load("/kpsmart/event/route?add",function(){
-			configureAddModal();
+		KPS.modal.load("route?add",function(){
+			KPS.modal.configure(addModalConfiguration);
+			KPS.data.locations.load(function () { // TODO: needed?
+				KPS.data.locations.setupPortEntryTypeahead();
+			});
 			KPS.modal.show();
 		});
 	};
 	
 	cls.updateRoute = function(id) {
 		KPS.modal.load("route?updateform&routeId="+id, function (data) {
+			KPS.modal.configure(updateModalConfiguration);
+			KPS.data.locations.load(function () { // TODO: needed?
+				KPS.data.locations.setupPortEntryTypeahead();
+			});
 			KPS.modal.show();
 		});
 	};
@@ -127,14 +129,30 @@ KPS.util.map = KPS.util.map || {};
 	var map = undefined;
 	var backStackInfo = {};
 	
-	cls.show = function(name, element, callback){
-		backStackInfo = {element: element, callback: callback};
+	var modalConfiguration = {
+			title: "Add location",
+			okButton: {
+				title: "Create location",
+				action: function() {
+					create();
+				}
+			},
+			cancelButton: {
+				action: function() {
+					dismissNewLocation();
+//					$("#emptyModalSuccessMessage").html("Location added!"); // TODO: look at all of these
+				}
+			}
+	};
+	
+	cls.show = function(name, element){
+		backStackInfo = {element: element};
 		
 		if(!map) {
 			setupMap();
 		}
 		
-		configureModal();
+		backStackInfo.oldModal = KPS.modal.configure(modalConfiguration);
 		$("#newRouteCarousel").animate({marginLeft:"-580px"},400); // TODO: move animation stuff to modal something?
 		document.getElementById('newLocationMapLocationName').value = name;
 		search();
@@ -142,7 +160,7 @@ KPS.util.map = KPS.util.map || {};
 
 	function dismiss() {
 		$("#newRouteCarousel").animate({marginLeft:"0"},400);
-		backStackInfo.callback();
+		KPS.modal.configure(backStackInfo.oldModal);
 	};
 	
 	function create() { // TODO: success info
@@ -191,16 +209,6 @@ KPS.util.map = KPS.util.map || {};
 				alert("Geocode was not successful for the following reason: " + status);
 			}
 		});
-	}
-	
-	function configureModal() {
-		KPS.modal.setTitle("Add location");
-		KPS.modal.setOkButtonTitle("Create location");
-		KPS.modal.setOkButtonAction(create);
-		KPS.modal.setCancelButtonAction(function () {
-			dismissNewLocation();
-		});
-//		$("#emptyModalSuccessMessage").html("Location added!"); // TODO: look at all of these
 	}
 	
 	function setupMap() {

@@ -3,6 +3,17 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 
 (function (cls, $, undefined) {
 	// TODO: el, $el?
+	
+	var modalConfiguration = {
+			title: "New mail delivery",
+			okButton: {
+				title: "Submit",
+				action: function() {
+					document.getElementById('newMailForm').submit();
+				}
+			}
+	};
+	
 	cls.submitForm = function(id) {
 		var form = document.getElementById(id);
 		if(!validateForm(form)) return;
@@ -62,15 +73,6 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 		}
 	}
 	
-	function configureModal() {
-		KPS.modal.setTitle("New mail delivery");
-		KPS.modal.setOkButtonTitle("Submit");
-		KPS.modal.setOkButtonAction(function() {
-			cls.submitForm('newMailForm');
-		});
-		KPS.modal.setCancelButtonAction(true);
-	}
-	
 	$(document).ready(function() {
 		KPS.data.locations.load(function () {
 			KPS.data.locations.setupPortEntryTypeahead(function (child) {
@@ -92,7 +94,7 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 		$(".new-mail-delivery-link").each(function (index, child) {
 			$(child).click(function () {
 				KPS.modal.load("/kpsmart/event/mail", function(){
-					configureModal();
+					KPS.modal.configure(modalConfiguration);
 					KPS.modal.show();
 				});
 			});

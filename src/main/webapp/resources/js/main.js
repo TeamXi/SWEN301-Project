@@ -29,39 +29,47 @@ function show(obj){
 	alert(JSON.stringify(obj, null, "\t"));
 }
 
-(function (cls, $, undefined) { // TODO: setters private and record configuration?
-	// TODO: entirely js?
+(function (cls, $, undefined) {
+	// TODO: create element in js?
 //	var $el; // TODO: use
-	
-	cls.setTitle = function(title) {
+
+	var defaultConfiguration = {
+			title: "Modal",
+			okButton: {
+				title: "Ok",
+				action: function () {
+					cls.hide();
+				}
+			},
+			cancelButton: {
+				title: "Cancel",
+				action: function () {
+					cls.hide();
+				}
+			}
+	};
+	var currentConfiguration = defaultConfiguration;
+
+	function setTitle(title) {
 		$("#emptyLayoutModalTitle").html(title);
 	};
 
-	cls.setOkButtonTitle = function(name) {
+	function setOkButtonTitle(name) {
 		$("#emptyLayoutModalSubmit").html(name);
 	};
-	
-	cls.setOkButtonAction = function(action) {
-		$("#emptyLayoutModalSubmit").unbind();
-		$("#emptyLayoutModalSubmit").click(function (){
-			action();
-		});
+
+	function setOkButtonAction(action) {
+		$("#emptyLayoutModalSubmit").unbind('click');
+		$("#emptyLayoutModalSubmit").click(action);
 	};
 
-	/**
-	 * @param action false = no action, true = dismiss, function = action, anything else = no action
-	 */
-	cls.setCancelButtonAction = function(action) {
-		$("#emptyLayoutModalCancel").unbind();
-		
-		if(action === true) {
-			$("#emptyLayoutModalCancel").click(function () {
-				cls.hide();
-			});
-		}
-		else if(typeof action === 'function') {
-			$("#emptyLayoutModalCancel").click(action);
-		}
+	function setCancelButtonTitle(name) {
+		$("#emptyLayoutModalCancel").html(name);
+	};
+
+	function setCancelButtonAction(action) {
+		$("#emptyLayoutModalCancel").unbind('click');
+		$("#emptyLayoutModalCancel").click(action);
 	};
 
 	cls.show = function() {
@@ -71,14 +79,19 @@ function show(obj){
 	cls.hide = function() {
 		$('#emptyLayoutModal').modal('hide');
 	};
-	
-//	cls.configure = function(configuration) {
-//		this.setTitle(configuration.title);
-//		this.setOkButtonTitle(configuration.okTitle);
-//		this.setOkButtonAction(configuration.okAction);
-//		this.setCancelAction(consfiguration.cancelAction);
-//	};
-	
+
+	cls.configure = function(configuration) {
+		setTitle(configuration.title || defaultConfiguration.title);
+		setOkButtonTitle((configuration.okButton || {}).title || defaultConfiguration.okButton.title);
+		setOkButtonAction((configuration.okButton || {}).action || defaultConfiguration.okButton.action);
+		setCancelButtonTitle((configuration.cancelButton || {}).title || defaultConfiguration.cancelButton.title);
+		setCancelButtonAction((configuration.cancelButton || {}).action || defaultConfiguration.cancelButton.action);
+
+		var tmp = currentConfiguration;
+		currentConfiguration = configuration;
+		return tmp;
+	};
+
 	cls.load = function(url, callback) {
 		$("#emptyLayoutModalBody").load(url, {}, callback);
 	};
@@ -89,13 +102,13 @@ $(document).ready(function() {
 		$(".switch-container > *").hide();
 		$(".switch-container > *[data-window-hash='"+window.location.hash.substring(1)+"']").show();
 	};
-	
+
 	$(window).bind('hashchange', function() {
 		checkWindowHash();
 	});
-	
+
 	checkWindowHash();
-	
+
 	$('#emptyLayoutModal').modal({show:false, keyboard:true, backdrop: 'static'});
 
 });
@@ -104,7 +117,7 @@ $(document).ready(function() {
 	var locationList = [];
 	var locationNames = [];
 	var locationDataDirty = true;
-	
+
 	cls.setNeedsUpdate = function() {
 		locationDataDirty = true;
 	};
@@ -114,17 +127,17 @@ $(document).ready(function() {
 			$.get(KPS.siteRoot+"/event/location?list&format=json", function(data) {
 				response = eval(data);
 				names = [];
-				
+
 				for(var n=0;n<response.length;n++) {
 					var location = response[n];
 					names.push(location.name);
 				}
-				
+
 				locationList = response;
 				locationNames = names;
-				
+
 				locationDataDirty = false;
-				
+
 				callback();
 			});
 		}
