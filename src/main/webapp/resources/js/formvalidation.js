@@ -37,4 +37,15 @@ KPS.validation = KPS.validation || {};
 		$('.validate-error-message', form).each(function (index, child) {$(child).remove();});
 		$('.validate-error', form).each(function (index, child) {$(child).removeClass('validate-error');});
 	};
+	
+	cls.validationErrors = function(form, errors) {
+		for(var n=0;n<errors.length;n++){
+			var error = errors[n];
+			
+			KPS.validation.validationError(
+					$(form).find("input[name='"+error.name+"']"),
+					error.message
+			);
+		}
+	};
 }(KPS.validation, jQuery));

@@ -15,14 +15,9 @@ KPS.util.map = KPS.util.map || {};
 			var status = returnObj.status;
 
 			if(!status){
-				for(var error in returnObj.validation){ // TODO: common location
-					KPS.validation.validationError(
-							$("input[name='"+returnObj.validation[error].name+"']"),
-							returnObj.validation[error].message
-					);
-				}
+				KPS.validation.validationErrors(form, returnObj.validation);
 			}else{
-				$("#emptyModalSuccessMessage").fadeIn(500,function(){
+				$("#emptyModalSuccessMessage").fadeIn(500,function(){ // TODO: implement
 					setTimeout(function () {
 						$("#emptyModalSuccessMessage").fadeOut(500);
 					}, 1000);

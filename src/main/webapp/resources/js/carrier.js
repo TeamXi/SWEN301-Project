@@ -13,20 +13,15 @@ KPS.event.carrier = KPS.event.carrier || {};
 		return ok;
 	}
 	
-	function submitForm(element, url, callback) {
-		if(!validateForm(element)) return;
+	function submitForm(form, url, callback) {
+		if(!validateForm(form)) return;
 		
-		KPS.util.submitForm($(element), url, function(data){
+		KPS.util.submitForm($(form), url, function(data){
 			var returnObj = eval(data);
 			var status = returnObj.status;
 			
 			if(!status){
-				for(var error in returnObj.validation){
-					KPS.validation.validationError(
-							$("input[name='"+returnObj.validation[error].name+"']"),
-							returnObj.validation[error].message
-					);
-				}
+				KPS.validation.validationErrors(form, returnObj.validation);
 			} else{
 				callback(data);
 				

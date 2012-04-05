@@ -12,12 +12,7 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 			var status = returnObj.status;
 			
 			if(!status){
-				for(var error in returnObj.validation){ // TODO: common, part of submitForm?
-					KPS.validation.validationError(
-							$("input[name='"+returnObj.validation[error].name+"']"),
-							returnObj.validation[error].message
-					);
-				}
+				KPS.validation.validationErrors(form, returnObj.validation);
 			}else{
 				$("#addMailSuccessMessage").fadeIn(500,function(){
 					setTimeout(function () {

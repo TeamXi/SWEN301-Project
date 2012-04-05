@@ -12,7 +12,7 @@
 		class="alert alert-success">Mail added successfully!
 	</div>
 </div>
-<stripes:form id="newMailForm" action="javascript:KPS.event.mail.submitForm('newMailForm')">
+<stripes:form id="newMailForm" action="javascript:KPS.event.maildelivery.submitForm('newMailForm')">
 	<stripes:label for="source">Source</stripes:label>
 	<stripes:text class="portEntry" name="source" />
 
