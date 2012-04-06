@@ -1,5 +1,6 @@
 KPS.util = KPS.util || {};
 KPS.modal = KPS.modal || {};
+KPS.modal.carrousel = KPS.modal.carrousel || {};
 KPS.data = KPS.data || {};
 KPS.data.locations = KPS.data.locations || {};
 
@@ -29,7 +30,7 @@ function show(obj){
 	alert(JSON.stringify(obj, null, "\t"));
 }
 
-(function (cls, $, undefined) {
+(function (cls, $, undefined) { // TODO: common alert area in modals?
 	// TODO: create element in js?
 //	var $el; // TODO: use
 
@@ -95,23 +96,17 @@ function show(obj){
 	cls.load = function(url, callback) {
 		$("#emptyLayoutModalBody").load(url, {}, callback);
 	};
+	
+	$(document).ready(function() {
+		$('#emptyLayoutModal').modal({show:false, keyboard:true, backdrop: 'static'});
+	});
 } (KPS.modal, jQuery));
 
-$(document).ready(function() {
-	var checkWindowHash = function () {
-		$(".switch-container > *").hide();
-		$(".switch-container > *[data-window-hash='"+window.location.hash.substring(1)+"']").show();
+(function(cls, $, undefined){
+	cls.show = function(num) {
+		$("#emptyLayoutModalBody").animate({marginLeft:(num*-580)+"px"},400); // TODO: KPS.modal.$el
 	};
-
-	$(window).bind('hashchange', function() {
-		checkWindowHash();
-	});
-
-	checkWindowHash();
-
-	$('#emptyLayoutModal').modal({show:false, keyboard:true, backdrop: 'static'});
-
-});
+} (KPS.modal.carrousel, jQuery)); // TODO: loading, pass in divs etc
 
 (function (cls, $, undefined)  {
 	var locationList = [];

@@ -72,7 +72,9 @@
 					<h3 id="emptyLayoutModalTitle"></h3>
 				</div>
 				<div class="modal-body">
-					<div id="emptyLayoutModalBody">
+					<div id="emptyLayoutModalCarrouselWindow">
+						<div id="emptyLayoutModalBody">
+						</div>
 					</div>
 				</div>
 				<div class="modal-footer">

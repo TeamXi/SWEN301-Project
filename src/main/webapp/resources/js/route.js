@@ -153,13 +153,13 @@ KPS.util.map = KPS.util.map || {};
 		}
 		
 		backStackInfo.oldModal = KPS.modal.configure(modalConfiguration);
-		$("#newRouteCarousel").animate({marginLeft:"-580px"},400); // TODO: move animation stuff to modal something?
+		KPS.modal.carrousel.show(1);
 		document.getElementById('newLocationMapLocationName').value = name;
 		search();
 	};
 
 	function dismiss() {
-		$("#newRouteCarousel").animate({marginLeft:"0"},400);
+		KPS.modal.carrousel.show(0);
 		KPS.modal.configure(backStackInfo.oldModal);
 	};
 	
