@@ -72,14 +72,14 @@ KPS.util.map = KPS.util.map || {};
 	};
 	
 	function validateLocationField(element) {
-		if(!KPS.data.locations.exists(element.value)) {
+		if(!KPS.data.locations.exists(element.value)) { // TODO: generate DOM?
 			KPS.validation.validationError(element, '"'+element.value+'" is not a valid location.'+(element.value?' Would you like to <a class="inject-form-element" onclick="KPS.event.route.showNewLocationScreen(\''+element.value+'\', this.formElement);">create it</a>?':''));
 			return false;
 		}
 		return true;
 	}
 	
-	cls.addRoute = function(){
+	cls.addRoute = function(){ // TODO: only load once.
 		KPS.modal.load("route?add",function(){
 			KPS.modal.configure(addModalConfiguration);
 			KPS.data.locations.load(function () { // TODO: needed?
