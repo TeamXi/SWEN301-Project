@@ -65,19 +65,6 @@
 					</div>
 				</div>
 			</div>
-			
-			<div class="modal fade" id="emptyLayoutModal">
-				<div class="modal-header">
-					<a class="close" data-dismiss="modal">×</a>
-					<h3 id="emptyLayoutModalTitle"></h3>
-				</div>
-				<div class="modal-body" id="emptyLayoutModalBody">
-				</div>
-				<div class="modal-footer">
-					<a href="#" class="btn btn-warning" id="emptyLayoutModalCancel"></a>
-					<a href="#" class="btn btn-success" id="emptyLayoutModalSubmit"></a>
-				</div>
-			</div>
 
 			<div class="container">
 				<div class="row-fluid">

@@ -89,8 +89,65 @@ function show(obj){
 
 // KPS.modal
 (function (cls, $, undefined) { // TODO: common alert area in modals?
-	// TODO: create element in js?
-//	var $el; // TODO: use
+//<div class="modal fade">
+//	<div class="modal-header">
+//		<a class="close" data-dismiss="modal"></a>
+//		<h3></h3>
+//	</div>
+//	<div class="modal-body">
+//	</div>
+//	<div class="modal-footer">
+//		<a href="#" class="btn btn-warning"></a>
+//		<a href="#" class="btn btn-success"></a>
+//	</div>
+//</div>
+	
+	// El setup
+
+	cls.el = document.createElement('div');
+	cls.$el = $(cls.el);
+	cls.$el.addClass('modal fade');
+	
+	var header = document.createElement('div');
+	$(header).addClass('modal-header');
+	var cross = document.createElement('a');
+	$(cross).addClass('close').html('&times;').attr('data-dismiss', 'modal');
+	header.appendChild(cross);
+	var title = document.createElement('h3');
+	var $title = $(title);
+	header.appendChild(title);
+	
+	cls.el.appendChild(header);
+	
+	var body = document.createElement('div');
+	var $body = $(body);
+	$body.addClass('modal-body');
+	
+	cls.el.appendChild(body);
+	
+	var footer = document.createElement('div');
+	$(footer).addClass('modal-footer');
+	var cancelButton = document.createElement('a');
+	var $cancelButton = $(cancelButton);
+	$cancelButton.addClass('btn btn-warning');
+	footer.appendChild(cancelButton);
+	var okButton = document.createElement('a');
+	var $okButton = $(okButton);
+	$okButton.addClass('btn btn-success');
+	footer.appendChild(okButton);
+	
+	cls.el.appendChild(footer);
+	
+	// Carrousel setup
+	
+	cls.carrousel = new KPS.carrousel();
+	cls.carrousel.width = 550;
+	cls.carrousel.spacing = 30;
+	cls.carrousel.setClips(false);
+	cls.carrousel.layout();
+	body.appendChild(cls.carrousel.el);
+	
+	// Configurations
 
 	var defaultConfiguration = {
 			title: "Modal",
@@ -108,44 +165,35 @@ function show(obj){
 			}
 	};
 	var currentConfiguration = defaultConfiguration;
-	
-	$(document).ready(function() { // TODO: not needed
-		cls.carrousel = new KPS.carrousel();
-		cls.carrousel.width = 550;
-		cls.carrousel.spacing = 30;
-		cls.carrousel.setClips(false);
-		cls.carrousel.layout();
-		$("#emptyLayoutModalBody").append(cls.carrousel.el);
-	});
 
 	function setTitle(title) {
-		$("#emptyLayoutModalTitle").html(title);
+		$title.html(title);
 	};
 
 	function setOkButtonTitle(name) {
-		$("#emptyLayoutModalSubmit").html(name);
+		$okButton.html(name);
 	};
 
 	function setOkButtonAction(action) {
-		$("#emptyLayoutModalSubmit").unbind('click');
-		$("#emptyLayoutModalSubmit").click(action);
+		$okButton.unbind('click');
+		$okButton.click(action);
 	};
 
 	function setCancelButtonTitle(name) {
-		$("#emptyLayoutModalCancel").html(name);
+		$cancelButton.html(name);
 	};
 
 	function setCancelButtonAction(action) {
-		$("#emptyLayoutModalCancel").unbind('click');
-		$("#emptyLayoutModalCancel").click(action);
+		$cancelButton.unbind('click');
+		$cancelButton.click(action);
 	};
 
 	cls.show = function() {
-		$('#emptyLayoutModal').modal('show');
+		cls.$el.modal('show');
 	};
 
 	cls.hide = function() {
-		$('#emptyLayoutModal').modal('hide');
+		cls.$el.modal('hide');
 	};
 
 	cls.configure = function(configuration) {
@@ -165,7 +213,8 @@ function show(obj){
 	};
 	
 	$(document).ready(function() {
-		$('#emptyLayoutModal').modal({show:false, keyboard:true, backdrop: 'static'});
+		document.body.appendChild(cls.el);
+		cls.$el.modal({show:false, keyboard:true, backdrop: 'static'});
 	});
 } (KPS.modal, jQuery));
 
