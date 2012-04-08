@@ -53,15 +53,18 @@ tr:hover .row-hover-controls {
 	padding: 15px;
 }
 
-#emptyLayoutModalCarrouselWindow {
-}
+/*
+ *Carrousel
+ */
 
-#emptyLayoutModalCarrouselWindow > #emptyLayoutModalBody {
+.kps-carrousel > .kps-carrousel-body {
 	width: 1000000px;
 }
 
-#emptyLayoutModalCarrouselWindow > #emptyLayoutModalBody > div{
-	width: 550px;
-	margin-right: 30px;
+.kps-carrousel.clip {
+	overflow: hidden;
+}
+
+.kps-carrousel > .kps-carrousel-body > div {
 	float: left;
 }

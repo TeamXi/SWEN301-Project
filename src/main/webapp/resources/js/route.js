@@ -153,13 +153,13 @@ KPS.util.map = KPS.util.map || {};
 		}
 		
 		backStackInfo.oldModal = KPS.modal.configure(modalConfiguration);
-		KPS.modal.carrousel.show(1);
+		KPS.modal.carrousel.next();
 		document.getElementById('newLocationMapLocationName').value = name;
 		search();
 	};
 
 	function dismiss() {
-		KPS.modal.carrousel.show(0);
+		KPS.modal.carrousel.previous();
 		KPS.modal.configure(backStackInfo.oldModal);
 	};
 	

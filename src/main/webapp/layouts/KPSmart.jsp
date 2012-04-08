@@ -71,11 +71,7 @@
 					<a class="close" data-dismiss="modal">×</a>
 					<h3 id="emptyLayoutModalTitle"></h3>
 				</div>
-				<div class="modal-body">
-					<div id="emptyLayoutModalCarrouselWindow">
-						<div id="emptyLayoutModalBody">
-						</div>
-					</div>
+				<div class="modal-body" id="emptyLayoutModalBody">
 				</div>
 				<div class="modal-footer">
 					<a href="#" class="btn btn-warning" id="emptyLayoutModalCancel"></a>
