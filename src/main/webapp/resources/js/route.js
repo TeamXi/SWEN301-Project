@@ -5,7 +5,12 @@ KPS.util = KPS.util || {};
 KPS.util.map = KPS.util.map || {};
 
 (function(cls, $, undefined) {
-	// TODO: el, $el?
+	var newDivId = 'newRouteFormContainer';
+	var newFormId = 'newRouteForm';
+	var newFormSubmitCallback = 'KPS.event.route.submitNewForm()';
+	var newLocationDivId = 'newLocationMapWrapper';
+	
+	var newForm = undefined;
 	
 	var addModalConfiguration = {
 			title: "Add route",
@@ -28,15 +33,14 @@ KPS.util.map = KPS.util.map || {};
 	};
 	
 	cls.submitNewForm = function() {
-		var form = document.getElementById('newRouteForm');
-		if(!cls.validateForm(form)) return;
+		if(!cls.validateForm(newForm)) return;
 
-		KPS.util.submitForm(form, "route?new", function(data){
+		KPS.util.submitForm(newForm, "route?new", function(data){
 			var returnObj = eval(data);
 			var status = returnObj.status;
 
 			if(!status){
-				KPS.validation.validationErrors(form, returnObj.validation);
+				KPS.validation.validationErrors(newForm, returnObj.validation);
 			}else{
 				$("#emptyModalSuccessMessage").fadeIn(500,function(){ // TODO: implement
 					setTimeout(function () {
@@ -80,7 +84,9 @@ KPS.util.map = KPS.util.map || {};
 	}
 	
 	cls.addRoute = function(){ // TODO: only load once.
-		KPS.modal.load("route?add",function(){
+		KPS.modal.load("route?addform&divId="+newDivId+"&formId="+newFormId+"&submitCallback="+newFormSubmitCallback,function(){
+			newForm = document.getElementById(newFormId);
+			KPS.modal.carrousel.add(document.getElementById(newLocationDivId));
 			KPS.modal.configure(addModalConfiguration);
 			KPS.data.locations.load(function () { // TODO: needed?
 				KPS.data.locations.setupPortEntryTypeahead();
@@ -91,6 +97,7 @@ KPS.util.map = KPS.util.map || {};
 	
 	cls.updateRoute = function(id) {
 		KPS.modal.load("route?updateform&routeId="+id, function (data) {
+			KPS.modal.carrousel.add(document.getElementById(newLocationDivId));
 			KPS.modal.configure(updateModalConfiguration);
 			KPS.data.locations.load(function () { // TODO: needed?
 				KPS.data.locations.setupPortEntryTypeahead();

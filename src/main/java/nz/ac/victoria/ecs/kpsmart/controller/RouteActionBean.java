@@ -26,13 +26,19 @@ public class RouteActionBean extends AbstractActionBean {
 	
 	private long routeId;
 	
+	private String divId;
+	
+	private String formId;
+	
+	private String submitCallback;
+	
 	@DefaultHandler
 	public Resolution defaultEvent() {
 		return new ForwardResolution("/views/event/route.jsp");
 	}
-	@HandlesEvent("add")
+	@HandlesEvent("addform")
 	public Resolution addRouteScreen() {
-		return new ForwardResolution("/views/event/routeNewForm.jsp");
+		return new ForwardResolution("/views/event/routeForm.jsp");
 	}
 	
 	@HandlesEvent("listfragment")
@@ -147,5 +153,41 @@ public class RouteActionBean extends AbstractActionBean {
 	 */
 	public void setRouteId(long routeId) {
 		this.routeId = routeId;
+	}
+	/**
+	 * @return the divId
+	 */
+	public String getDivId() {
+		return divId;
+	}
+	/**
+	 * @param divId the divId to set
+	 */
+	public void setDivId(String divId) {
+		this.divId = divId;
+	}
+	/**
+	 * @return the formId
+	 */
+	public String getFormId() {
+		return formId;
+	}
+	/**
+	 * @param formId the formId to set
+	 */
+	public void setFormId(String formId) {
+		this.formId = formId;
+	}
+	/**
+	 * @return the submitCallback
+	 */
+	public String getSubmitCallback() {
+		return submitCallback;
+	}
+	/**
+	 * @param submitCallback the submitCallback to set
+	 */
+	public void setSubmitCallback(String submitCallback) {
+		this.submitCallback = submitCallback;
 	}
 }

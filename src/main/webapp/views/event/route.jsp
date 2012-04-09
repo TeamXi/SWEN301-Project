@@ -17,7 +17,17 @@
 		<div id="routeListContainer">
 			<jsp:include page="routeList.jsp"></jsp:include>
 		</div>
-
+		
+		<div style="display: none">
+			<div id="newLocationMapWrapper">
+				<input type="text" id="newLocationMapLocationName"></input> <button class="btn" onclick="KPS.event.location.search()">search</button>
+				<br />
+				<select id="newLocationMapLocationResults">
+				</select>
+				Is international: <input type="checkbox" checked="checked" id="newLocationMapLocationIsInternational" />
+				<div id="newLocationMap"></div>
+			</div>
+		</div>
 	</stripes:layout-component>
 </stripes:layout-render>
 

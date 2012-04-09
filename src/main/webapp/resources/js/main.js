@@ -85,6 +85,12 @@ function show(obj){
 			callback(responseText, textStatus, XMLHttpRequest);
 		});
 	};
+	
+	pack.carrousel.prototype.add = function(element) {
+		// TODO: checks
+		this.body.appendChild(element);
+		this.layout();
+	};
 }(KPS, jQuery));
 
 // KPS.modal
