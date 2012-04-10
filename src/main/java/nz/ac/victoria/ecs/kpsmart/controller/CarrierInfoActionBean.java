@@ -27,6 +27,11 @@ public class CarrierInfoActionBean extends AbstractActionBean {
 		return new ForwardResolution("/views/event/carrierList.jsp");
 	}
 	
+	@HandlesEvent("list")
+	public Resolution carrierListJSON() {
+		return new ForwardResolution("/views/event/carrierListJSON.jsp");
+	}
+	
 	@HandlesEvent("new")
 	public Resolution newCarrierInfo() {
 		Carrier newCarrier = new Carrier();

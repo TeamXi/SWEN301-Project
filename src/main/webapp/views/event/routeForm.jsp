@@ -20,8 +20,8 @@
 			<stripes:options-enumeration enum="nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans" />
 		</stripes:select>
 		
-		<stripes:label for="carrierId">Carrier</stripes:label>
-		<stripes:text class="carrierEntry" name="carrierId" value="${actionBean.carrierId}" disabled="${actionBean.disabledFormFields['carrierId']}"/>
+		<stripes:label for="carrier">Carrier</stripes:label>
+		<stripes:text class="carrierEntry" name="carrier" value="${actionBean.carrier}" disabled="${actionBean.disabledFormFields['carrier']}"/>
 		
 		<stripes:submit name="submitbutton" style="visibility:hidden"></stripes:submit>
 	</stripes:form>

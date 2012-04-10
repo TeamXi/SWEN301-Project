@@ -2,6 +2,7 @@ KPS.util = KPS.util || {};
 KPS.modal = KPS.modal || {};
 KPS.data = KPS.data || {};
 KPS.data.locations = KPS.data.locations || {};
+KPS.data.carriers = KPS.data.carriers || {};
 
 function performLogin(siteRoot,role){
 	$.post(siteRoot+"/login", {role: role}, function(data) {
@@ -254,11 +255,15 @@ function show(obj){
 
 				locationDataDirty = false;
 
-				callback();
+				if(callback) {
+					callback();
+				}
 			});
 		}
 		else {
-			callback();
+			if(callback) {
+				callback();
+			}
 		}
 	};
 
@@ -294,3 +299,41 @@ function show(obj){
 		return undefined;
 	};
 }(KPS.data.locations, jQuery));
+
+//KPS.data.carriers
+(function (cls, $, undefined)  {
+	var carrierList = [];
+	
+	cls.load = function(callback) {
+		$.get(KPS.siteRoot+"/event/carrier?list&format=json", function(data) {
+			carrierList = eval(data);
+			
+			if(callback) {
+				callback();
+			}
+		});
+	};
+
+	cls.setupCarrierEntryTypeahead = function(iterator) {
+		$(".carrierEntry").each(function(index, child) { // TODO: ????
+			if(child.typeahead) { // Update
+				child.typeahead.source = carrierList;
+			}
+			else { // New
+				$(child).typeahead({source: carrierList});
+				if(iterator) {
+					iterator(child);
+				}
+			}
+		});
+	};
+
+	cls.exists = function(name) {
+		for(var n=0;n<carrierList.length;n++) {
+			if(carrierList[n].toLowerCase() == name.toLowerCase()) {
+				return true;
+			}
+		}
+		return false;
+	};
+}(KPS.data.carriers, jQuery));

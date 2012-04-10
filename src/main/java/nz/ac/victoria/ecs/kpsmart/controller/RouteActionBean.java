@@ -32,7 +32,7 @@ public class RouteActionBean extends FormActionBean {
 	
 	private String submitCallback;
 	
-	private long carrierId;
+	private String carrier;
 	
 	@DefaultHandler
 	public Resolution defaultEvent() {
@@ -46,12 +46,13 @@ public class RouteActionBean extends FormActionBean {
 	
 	@HandlesEvent("updateform")
 	public Resolution updateRouteScreen() {
-		disableFormField(new String[]{"source", "destination", "transportType", "carrierId"});
+		disableFormField(new String[]{"source", "destination", "transportType", "carrier"});
 		
 		Route route = getStateManipulator().getRouteByID(routeId);
 		source = route.getStartPoint().getName();
 		destination = route.getEndPoint().getName();
 		transportType = route.getTransportMeans();
+		carrier = route.getCarrier().getName();
 				
 		return new ForwardResolution("/views/event/routeForm.jsp");
 	}
@@ -110,7 +111,7 @@ public class RouteActionBean extends FormActionBean {
 		newRoute.setTransportMeans(transportType);
 
 		//TODO: Add following options to Route.
-		newRoute.setCarrier(getStateManipulator().getCarrier(carrierId));
+		newRoute.setCarrier(getStateManipulator().getCarrier(carrier));
 		newRoute.setCarrierVolumeUnitCost((float)8.0);
 		newRoute.setCarrierWeightUnitCost((float)8.9);
 		newRoute.setDisabled(false);
@@ -216,16 +217,16 @@ public class RouteActionBean extends FormActionBean {
 	}
 
 	/**
-	 * @return the carrierId
+	 * @return the carrier
 	 */
-	public long getCarrierId() {
-		return carrierId;
+	public String getCarrier() {
+		return carrier;
 	}
 
 	/**
-	 * @param carrierId the carrierId to set
+	 * @param carrier the carrier to set
 	 */
-	public void setCarrierId(long carrierId) {
-		this.carrierId = carrierId;
+	public void setCarrier(String carrier) {
+		this.carrier = carrier;
 	}
 }

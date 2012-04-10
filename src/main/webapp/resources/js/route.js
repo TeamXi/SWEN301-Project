@@ -87,6 +87,10 @@ KPS.util.map = KPS.util.map || {};
 		KPS.validation.resetValidation(form);
 		ok &= validateLocationField(form.elements['source']);
 		ok &= validateLocationField(form.elements['destination']);
+		if(!KPS.data.carriers.exists(form.elements['carrier'].value)) {
+			ok = false;
+			KPS.validation.validationError(form.elements['carrier'], "Please enter a valid carrier");
+		}
 		if(form.elements['transportType'].value == "placeholder") {
 			ok = false;
 			KPS.validation.validationError(form.elements['transportType'], "Please select a transport type");
@@ -117,6 +121,7 @@ KPS.util.map = KPS.util.map || {};
 			KPS.data.locations.load(function () { // TODO: needed?
 				KPS.data.locations.setupPortEntryTypeahead();
 			});
+			KPS.data.carriers.setupCarrierEntryTypeahead();
 			KPS.modal.show();
 		});
 	};
@@ -129,6 +134,7 @@ KPS.util.map = KPS.util.map || {};
 			KPS.data.locations.load(function () { // TODO: needed?
 				KPS.data.locations.setupPortEntryTypeahead();
 			});
+			KPS.data.carriers.setupCarrierEntryTypeahead();
 			KPS.modal.show();
 		});
 	};
@@ -156,6 +162,7 @@ KPS.util.map = KPS.util.map || {};
 			cls.addRoute();
 		});
 		
+		KPS.data.carriers.load();
 		newLocationDiv = document.getElementById(newLocationDivId);
 	});
 }(KPS.event.route, jQuery));
