@@ -209,6 +209,7 @@ KPS.util.map = KPS.util.map || {};
 		}, function (data) {
 			KPS.data.locations.setNeedsUpdate();
 			KPS.data.locations.load(function () { // TODO: insert rather than reload
+				KPS.data.locations.setupPortEntryTypeahead();
 				backStackInfo.element.value = location.formatted_address;
 				KPS.event.route.validateForm(document.getElementById('newRouteForm')); // TODO:...
 				dismiss();
