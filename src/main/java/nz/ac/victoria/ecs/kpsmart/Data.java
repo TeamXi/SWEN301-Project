@@ -84,7 +84,7 @@ final class Data {
 		}
 		sm.saveRoute(r2);
 		
-		Route r3 = new Route();
+		Route r3 = Route.newRoute();
 		try {
 			r3.setCarrier(sm.getCarrier(1));
 			r3.setCarrierVolumeUnitCost((float) 8.0);
@@ -101,7 +101,7 @@ final class Data {
 		}
 		sm.save(r3);
 		
-		Route r4 = new Route();
+		Route r4 = Route.newRoute();
 		try {
 			r4.setCarrier(sm.getCarrier(1));
 			r4.setCarrierVolumeUnitCost((float) 8.0);
