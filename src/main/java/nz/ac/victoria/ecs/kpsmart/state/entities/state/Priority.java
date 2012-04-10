@@ -5,17 +5,20 @@ import static nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans.Lan
 import static nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans.Sea;
 
 public enum Priority {
-	International_Air(Air),
-	International_Standard(Air, Land, Sea),
+	International_Air(true, Air),
+	International_Standard(true, Air, Land, Sea),
 	
-	Domestic_Air(Air),
-	Domestic_Standard(Air, Land, Sea);
+	Domestic_Air(false, Air),
+	Domestic_Standard(false, Air, Land, Sea);
 	
 	// -----------------------------------------------
 	
 	public final TransportMeans[] ValidTransportMeans;
 	
-	private Priority(final TransportMeans... valid) {
+	public final boolean International;
+	
+	private Priority(boolean international, final TransportMeans... valid) {
 		this.ValidTransportMeans = valid;
+		this.International = international;
 	}
 }

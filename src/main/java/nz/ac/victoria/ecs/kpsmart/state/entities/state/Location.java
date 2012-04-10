@@ -31,6 +31,44 @@ public final class Location extends StorageEntity implements Serializable {
 		private double latitude;
 		
 		private double longitude;
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			long temp;
+			temp = Double.doubleToLongBits(latitude);
+			result = prime * result + (int) (temp ^ (temp >>> 32));
+			temp = Double.doubleToLongBits(longitude);
+			result = prime * result + (int) (temp ^ (temp >>> 32));
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			LocationPK other = (LocationPK) obj;
+			if (Double.doubleToLongBits(latitude) != Double
+					.doubleToLongBits(other.latitude))
+				return false;
+			if (Double.doubleToLongBits(longitude) != Double
+					.doubleToLongBits(other.longitude))
+				return false;
+			return true;
+		}
+	}
+	
+	public Location() {}
+	public Location(final String name, final double latitude, final double longitude, final boolean international) {
+		this.name = name;
+		this.primaryKey.latitude = latitude;
+		this.primaryKey.longitude = longitude;
+		this.international = international ? Bool.True : Bool.False;
 	}
 
 	public long getId() {

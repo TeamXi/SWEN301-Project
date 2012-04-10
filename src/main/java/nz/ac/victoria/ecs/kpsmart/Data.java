@@ -43,6 +43,8 @@ final class Data {
 		sm.save(l4);
 		Location l5 = createLocation(true, 52.749594, 5.998535, "Amsterdam");
 		sm.save(l5);
+		Location l6 = createLocation(false, -1, -1, "Christchurch");
+		sm.save(l6);
 		/*
 		 * 
 		 * Routes
@@ -81,6 +83,40 @@ final class Data {
 			throw new RuntimeException(e);
 		}
 		sm.saveRoute(r2);
+		
+		Route r3 = new Route();
+		try {
+			r3.setCarrier(sm.getCarrier(1));
+			r3.setCarrierVolumeUnitCost((float) 8.0);
+			r3.setCarrierWeightUnitCost((float)8.9);
+			r3.setDisabled(false);
+			r3.setDuration(1);
+			r3.setEndPoint(sm.getLocationForName("Christchurch"));
+			r3.setFrequency(6);
+			r3.setStartPoint(sm.getLocationForName("Wellington"));
+			r3.setStartingTime(new SimpleDateFormat("y-m-d h:m:s").parse("2012-03-27 11:45:18"));
+			r3.setTransportMeans(TransportMeans.Air);
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+		sm.save(r3);
+		
+		Route r4 = new Route();
+		try {
+			r4.setCarrier(sm.getCarrier(1));
+			r4.setCarrierVolumeUnitCost((float) 8.0);
+			r4.setCarrierWeightUnitCost((float)8.9);
+			r4.setDisabled(false);
+			r4.setDuration(1);
+			r4.setEndPoint(sm.getLocationForName("Rome"));
+			r4.setFrequency(6);
+			r4.setStartPoint(sm.getLocationForName("Auckland"));
+			r4.setStartingTime(new SimpleDateFormat("y-m-d h:m:s").parse("2012-03-27 11:45:18"));
+			r4.setTransportMeans(TransportMeans.Air);
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+		sm.save(r4);
 	}
 
 	public Location createLocation(boolean international, double d, double e, String name) {

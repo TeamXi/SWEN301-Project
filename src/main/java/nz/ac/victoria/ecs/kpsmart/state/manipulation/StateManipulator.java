@@ -1,5 +1,6 @@
 package nz.ac.victoria.ecs.kpsmart.state.manipulation;
 
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
@@ -81,4 +82,12 @@ public interface StateManipulator extends ReadOnlyStateManipulator {
 	 * @param entity	The entity to delete
 	 */
 	public void delete(StorageEntity entity);
+
+	/**
+	 * Get a carrier by it's unique name
+	 * 
+	 * @param name	The name of the carrier
+	 * @return	The carrier or null if none was found
+	 */
+	public Carrier getCarrier(String name);
 }

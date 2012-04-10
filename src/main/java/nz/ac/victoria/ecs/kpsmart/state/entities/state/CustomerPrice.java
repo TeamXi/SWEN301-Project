@@ -28,6 +28,43 @@ public class CustomerPrice extends StorageEntity implements Serializable {
 		
 		@Enumerated(EnumType.STRING)
 		private Priority priority;
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result
+					+ ((endLocation == null) ? 0 : endLocation.hashCode());
+			result = prime * result
+					+ ((priority == null) ? 0 : priority.hashCode());
+			result = prime * result
+					+ ((startLocation == null) ? 0 : startLocation.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			CustomerPricePK other = (CustomerPricePK) obj;
+			if (endLocation == null) {
+				if (other.endLocation != null)
+					return false;
+			} else if (!endLocation.equals(other.endLocation))
+				return false;
+			if (priority != other.priority)
+				return false;
+			if (startLocation == null) {
+				if (other.startLocation != null)
+					return false;
+			} else if (!startLocation.equals(other.startLocation))
+				return false;
+			return true;
+		}
 	}
 
 	public Location getStartLocation() {

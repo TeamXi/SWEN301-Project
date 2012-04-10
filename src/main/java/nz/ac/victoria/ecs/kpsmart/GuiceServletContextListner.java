@@ -6,6 +6,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
+import nz.ac.victoria.ecs.kpsmart.routefinder.DijkstraRouteFinder;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.HibernateStateManipulationModule;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.InMemoryStateManipulationModule;
 
@@ -16,24 +17,36 @@ import com.google.inject.util.Modules;
 
 public final class GuiceServletContextListner implements ServletContextListener {
 	private static Stack<History> injectors = new Stack<GuiceServletContextListner.History>();
+	private static boolean initilized = false;
 	
 	public static Injector getInjector() {
 		return injectors.peek().injector;
 	}
 	
-	public static void init() {
+	public static synchronized void init() {
+		if (initilized)
+			return;
+		
 		Module[] modules = {
 				new HibernateStateManipulationModule(),
 				new InMemoryStateManipulationModule(),
-				new EntityManager.Module()
+				new EntityManager.Module(),
+				new DijkstraRouteFinder.Module()
 		};
 		
 		injectors.push(new History(Guice.createInjector(modules), modules));
 		
 		new Data().createData();
+		
+		initilized = true;
 	}
 	
-	public static void overloadModules(Module... modules) {
+	/**
+	 * Override the modules in the current injector with the given ones
+	 * 
+	 * @param modules	The new modules that will overload the modules in the injector
+	 */
+	public static synchronized void overloadModules(Module... modules) {
 		Module[] newModules = (injectors.isEmpty()) ? 
 				modules : 
 				new Module[] { Modules.override(injectors.peek().modules).with(modules) };
@@ -41,7 +54,10 @@ public final class GuiceServletContextListner implements ServletContextListener 
 		injectors.push(new History(Guice.createInjector(newModules), newModules));
 	}
 	
-	public static void restorePreviousInjector() {
+	/**
+	 * Restore the previous injector state
+	 */
+	public static synchronized void restorePreviousInjector() {
 		injectors.pop();
 	}
 

@@ -16,11 +16,9 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.RouteID;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans;
 
 import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
@@ -29,13 +27,19 @@ import org.hibernate.service.ServiceRegistryBuilder;
 
 import com.google.inject.AbstractModule;
 
-@SuppressWarnings("deprecation")
-public final class HibernateStateManipulationModule extends AbstractModule {
+public class HibernateStateManipulationModule extends AbstractModule {
 	@Override
 	public void configure() {
 		// General Bindings
 		bind(StateManipulator.class).to(HibernateStateManipulator.class);
 		
+		Session session = this.getSession("hibernate.properties");
+		session.beginTransaction();
+		bind(Session.class).toInstance(session);
+		
+	}
+	
+	protected Session getSession(String configurationFileName) {
 		// Configure hibernate
 		final Class<?>[] annotatedClasses = {
 				CustomerPriceUpdateEvent.class,
@@ -48,12 +52,11 @@ public final class HibernateStateManipulationModule extends AbstractModule {
 				LocationUpdateEvent.class,
 				CustomerPriceUpdateEvent.class,
 				Event.class,
-//				
+						
 				StorageEntity.class,
 				Carrier.class,
 				Location.class,
 				MailDelivery.class,
-//				Priority.class,
 				Route.class,
 				RouteID.class,
 //				TransportMeans.class,
@@ -63,18 +66,15 @@ public final class HibernateStateManipulationModule extends AbstractModule {
 		
 		try {
 			Properties p = new Properties();
-			p.load(this.getClass().getClassLoader().getResourceAsStream("hibernate.properties"));
+			p.load(this.getClass().getClassLoader().getResourceAsStream(configurationFileName));
 			final Configuration configuration = new Configuration();
 			configuration.addProperties(p);
 			
 			for (final Class<?> c : annotatedClasses)
 				configuration.addAnnotatedClass(c);
 			
-//			Session session = configuration.buildSessionFactory().getCurrentSession();
 			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
-			Session session = configuration.buildSessionFactory(serviceRegistry).getCurrentSession();
-			session.beginTransaction();
-			bind(Session.class).toInstance(session);
+			return configuration.buildSessionFactory(serviceRegistry).getCurrentSession();
 		} catch (IOException e) {
 			throw new RuntimeException("Could not load the hibernate properties file", e);
 		}

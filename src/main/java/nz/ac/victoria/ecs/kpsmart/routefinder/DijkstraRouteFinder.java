@@ -17,6 +17,7 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.StateManipulator;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 
 @InjectOnContruct
@@ -30,7 +31,7 @@ public final class DijkstraRouteFinder implements RouteFinder {
 		GraphNode goal = null;
 		PriorityQueue<SearchNode> fringe = new PriorityQueue<DijkstraRouteFinder.SearchNode>();
 		fringe.add(new SearchNode(null, start, new Weight(0, 0)));
-		
+			
 		for (SearchNode current = fringe.poll(); current != null; current = fringe.poll()) {
 			if (current.to.currentLocation.equals(endPoint)) {
 				goal = current.to;
@@ -59,7 +60,7 @@ public final class DijkstraRouteFinder implements RouteFinder {
 		for (GraphNode current = goal; current != null; current = current.pathTo)
 			path.add(current);
 		
-		if (!path.isEmpty() && path.get(path.size()-1) != start)
+		if (path.isEmpty() || path.get(path.size()-1) != start)
 			return null;
 			// We didnt find a path
 		
@@ -197,6 +198,13 @@ public final class DijkstraRouteFinder implements RouteFinder {
 		@Override
 		public int compareTo(Weight o) {
 			return Double.compare(Math.min(this.volumeCost, this.weightCost), Math.min(o.volumeCost, o.weightCost));
+		}
+	}
+	
+	public static final class Module extends AbstractModule {
+		@Override
+		protected void configure() {
+			bind(RouteFinder.class).to(DijkstraRouteFinder.class);
 		}
 	}
 }

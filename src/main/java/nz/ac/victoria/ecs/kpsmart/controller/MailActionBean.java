@@ -3,12 +3,15 @@ package nz.ac.victoria.ecs.kpsmart.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.inject.Inject;
+
 import net.sourceforge.stripes.action.DefaultHandler;
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.HandlesEvent;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 import nz.ac.victoria.ecs.kpsmart.resolutions.FormValidationResolution;
+import nz.ac.victoria.ecs.kpsmart.routefinder.RouteFinder;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
@@ -26,6 +29,9 @@ public class MailActionBean extends AbstractActionBean {
 	private float weight;
 	
 	private float volume;
+	
+	@Inject
+	private RouteFinder routeFinder;
 	
 	@DefaultHandler
 	public Resolution defaultEvent() {
@@ -47,7 +53,12 @@ public class MailActionBean extends AbstractActionBean {
 		do{
 			MailDelivery delivery = new MailDelivery();
 			
-			List<Route> route = findRoute(source,destination);
+			List<Route> route = this.routeFinder.calculateRoute(
+					priority, 
+					this.getEntityManager().getData().getLocationForName(source), 
+					this.getEntityManager().getData().getLocationForName(destination), 
+					weight, 
+					volume);
 			
 			if(route == null) break;
 			

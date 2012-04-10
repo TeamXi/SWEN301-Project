@@ -14,39 +14,48 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
+import nz.ac.victoria.ecs.kpsmart.util.Filter;
 
+import org.hibernate.FetchMode;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 
 import com.google.inject.Inject;
+import static nz.ac.victoria.ecs.kpsmart.util.ListUtils.filter;
 
 @InjectOnContruct
-public final class HibernateStateManipulator implements StateManipulator {
+public class HibernateStateManipulator implements StateManipulator {
 	@Inject @PersistenceContext
 	private Session session;
 	
+	protected Session getSession() {
+		return session;
+	}
+
 	@Override
 	public MailDelivery getMailDelivery(final long id) {		
-		return (MailDelivery) session.get(MailDelivery.class, id);
+		return (MailDelivery) getSession().get(MailDelivery.class, id);
 	}
 
 	@Override
 	public void saveMailDelivery(final MailDelivery delivery) {
-		this.session.merge(delivery);
-		this.session.flush();
+		this.getSession().merge(delivery);
+		this.getSession().flush();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Location> getAllLocations() {
-		return (Collection<Location>) this.session.createCriteria(Location.class).list();
+		return (Collection<Location>) this.getSession().createCriteria(Location.class).list();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Route> getAllRoute() {
-		return (List<Route>) this.session.createCriteria(Route.class)
+		return (List<Route>) this.getSession().createCriteria(Route.class)
 				.add(Restrictions.eq("disabled", Bool.False))
 				.addOrder(Order.asc("uid.id"))
 				.list();
@@ -62,7 +71,7 @@ public final class HibernateStateManipulator implements StateManipulator {
 	@Override
 	public Carrier getCarrier(long id) {
 //		return (Carrier) this.session.get(Carrier.class, id);
-		return (Carrier) this.session.createCriteria(Carrier.class)
+		return (Carrier) this.getSession().createCriteria(Carrier.class)
 				.add(Restrictions.eq("disabled", Bool.False))
 				.add(Restrictions.eq("id", id))
 				.uniqueResult();
@@ -70,8 +79,8 @@ public final class HibernateStateManipulator implements StateManipulator {
 
 	@Override
 	public void saveCarrier(StorageEntity carier) {
-		this.session.merge(carier);
-		this.session.flush();
+		this.getSession().merge(carier);
+		this.getSession().flush();
 	}
 	
 	@Override
@@ -94,7 +103,7 @@ public final class HibernateStateManipulator implements StateManipulator {
 
 	@Override
 	public Location getLocationForName(String name) {
-		return (Location) this.session.createCriteria(Location.class)
+		return (Location) this.getSession().createCriteria(Location.class)
 				.add(Restrictions.eq("name", name))
 				.add(Restrictions.ne("disabled", Bool.True))
 				.uniqueResult();
@@ -102,21 +111,21 @@ public final class HibernateStateManipulator implements StateManipulator {
 
 	@Override
 	public void saveLocation(Location location) {
-		this.session.merge(location);
-		this.session.flush();
+		this.getSession().merge(location);
+		this.getSession().flush();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Carrier> getAllCarriers() {
-		return (Collection<Carrier>) this.session.createCriteria(Carrier.class)
+		return (Collection<Carrier>) this.getSession().createCriteria(Carrier.class)
 				.add(Restrictions.eq("disabled", Bool.False))
 				.list();
 	}
 
 	@Override
 	public Route getRouteByID(long id) {
-		return (Route) this.session.createCriteria(Route.class)
+		return (Route) this.getSession().createCriteria(Route.class)
 				.add(Restrictions.eq("uid.id", id))
 				.add(Restrictions.ne("disabled", Bool.True))
 				.uniqueResult();
@@ -130,44 +139,85 @@ public final class HibernateStateManipulator implements StateManipulator {
 
 	@Override
 	public void save(StorageEntity entity) {
-		this.session.save(entity);
-		this.session.flush();
+		this.getSession().save(entity);
+		this.getSession().flush();
 	}
 
 	@Override
 	public void delete(StorageEntity entity) {
-		this.session.delete(entity);
-		this.session.flush();
+		this.getSession().delete(entity);
+		this.getSession().flush();
 	}
 
 	@Override
 	public DomesticCustomerPrice getDomesticCustomerPrice() {
-		return (DomesticCustomerPrice) this.session.createCriteria(DomesticCustomerPrice.class)
+		return (DomesticCustomerPrice) this.getSession().createCriteria(DomesticCustomerPrice.class)
 					.uniqueResult();
 	}
 
 	@Override
 	public void save(DomesticCustomerPrice domesticPrice) {
-		this.session.createQuery("DELETE FROM "+DomesticCustomerPrice.class.getSimpleName())
+		this.getSession().createQuery("DELETE FROM "+DomesticCustomerPrice.class.getSimpleName())
 				.executeUpdate();
-		this.session.save(domesticPrice);
+		this.getSession().save(domesticPrice);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<Route> getAllRoutesForPriority(Priority priority) {
-		return (Collection<Route>) this.session.createCriteria(Route.class)
-					.add(Restrictions.in("transportMeans", priority.ValidTransportMeans))
-					.list();
+	public Collection<Route> getAllRoutesForPriority(final Priority priority) {
+		return filter((List<Route>) this.getSession().createCriteria(Route.class)
+					.add(Restrictions.in("primaryKey.transportMeans", priority.ValidTransportMeans))
+					.add(Restrictions.eq("disabled", Bool.False))
+					.list(),
+				new Filter<Route>() {
+					@Override
+					public boolean filter(Route object) {
+						if (priority.International)
+							return true;
+						
+						return !object.getStartPoint().isInternational() && !object.getEndPoint().isInternational();
+					}
+				});
+		
+//		String statement = "select route from Route as route " + 
+//				"inner join route.primaryKey.startPoint as startPoint " +
+//				"inner join route.primaryKey.endPoint as endPoint " +
+//			"where " +
+////				"route.primaryKey.transportMeans in :transportmeans and " + 
+//				"startPoint.international = :false and " +
+//				"endPoint.international = :false and " +
+//				"route.disabled = :disabled";
+		
+//		return this.getSession().createQuery(statement)
+////			.setParameter("transportmeans", priority.ValidTransportMeans)
+//			.setParameter("false", Bool.False)
+//			.setParameter("disabled", Bool.False)
+//			.list();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Route> getRoutesBetween(Location start, Location end, Priority priority) {
-		return (Collection<Route>) this.session.createCriteria(Route.class)
-					.add(Restrictions.eq("startpoint", start))
-					.add(Restrictions.eq("endPoint", end))
-					.add(Restrictions.in("transportMeans", priority.ValidTransportMeans))
+		return (Collection<Route>) this.getSession().createCriteria(Route.class)
+					.add(Restrictions.eq("primaryKey.startPoint", start))
+					.add(Restrictions.eq("primaryKey.endPoint", end))
+					.add(Restrictions.in("primaryKey.transportMeans", priority.ValidTransportMeans))
+					.add(Restrictions.eq("disabled", Bool.False))
 					.list();
+	}
+
+	@Override
+	public Carrier getCarrier(String name) {
+		return (Carrier) this.session.createCriteria(Carrier.class)
+					.add(Restrictions.eq("name", name))
+					.add(Restrictions.eq("disabled", Bool.False))
+					.uniqueResult();
+	}
+	
+	public static Criterion ifTrue(Criterion ifTrue, Criterion ifFalse, boolean expression) {
+		if (expression)
+			return ifTrue;
+		else
+			return ifFalse;
 	}
 }

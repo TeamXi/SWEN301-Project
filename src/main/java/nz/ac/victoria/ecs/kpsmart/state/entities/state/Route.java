@@ -7,8 +7,6 @@ import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -43,14 +41,67 @@ public final class Route extends StorageEntity implements Serializable {
 		@Enumerated(EnumType.STRING)
 		private TransportMeans transportMeans;
 		
-		@ManyToOne
+		@OneToOne
 		private Location startPoint;
 		
-		@ManyToOne
+		@OneToOne
 		private Location endPoint;
 		
 		@ManyToOne
 		private Carrier carrier;
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result
+					+ ((carrier == null) ? 0 : carrier.hashCode());
+			result = prime * result
+					+ ((endPoint == null) ? 0 : endPoint.hashCode());
+			result = prime * result
+					+ ((startPoint == null) ? 0 : startPoint.hashCode());
+			result = prime
+					* result
+					+ ((transportMeans == null) ? 0 : transportMeans.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			RoutePK other = (RoutePK) obj;
+			if (carrier == null) {
+				if (other.carrier != null)
+					return false;
+			} else if (!carrier.equals(other.carrier))
+				return false;
+			if (endPoint == null) {
+				if (other.endPoint != null)
+					return false;
+			} else if (!endPoint.equals(other.endPoint))
+				return false;
+			if (startPoint == null) {
+				if (other.startPoint != null)
+					return false;
+			} else if (!startPoint.equals(other.startPoint))
+				return false;
+			if (transportMeans != other.transportMeans)
+				return false;
+			return true;
+		}
+	}
+	
+	public Route() {}
+	public Route(final TransportMeans trans, final Location start, final Location end, final Carrier carrier) {
+		this.primaryKey.transportMeans = trans;
+		this.primaryKey.startPoint = start;
+		this.primaryKey.endPoint = end;
+		this.primaryKey.carrier = carrier;
 	}
 	
 	public static Route newRoute() {

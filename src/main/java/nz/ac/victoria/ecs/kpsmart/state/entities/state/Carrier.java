@@ -6,8 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
+@Table(uniqueConstraints=@UniqueConstraint(columnNames={"name"}))
 public final class Carrier extends StorageEntity implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -15,6 +18,11 @@ public final class Carrier extends StorageEntity implements Serializable {
 	
 	private String name;
 	
+	public Carrier() {}
+	public Carrier(String name) {
+		this.name = name;
+	}
+
 	public String getName() {
 		return name;
 	}
