@@ -48,12 +48,13 @@ public final class HibernateStateManipulator implements StateManipulator {
 	public List<Route> getAllRoute() {
 		return (List<Route>) this.session.createCriteria(Route.class)
 				.add(Restrictions.eq("disabled", Bool.False))
-				.addOrder(Order.asc("id"))
+				.addOrder(Order.asc("uid.id"))
 				.list();
 	}
 
 	@Override
 	public void saveRoute(Route route) {
+		this.session.merge(route.getUid());
 		this.session.merge(route);
 		this.session.flush();
 	}
@@ -116,7 +117,7 @@ public final class HibernateStateManipulator implements StateManipulator {
 	@Override
 	public Route getRouteByID(long id) {
 		return (Route) this.session.createCriteria(Route.class)
-				.add(Restrictions.eq("id", id))
+				.add(Restrictions.eq("uid.id", id))
 				.add(Restrictions.ne("disabled", Bool.True))
 				.uniqueResult();
 	}

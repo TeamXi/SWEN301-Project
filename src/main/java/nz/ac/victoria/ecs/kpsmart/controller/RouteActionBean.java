@@ -36,8 +36,19 @@ public class RouteActionBean extends AbstractActionBean {
 	public Resolution defaultEvent() {
 		return new ForwardResolution("/views/event/route.jsp");
 	}
+	
 	@HandlesEvent("addform")
 	public Resolution addRouteScreen() {
+		return new ForwardResolution("/views/event/routeForm.jsp");
+	}
+	
+	@HandlesEvent("updateform")
+	public Resolution updateRouteScreen() {
+		Route route = getStateManipulator().getRouteByID(routeId);
+		source = route.getStartPoint().getName();
+		destination = route.getEndPoint().getName();
+		transportType = route.getTransportMeans();
+				
 		return new ForwardResolution("/views/event/routeForm.jsp");
 	}
 	
@@ -45,11 +56,13 @@ public class RouteActionBean extends AbstractActionBean {
 	public Resolution routeListFragment() {
 		return new ForwardResolution("/views/event/routeList.jsp");
 	}
+	
 	@HandlesEvent("update")
 	public Resolution updateRouteInfo(){
-		
-		//Route updatedRoute = fillRoute(getStateManipulator().getRouteById(routeId));
-		//getStateManipulator().saveRoute(updatedRoute);
+		Route updatedRoute = fillUpdateRoute(getStateManipulator().getRouteByID(routeId));
+		RouteUpdateEvent event = new RouteUpdateEvent();
+		event.setEntity(updatedRoute);
+		getEntityManager().performEvent(event);
 		
 		return new FormValidationResolution(true, null, null);
 	}
@@ -57,7 +70,7 @@ public class RouteActionBean extends AbstractActionBean {
 	@HandlesEvent("new")
 	public Resolution newRouteInfo() {
 		Map<String,String> errors = new HashMap<String,String>();
-		Route newRoute = fillRoute(new Route());
+		Route newRoute = fillNewRoute(Route.newRoute());
 
 		newRoute.setStartingTime(Calendar.getInstance().getTime());
 
@@ -87,7 +100,7 @@ public class RouteActionBean extends AbstractActionBean {
 		return new FormValidationResolution(true, null, null);
 	}
 
-	private Route fillRoute(Route newRoute) {
+	private Route fillNewRoute(Route newRoute) {
 		newRoute.setStartPoint(getStateManipulator().getLocationForName(source));
 		newRoute.setEndPoint(getStateManipulator().getLocationForName(destination));
 		newRoute.setTransportMeans(transportType);
@@ -101,6 +114,12 @@ public class RouteActionBean extends AbstractActionBean {
 
 		return newRoute;
 	}
+	
+	private Route fillUpdateRoute(Route route) {
+		// TODO: implement
+		return route;
+	}
+	
 	/**
 	 * @return the source
 	 */

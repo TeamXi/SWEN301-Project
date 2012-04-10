@@ -18,6 +18,7 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.RouteID;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans;
 
@@ -54,6 +55,7 @@ public final class HibernateStateManipulationModule extends AbstractModule {
 				MailDelivery.class,
 //				Priority.class,
 				Route.class,
+				RouteID.class,
 //				TransportMeans.class,
 				CustomerPrice.class,
 				DomesticCustomerPrice.class

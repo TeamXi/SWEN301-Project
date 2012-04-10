@@ -11,13 +11,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 @Entity
 public final class Route extends StorageEntity implements Serializable {
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
+	@Cascade(CascadeType.ALL)
+	@OneToOne
+	private RouteID uid;
 	
 	@Id
 	private RoutePK primaryKey = new RoutePK();
@@ -48,16 +53,26 @@ public final class Route extends StorageEntity implements Serializable {
 		private Carrier carrier;
 	}
 	
+	public static Route newRoute() {
+		Route r = new Route();
+		r.uid = new RouteID();
+		return r;
+	}
+	
 	public boolean isInternational() {
 		return this.getPrimaryKey().startPoint.isInternational() || this.getPrimaryKey().endPoint.isInternational();
 	}
-
+	
 	public long getId() {
-		return id;
+		return (uid == null)?0:uid.getId();
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public RouteID getUid() {
+		return uid;
+	}
+
+	public void setUid(RouteID uid) {
+		this.uid = uid;
 	}
 
 	public TransportMeans getTransportMeans() {
@@ -99,7 +114,7 @@ public final class Route extends StorageEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Route [id=" + id + ", transportMeans=" + getPrimaryKey().transportMeans
+		return "Route [id=" + getId() + ", transportMeans=" + getPrimaryKey().transportMeans
 				+ ", startPoint=" + getPrimaryKey().startPoint + ", endPoint=" + getPrimaryKey().endPoint
 				+ ", carrier=" + getPrimaryKey().carrier + ", carrierWeightUnitCost="
 				+ carrierWeightUnitCost + ", carrierVolumeUnitCost="
@@ -121,7 +136,7 @@ public final class Route extends StorageEntity implements Serializable {
 		result = prime * result
 				+ ((getPrimaryKey().endPoint == null) ? 0 : getPrimaryKey().endPoint.hashCode());
 		result = prime * result + frequency;
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + (int) (getId() ^ (getId() >>> 32));
 		result = prime * result
 				+ ((getPrimaryKey().startPoint == null) ? 0 : getPrimaryKey().startPoint.hashCode());
 		result = prime * result
@@ -162,7 +177,7 @@ public final class Route extends StorageEntity implements Serializable {
 			return false;
 		if (frequency != other.frequency)
 			return false;
-		if (id != other.id)
+		if (getId() != other.getId())
 			return false;
 		if (getPrimaryKey().startPoint == null) {
 			if (other.getPrimaryKey().startPoint != null)
