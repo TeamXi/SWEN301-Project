@@ -19,13 +19,14 @@ KPS.util.map = KPS.util.map || {};
 	var newLocationDiv = undefined;
 	
 	var newForm = undefined;
+	var updateForm = undefined;
 	
 	var addModalConfiguration = {
 			title: "Add route",
 			okButton: {
 				title: "Create route",
 				action: function() {
-					document.getElementById('newRouteForm').submit();
+					newForm.submit();
 				}
 			}
 	};
@@ -34,8 +35,7 @@ KPS.util.map = KPS.util.map || {};
 			okButton: {
 				title: "Update",
 				action: function() {
-					//document.getElementById('updateRouteForm').submit();
-					// TODO: implement
+					updateForm.submit();
 				}
 			}
 	};
@@ -50,7 +50,9 @@ KPS.util.map = KPS.util.map || {};
 			if(!status){
 				KPS.validation.validationErrors(form, returnObj.validation);
 			}else{
-				callback();
+				if(callback) {
+					callback();
+				}
 				updateRouteList();
 			}
 		});
@@ -58,21 +60,13 @@ KPS.util.map = KPS.util.map || {};
 	
 	cls.submitNewForm = function() {
 		submitForm(newForm, "route?new", function() {
-//			$("#emptyModalSuccessMessage").fadeIn(500,function(){ // TODO: implement
-//				setTimeout(function () {
-//					$("#emptyModalSuccessMessage").fadeOut(500);
-//				}, 1000);
-//			});
+			KPS.modal.hide();
 		});
 	};
 	
 	cls.submitUpdateForm = function(id) {
 		submitForm(updateForm, "route?update&routeId="+id, function() {
-//			$("#emptyModalSuccessMessage").fadeIn(500,function(){ // TODO: implement
-//				setTimeout(function () {
-//					$("#emptyModalSuccessMessage").fadeOut(500);
-//				}, 1000);
-//			});
+			KPS.modal.hide();
 		});
 	};
 	
@@ -95,6 +89,10 @@ KPS.util.map = KPS.util.map || {};
 			ok = false;
 			KPS.validation.validationError(form.elements['transportType'], "Please select a transport type");
 		}
+		ok &= KPS.validation.validateNumberField(form.elements['weightCost'], "Cost per gram");
+		ok &= KPS.validation.validateNumberField(form.elements['volumeCost'], "Cost per cm&sup3;");
+		ok &= KPS.validation.validateNumberField(form.elements['frequency'], "Departure frequency");
+		ok &= KPS.validation.validateNumberField(form.elements['duration'], "Transit duration");
 
 		return ok;
 	};
@@ -130,6 +128,7 @@ KPS.util.map = KPS.util.map || {};
 		KPS.modal.load("route?updateform&routeId="+id+updateFormPartialURL+"&submitCallback="+updateFormSubmitCallback+"("+id+")", function (data) {
 			KPS.util.disableInputAutocomplete();
 			
+			updateForm = document.getElementById(updateFormId);
 			KPS.modal.configure(updateModalConfiguration);
 			KPS.data.locations.load(function () { // TODO: needed?
 				KPS.data.locations.setupPortEntryTypeahead();

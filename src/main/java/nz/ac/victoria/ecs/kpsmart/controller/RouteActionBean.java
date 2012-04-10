@@ -19,20 +19,17 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans;
 public class RouteActionBean extends FormActionBean {
 	
 	private String source;
-	
 	private String destination;
-	
 	private TransportMeans transportType;
-	
 	private long routeId;
-	
 	private String divId;
-	
 	private String formId;
-	
 	private String submitCallback;
-	
 	private String carrier;
+	private float weightCost;
+	private float volumeCost;
+	private int frequency;
+	private int duration;
 	
 	@DefaultHandler
 	public Resolution defaultEvent() {
@@ -53,7 +50,11 @@ public class RouteActionBean extends FormActionBean {
 		destination = route.getEndPoint().getName();
 		transportType = route.getTransportMeans();
 		carrier = route.getCarrier().getName();
-				
+		weightCost = route.getCarrierWeightUnitCost();
+		volumeCost = route.getCarrierVolumeUnitCost();
+		frequency = route.getFrequency();
+		duration = route.getDuration();
+		
 		return new ForwardResolution("/views/event/routeForm.jsp");
 	}
 	
@@ -109,20 +110,22 @@ public class RouteActionBean extends FormActionBean {
 		newRoute.setStartPoint(getStateManipulator().getLocationForName(source));
 		newRoute.setEndPoint(getStateManipulator().getLocationForName(destination));
 		newRoute.setTransportMeans(transportType);
-
-		//TODO: Add following options to Route.
 		newRoute.setCarrier(getStateManipulator().getCarrier(carrier));
-		newRoute.setCarrierVolumeUnitCost((float)8.0);
-		newRoute.setCarrierWeightUnitCost((float)8.9);
+		newRoute.setCarrierVolumeUnitCost(volumeCost);
+		newRoute.setCarrierWeightUnitCost(weightCost);
+		newRoute.setFrequency(frequency);
+		newRoute.setDuration(duration);
 		newRoute.setDisabled(false);
-		newRoute.setDuration(1);
-		newRoute.setFrequency(1);
-
+		
 		return newRoute;
 	}
 	
 	private Route fillUpdateRoute(Route route) {
-		// TODO: implement
+		route.setCarrierVolumeUnitCost(volumeCost);
+		route.setCarrierWeightUnitCost(weightCost);
+		route.setFrequency(frequency);
+		route.setDuration(duration);
+		
 		return route;
 	}
 	
@@ -228,5 +231,61 @@ public class RouteActionBean extends FormActionBean {
 	 */
 	public void setCarrier(String carrier) {
 		this.carrier = carrier;
+	}
+
+	/**
+	 * @return the weightCost
+	 */
+	public float getWeightCost() {
+		return weightCost;
+	}
+
+	/**
+	 * @param weightCost the weightCost to set
+	 */
+	public void setWeightCost(float weightCost) {
+		this.weightCost = weightCost;
+	}
+
+	/**
+	 * @return the volumeCost
+	 */
+	public float getVolumeCost() {
+		return volumeCost;
+	}
+
+	/**
+	 * @param volumeCost the volumeCost to set
+	 */
+	public void setVolumeCost(float volumeCost) {
+		this.volumeCost = volumeCost;
+	}
+
+	/**
+	 * @return the frequency
+	 */
+	public int getFrequency() {
+		return frequency;
+	}
+
+	/**
+	 * @param frequency the frequency to set
+	 */
+	public void setFrequency(int frequency) {
+		this.frequency = frequency;
+	}
+
+	/**
+	 * @return the duration
+	 */
+	public int getDuration() {
+		return duration;
+	}
+
+	/**
+	 * @param duration the duration to set
+	 */
+	public void setDuration(int duration) {
+		this.duration = duration;
 	}
 }

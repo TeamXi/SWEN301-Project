@@ -23,6 +23,18 @@
 		<stripes:label for="carrier">Carrier</stripes:label>
 		<stripes:text class="carrierEntry" name="carrier" value="${actionBean.carrier}" disabled="${actionBean.disabledFormFields['carrier']}"/>
 		
+		<stripes:label for="weightCost">Cost per gram ($)</stripes:label>
+		<stripes:text name="weightCost" value="${actionBean.weightCost}" disabled="${actionBean.disabledFormFields['weightCost']}"/>
+		
+		<stripes:label for="volumeCost">Cost per cm&sup3; ($)</stripes:label>
+		<stripes:text name="volumeCost" value="${actionBean.volumeCost}" disabled="${actionBean.disabledFormFields['volumeCost']}"/>
+		
+		<stripes:label for="frequency">Time between departures (hours)</stripes:label>
+		<stripes:text name="frequency" value="${actionBean.frequency}" disabled="${actionBean.disabledFormFields['frequency']}"/>
+		
+		<stripes:label for="duration">Transit duration (hours)</stripes:label>
+		<stripes:text name="duration" value="${actionBean.duration}" disabled="${actionBean.disabledFormFields['duration']}"/>
+		
 		<stripes:submit name="submitbutton" style="visibility:hidden"></stripes:submit>
 	</stripes:form>
 </div>
