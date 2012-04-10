@@ -16,7 +16,7 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans;
 
 @UrlBinding("/event/route?{$event}")
-public class RouteActionBean extends AbstractActionBean {
+public class RouteActionBean extends FormActionBean {
 	
 	private String source;
 	
@@ -44,6 +44,8 @@ public class RouteActionBean extends AbstractActionBean {
 	
 	@HandlesEvent("updateform")
 	public Resolution updateRouteScreen() {
+		disableFormField(new String[]{"source", "destination", "transportType"});
+		
 		Route route = getStateManipulator().getRouteByID(routeId);
 		source = route.getStartPoint().getName();
 		destination = route.getEndPoint().getName();
