@@ -6,6 +6,8 @@
 		<tr>
 			<td>From</td>
 			<td>To</td>
+			<td>Carrier</td>
+			<td>Transport method</td>
 			<td>Category</td>
 		</tr>
 	</thead>
@@ -14,6 +16,8 @@
 			<tr>
 				<td><c:out value="${route.startPoint.name}" /></td>
 				<td><c:out value="${route.endPoint.name}" /></td>
+				<td><c:out value="${route.carrier.name}" /></td>
+				<td><c:out value="${route.transportMeans}" /></td>
 				<td>
 					<c:out value="${route.international?'International':'Domestic'}" />
 					<span class="row-hover-controls">
