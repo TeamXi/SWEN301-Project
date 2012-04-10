@@ -7,8 +7,16 @@ KPS.util.map = KPS.util.map || {};
 (function(cls, $, undefined) {
 	var newDivId = 'newRouteFormContainer';
 	var newFormId = 'newRouteForm';
-	var newFormSubmitCallback = 'KPS.event.route.submitNewForm()';
+	var newFormSubmitCallback = 'KPS.event.route.submitNewForm';
+	var newFormURL = "&divId="+newDivId+"&formId="+newFormId+"&submitCallback="+newFormSubmitCallback+"()";
+	
+	var updateDivId = 'updateRouteFormContainer';
+	var updateFormId = 'updateRouteForm';
+	var updateFormSubmitCallback = 'KPS.event.route.submitUpdateForm';
+	var updateFormPartialURL = "&divId="+updateDivId+"&formId="+updateFormId;
+	
 	var newLocationDivId = 'newLocationMapWrapper';
+	var newLocationDiv = undefined;
 	
 	var newForm = undefined;
 	
@@ -32,23 +40,39 @@ KPS.util.map = KPS.util.map || {};
 			}
 	};
 	
-	cls.submitNewForm = function() {
-		if(!cls.validateForm(newForm)) return;
+	function submitForm(form, url, callback) {
+		if(!cls.validateForm(form)) return;
 
-		KPS.util.submitForm(newForm, "route?new", function(data){
+		KPS.util.submitForm(form, url, function(data){
 			var returnObj = eval(data);
 			var status = returnObj.status;
 
 			if(!status){
-				KPS.validation.validationErrors(newForm, returnObj.validation);
+				KPS.validation.validationErrors(form, returnObj.validation);
 			}else{
-				$("#emptyModalSuccessMessage").fadeIn(500,function(){ // TODO: implement
-					setTimeout(function () {
-						$("#emptyModalSuccessMessage").fadeOut(500);
-					}, 1000);
-				});
+				callback();
 				updateRouteList();
 			}
+		});
+	};
+	
+	cls.submitNewForm = function() {
+		submitForm(newForm, "route?new", function() {
+//			$("#emptyModalSuccessMessage").fadeIn(500,function(){ // TODO: implement
+//				setTimeout(function () {
+//					$("#emptyModalSuccessMessage").fadeOut(500);
+//				}, 1000);
+//			});
+		});
+	};
+	
+	cls.submitUpdateForm = function(id) {
+		submitForm(updateForm, "route?update&routeId="+id, function() {
+//			$("#emptyModalSuccessMessage").fadeIn(500,function(){ // TODO: implement
+//				setTimeout(function () {
+//					$("#emptyModalSuccessMessage").fadeOut(500);
+//				}, 1000);
+//			});
 		});
 	};
 	
@@ -84,9 +108,9 @@ KPS.util.map = KPS.util.map || {};
 	}
 	
 	cls.addRoute = function(){ // TODO: only load once.
-		KPS.modal.load("route?addform&divId="+newDivId+"&formId="+newFormId+"&submitCallback="+newFormSubmitCallback,function(){
+		KPS.modal.load("route?addform"+newFormURL,function(){
 			newForm = document.getElementById(newFormId);
-			KPS.modal.carrousel.add(document.getElementById(newLocationDivId));
+			KPS.modal.carrousel.add(newLocationDiv);
 			KPS.modal.configure(addModalConfiguration);
 			KPS.data.locations.load(function () { // TODO: needed?
 				KPS.data.locations.setupPortEntryTypeahead();
@@ -96,8 +120,7 @@ KPS.util.map = KPS.util.map || {};
 	};
 	
 	cls.updateRoute = function(id) {
-		KPS.modal.load("route?updateform&routeId="+id, function (data) {
-			KPS.modal.carrousel.add(document.getElementById(newLocationDivId));
+		KPS.modal.load("route?updateform&routeId="+id+updateFormPartialURL+"&submitCallback="+updateFormSubmitCallback+"("+id+")", function (data) {
 			KPS.modal.configure(updateModalConfiguration);
 			KPS.data.locations.load(function () { // TODO: needed?
 				KPS.data.locations.setupPortEntryTypeahead();
@@ -128,6 +151,8 @@ KPS.util.map = KPS.util.map || {};
 		$("#menu-newRouteDropdown").click(function () {
 			cls.addRoute();
 		});
+		
+		newLocationDiv = document.getElementById(newLocationDivId);
 	});
 }(KPS.event.route, jQuery));
 

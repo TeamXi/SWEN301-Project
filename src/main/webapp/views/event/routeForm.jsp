@@ -9,13 +9,13 @@
 	<stripes:form id="${actionBean.formId}" action="javascript:${actionBean.submitCallback}">
 
 		<stripes:label for="source">Source</stripes:label>
-		<stripes:text class="portEntry" name="source" />
+		<stripes:text class="portEntry" name="source" value="${actionBean.source}"/>
 
 		<stripes:label for="destination">Destination</stripes:label>
-		<stripes:text class="portEntry" name="destination" />
+		<stripes:text class="portEntry" name="destination" value="${actionBean.destination}"/>
 
 		<stripes:label for="transportType">Transport type</stripes:label>
-		<stripes:select name="transportType">
+		<stripes:select name="transportType" value="${actionBean.transportType}">
 			<option value="placeholder">Select a transport type</option>
 			<stripes:options-enumeration enum="nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans" />
 		</stripes:select>
