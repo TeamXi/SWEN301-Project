@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import nz.ac.victoria.ecs.kpsmart.InjectOnContruct;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Bool;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
@@ -145,8 +146,36 @@ public class HibernateStateManipulator implements StateManipulator {
 
 	@Override
 	public void delete(StorageEntity entity) {
-		this.getSession().delete(entity);
+//		entity.setDisabled(true);
+//		this.getSession().merge(entity);
+		this.deleteRelatedEntities(entity);
 		this.getSession().flush();
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void deleteRelatedEntities(StorageEntity entity) {
+		entity.setDisabled(true);
+		this.session.merge(entity);
+		
+		if (
+			(entity instanceof MailDelivery) ||
+			(entity instanceof CustomerPrice) ||
+			(entity instanceof Route)
+		) 
+			return;
+		
+		if (entity instanceof Carrier)
+			for (Route r : (List<Route>) this.session.createCriteria(Route.class)
+					.add(Restrictions.eq("primaryKey.carrier", entity))
+					.list())
+				this.deleteRelatedEntities(r);
+		if (entity instanceof Location)
+			for (Route r : (List<Route>) this.session.createCriteria(Route.class)
+					.add(Restrictions.or(
+							Restrictions.eq("primaryKey.startPoint", entity), 
+							Restrictions.eq("primaryKey.endPoint", entity)))
+					.list())
+				this.deleteRelatedEntities(r);
 	}
 
 	@Override
