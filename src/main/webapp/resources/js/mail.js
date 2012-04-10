@@ -94,6 +94,8 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 		$(".new-mail-delivery-link").each(function (index, child) {
 			$(child).click(function () {
 				KPS.modal.load("/kpsmart/event/mail", function(){
+					KPS.util.disableInputAutocomplete();
+					
 					KPS.modal.configure(modalConfiguration);
 					KPS.modal.show();
 				});

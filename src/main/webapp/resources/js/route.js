@@ -109,6 +109,8 @@ KPS.util.map = KPS.util.map || {};
 	
 	cls.addRoute = function(){ // TODO: only load once.
 		KPS.modal.load("route?addform"+newFormURL,function(){
+			KPS.util.disableInputAutocomplete();
+			
 			newForm = document.getElementById(newFormId);
 			KPS.modal.carrousel.add(newLocationDiv);
 			KPS.modal.configure(addModalConfiguration);
@@ -121,6 +123,8 @@ KPS.util.map = KPS.util.map || {};
 	
 	cls.updateRoute = function(id) {
 		KPS.modal.load("route?updateform&routeId="+id+updateFormPartialURL+"&submitCallback="+updateFormSubmitCallback+"("+id+")", function (data) {
+			KPS.util.disableInputAutocomplete();
+			
 			KPS.modal.configure(updateModalConfiguration);
 			KPS.data.locations.load(function () { // TODO: needed?
 				KPS.data.locations.setupPortEntryTypeahead();

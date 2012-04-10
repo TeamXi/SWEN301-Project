@@ -24,6 +24,10 @@ function performLogin(siteRoot,role){
 			callback(data);
 		});
 	};
+	
+	cls.disableInputAutocomplete = function() {
+		$("input").attr("autocomplete", "off");
+	};
 } (KPS.util, jQuery));
 
 function show(obj){

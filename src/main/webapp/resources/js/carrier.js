@@ -94,6 +94,8 @@ KPS.event.carrier = KPS.event.carrier || {};
 
 	cls.addCarrier = function() {
 		KPS.modal.load("carrier?newform", function (){
+			KPS.util.disableInputAutocomplete();
+			
 			KPS.modal.configure(addModalConfiguration);
 			KPS.modal.show();
 		});
@@ -101,6 +103,8 @@ KPS.event.carrier = KPS.event.carrier || {};
 
 	cls.updateCarrier = function(carrierID) {
 		KPS.modal.load("carrier?updateform&carrierId="+carrierID, function () {
+			KPS.util.disableInputAutocomplete();
+			
 			KPS.modal.configure(updateModalConfiguration);
 			KPS.modal.show();
 		});
