@@ -3,8 +3,6 @@
 <%@ taglib prefix="stripes"
 	uri="http://stripes.sourceforge.net/stripes.tld"%>
 
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/formvalidation.js"></script>
-
 <div id="${actionBean.divId}">
 	<stripes:form id="${actionBean.formId}" action="javascript:${actionBean.submitCallback}">
 
