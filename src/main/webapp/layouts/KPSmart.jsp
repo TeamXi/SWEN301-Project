@@ -47,6 +47,13 @@
 											<li><a id="menu-newCarrierDropdown" href="${pageContext.request.contextPath}/event/carrier#new">New</a></li>
 										</ul>
 									</li>
+									<li class="dropdown">
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown">Customer Prices<b class="caret"></b></a>
+										<ul class="dropdown-menu">
+											<li><a href="${pageContext.request.contextPath}/event/customerprice">List</a></li>
+											<li><a id="menu-newCarrierDropdown" href="${pageContext.request.contextPath}/event/customerprice#new">New</a></li>
+										</ul>
+									</li>
 								</c:if>
 							</ul>
 							
