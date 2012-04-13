@@ -4,18 +4,18 @@
 <stripes:layout-render name="/layouts/KPSmart.jsp">
 
 	<stripes:layout-component name="title">Routes</stripes:layout-component>
-	<stripes:layout-component name="content">
 	<stripes:layout-component name="scripts">
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/route.js"></script>
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 	</stripes:layout-component>
-	
+	<stripes:layout-component name="content">
 		<div class="span12">
 			<h1 class="pull-left">Routes</h1>
 			<button class="btn btn-success smallMargin" onclick="KPS.event.route.addRoute();">Add new</button>
-		</div>
-		<div id="routeListContainer">
-			<jsp:include page="routeList.jsp"></jsp:include>
+			
+			<div id="routeListContainer">
+				<jsp:include page="routeList.jsp"></jsp:include>
+			</div>
 		</div>
 		
 		<div style="display: none">
