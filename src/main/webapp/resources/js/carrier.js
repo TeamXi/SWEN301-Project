@@ -2,12 +2,23 @@ KPS.event = KPS.event || {};
 KPS.event.carrier = KPS.event.carrier || {};
 
 (function (cls, $, undefined) {
+	var newFormId = 'newCarrierForm';
+	var newFormSubmitCallback = 'KPS.event.carrier.submitNewForm';
+	var newFormURL = "&formId="+newFormId+"&submitCallback="+newFormSubmitCallback+"()";
+	
+	var updateFormId = 'updateCarrierForm';
+	var updateFormSubmitCallback = 'KPS.event.carrier.submitUpdateForm';
+	var updateFormPartialURL = "&formId="+updateFormId;
+	
+	var newForm = undefined;
+	var updateForm = undefined;
+	
 	var addModalConfiguration = {
 			title: "Add carrier",
 			okButton: {
 				title: "Create",
 				action: function() {
-					document.getElementById('newCarrierForm').submit();
+					newForm.submit();
 				}
 			}
 	};
@@ -16,7 +27,7 @@ KPS.event.carrier = KPS.event.carrier || {};
 			okButton: {
 				title: "Update",
 				action: function() {
-					document.getElementById('updateCarrierForm').submit();
+					updateForm.submit();
 				}
 			}
 	};
@@ -42,39 +53,37 @@ KPS.event.carrier = KPS.event.carrier || {};
 			if(!status){
 				KPS.validation.validationErrors(form, returnObj.validation);
 			} else{
-				callback(data);
-
+				if(callback) {
+					callback(data);
+				}
 				updateCarrierList();
 			}
 		});
 	}
 
-	cls.submitNewForm = function(id) {
-		submitForm(document.getElementById(id), "carrier?new", function (data) {
+	cls.submitNewForm = function() {
+		submitForm(newForm, "carrier?new", function (data) {
 			var response = eval(data);
 
 			if(!response.status) {
 				alert("There was an error adding this carrier.");
 			}
 			else {
-				$("#carrierSuccessMessage").fadeIn(500,function(){
-					setTimeout(function () {
-						$("#carrierSuccessMessage").fadeOut(500);
-					}, 1000);
-				});
+				KPS.modal.hide();
 			}
 		});
 	};
 
-	cls.submitUpdateForm = function(formId, carrierId) {
-		submitForm(document.getElementById(formId), "carrier?update&carrierId="+carrierId, function (data) {
+	cls.submitUpdateForm = function(carrierId) {
+		submitForm(updateForm, "carrier?update&carrierId="+carrierId, function (data) {
 			var response = eval(data);
 
 			if(!response.status) {
 				alert("There was an error updating this carrier.");
 			}
-
-			KPS.modal.hide();
+			else {
+				KPS.modal.hide();
+			}
 		});
 	};
 
@@ -93,7 +102,9 @@ KPS.event.carrier = KPS.event.carrier || {};
 	};
 
 	cls.addCarrier = function() {
-		KPS.modal.load("carrier?newform", function (){
+		KPS.modal.load("carrier?newform"+newFormURL, function (){
+			newForm = document.getElementById(newFormId);
+			
 			KPS.util.disableInputAutocomplete();
 			
 			KPS.modal.configure(addModalConfiguration);
@@ -102,7 +113,9 @@ KPS.event.carrier = KPS.event.carrier || {};
 	};
 
 	cls.updateCarrier = function(carrierID) {
-		KPS.modal.load("carrier?updateform&carrierId="+carrierID, function () {
+		KPS.modal.load("carrier?updateform&carrierId="+carrierID+updateFormPartialURL+"&submitCallback="+updateFormSubmitCallback+"("+carrierID+")", function () {
+			updateForm = document.getElementById(updateFormId);
+			
 			KPS.util.disableInputAutocomplete();
 			
 			KPS.modal.configure(updateModalConfiguration);

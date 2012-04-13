@@ -18,7 +18,7 @@ function performLogin(siteRoot,role){
 
 	cls.submitForm = function(form, url, callback) {
 		var values = {};
-		$(form).children("input, select").each(function(index, child) {
+		$(form).find("input, select").each(function(index, child) {
 			values[child.name] = child.value;
 		});
 		$.post(url, values, function(data) {

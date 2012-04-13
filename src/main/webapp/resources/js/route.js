@@ -47,7 +47,7 @@ KPS.util.map = KPS.util.map || {};
 			var returnObj = eval(data);
 			var status = returnObj.status;
 
-			if(!status){
+			if(!status){ // TODO: check reason and alert if server failure
 				KPS.validation.validationErrors(form, returnObj.validation);
 			}else{
 				if(callback) {
@@ -181,7 +181,7 @@ KPS.util.map = KPS.util.map || {};
 			},
 			cancelButton: {
 				action: function() {
-					dismissNewLocation();
+					dismiss();
 //					$("#emptyModalSuccessMessage").html("Location added!"); // TODO: look at all of these
 				}
 			}
@@ -197,7 +197,7 @@ KPS.util.map = KPS.util.map || {};
 		backStackInfo.oldModal = KPS.modal.configure(modalConfiguration);
 		KPS.modal.carrousel.next();
 		document.getElementById('newLocationMapLocationName').value = name;
-		search();
+		cls.search();
 	};
 
 	function dismiss() {
@@ -223,7 +223,7 @@ KPS.util.map = KPS.util.map || {};
 		});
 	}
 	
-	function search() {
+	cls.search = function() {
 		var geocoder = new google.maps.Geocoder();
 		geocoder.geocode( { 'address': document.getElementById('newLocationMapLocationName').value}, function(results, status) {
 			searchResults = results;

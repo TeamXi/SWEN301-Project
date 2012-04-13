@@ -48,14 +48,14 @@ tr:hover .row-hover-controls {
 	width: 100%;
 }
 
-.modal-body {
-	overflow: hidden;
-	padding: 15px;
-}
-
 /*
  *Carrousel
  */
+
+.modal-body {
+	overflow-x: hidden;
+	padding: 15px;
+}
 
 .kps-carrousel > .kps-carrousel-body {
 	width: 1000000px;

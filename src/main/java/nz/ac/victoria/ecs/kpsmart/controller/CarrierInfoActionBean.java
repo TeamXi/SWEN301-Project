@@ -11,7 +11,7 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityUpdateEvent.CarrierUp
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
 
 @UrlBinding("/event/carrier?{$event}")
-public class CarrierInfoActionBean extends AbstractActionBean {
+public class CarrierInfoActionBean extends FormActionBean {
 	
 	private String name;
 	
@@ -47,12 +47,12 @@ public class CarrierInfoActionBean extends AbstractActionBean {
 	@HandlesEvent("updateform")
 	public Resolution updateForm() {
 		name = getStateManipulator().getCarrier(carrierId).getName();
-		return new ForwardResolution("/views/event/carrierUpdateForm.jsp");
+		return new ForwardResolution("/views/event/carrierForm.jsp");
 	}
 	
 	@HandlesEvent("newform")
 	public Resolution newForm() {
-		return new ForwardResolution("/views/event/carrierNewForm.jsp");
+		return new ForwardResolution("/views/event/carrierForm.jsp");
 	}
 	
 	@HandlesEvent("update")

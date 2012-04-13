@@ -22,9 +22,6 @@ public class RouteActionBean extends FormActionBean {
 	private String destination;
 	private TransportMeans transportType;
 	private long routeId;
-	private String divId;
-	private String formId;
-	private String submitCallback;
 	private String carrier;
 	private float weightCost;
 	private float volumeCost;
@@ -181,42 +178,6 @@ public class RouteActionBean extends FormActionBean {
 	 */
 	public void setRouteId(long routeId) {
 		this.routeId = routeId;
-	}
-	/**
-	 * @return the divId
-	 */
-	public String getDivId() {
-		return divId;
-	}
-	/**
-	 * @param divId the divId to set
-	 */
-	public void setDivId(String divId) {
-		this.divId = divId;
-	}
-	/**
-	 * @return the formId
-	 */
-	public String getFormId() {
-		return formId;
-	}
-	/**
-	 * @param formId the formId to set
-	 */
-	public void setFormId(String formId) {
-		this.formId = formId;
-	}
-	/**
-	 * @return the submitCallback
-	 */
-	public String getSubmitCallback() {
-		return submitCallback;
-	}
-	/**
-	 * @param submitCallback the submitCallback to set
-	 */
-	public void setSubmitCallback(String submitCallback) {
-		this.submitCallback = submitCallback;
 	}
 
 	/**

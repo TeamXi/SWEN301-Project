@@ -13,26 +13,52 @@
 			class="alert alert-success">Mail added successfully!
 		</div>
 	</div>
-	<stripes:form id="newMailForm" action="javascript:KPS.event.maildelivery.submitForm('newMailForm')">
-		<stripes:label for="source">Source</stripes:label>
-		<stripes:text class="portEntry" name="source" />
-	
-		<stripes:label for="destination">Destination</stripes:label>
-		<stripes:text class="portEntry" name="destination" />
-	
-		<stripes:label for="priority">Priority</stripes:label>
-		<stripes:select name="priority">
-			<option value="placeholder">Select a Priority</option>
-			<stripes:options-enumeration
-				enum="nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority" />
-		</stripes:select>
-	
-		<stripes:label for="weight">Weight (grams)</stripes:label>
-		<stripes:text name="weight" />
-	
-		<stripes:label for="volume">Volume (cm&sup3;)</stripes:label>
-		<stripes:text name="volume" />
+	<stripes:form id="newMailForm" class="form-horizontal" action="javascript:KPS.event.maildelivery.submitForm('newMailForm')">
+		<fieldset>
+			<div class="control-group">
+				<stripes:label class="control-label" for="source">Source</stripes:label>
+				<div class="controls">
+					<stripes:text class="portEntry" name="source" />
+				</div>
+			</div>
 		
-		<stripes:submit name="submitbutton" style="visibility:hidden"></stripes:submit>
+			<div class="control-group">
+				<stripes:label class="control-label" for="destination">Destination</stripes:label>
+				<div class="controls">
+					<stripes:text class="portEntry" name="destination" />
+				</div>
+			</div>
+			
+			<div class="control-group">
+				<stripes:label class="control-label" for="priority">Priority</stripes:label>
+				<div class="controls">
+					<stripes:select name="priority">
+						<option value="placeholder">Select a Priority</option>
+						<stripes:options-enumeration
+							enum="nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority" />
+					</stripes:select>
+				</div>
+			</div>
+		
+			<div class="control-group">
+				<stripes:label class="control-label" for="weight">Weight</stripes:label>
+				<div class="controls">
+					<div class="input-append">
+						<stripes:text name="weight" /><span class="add-on">grams</span>
+					</div>
+				</div>
+			</div>
+			
+			<div class="control-group">
+				<stripes:label class="control-label" for="volume">Volume</stripes:label>
+				<div class="controls">
+					<div class="input-append">
+						<stripes:text name="volume" /><span class="add-on">cm&sup3;</span>
+					</div>
+				</div>
+			</div>
+			
+			<stripes:submit name="submitbutton" style="visibility:hidden"></stripes:submit>
+		</fieldset>
 	</stripes:form>
 </div>

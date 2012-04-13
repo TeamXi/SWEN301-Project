@@ -19,23 +19,29 @@ KPS.validation = KPS.validation || {};
 		return true;
 	};
 
-	cls.validationError = function(element, message) {
-		$(element).before('<div class="alert alert-error fade in validate-error-message"><a class="close" data-dismiss="alert">&times;</a>'+message+'</div>')
-					.prev()
-					.find(".inject-form-element")
-					.each(function (index, child) {
-						child.formElement = element;
-					});
+	cls.validationError = function(element, message, level) {
+		level = level || 'error';
 		
-		$(element).addClass('validate-error')
-			.focus(function() {
-				$(element).removeClass('validate-error');
-			});
+		var helptext = $(element).next(".help-block")[0];
+		if(!helptext) {
+			helptext = $("<p class='help-block'></p>");
+			var after = $(element).next(".add-on");
+			if(after.length == 0) {
+				after = element;
+			}
+			$(after).after(helptext);
+		}
+		
+		$(helptext).html(message).find(".inject-form-element").each(function (index, child) {
+			child.formElement = element;
+		});;
+		
+		$(element).closest(".control-group").addClass(level);
 	};
 
 	cls.resetValidation = function(form) {
-		$('.validate-error-message', form).each(function (index, child) {$(child).remove();});
-		$('.validate-error', form).each(function (index, child) {$(child).removeClass('validate-error');});
+		$('.help-block', form).html('');
+		$('.control-group', form).removeClass('error').removeClass('warning').removeClass('success');
 	};
 	
 	cls.validationErrors = function(form, errors) {
