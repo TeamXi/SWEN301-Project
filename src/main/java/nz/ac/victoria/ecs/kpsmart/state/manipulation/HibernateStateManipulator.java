@@ -154,6 +154,9 @@ public class HibernateStateManipulator implements StateManipulator {
 	
 	@SuppressWarnings("unchecked")
 	private void deleteRelatedEntities(StorageEntity entity) {
+		if (entity.isDisabled())
+			return;
+		
 		entity.setDisabled(true);
 		this.session.merge(entity);
 		
@@ -243,10 +246,18 @@ public class HibernateStateManipulator implements StateManipulator {
 					.uniqueResult();
 	}
 	
-	public static Criterion ifTrue(Criterion ifTrue, Criterion ifFalse, boolean expression) {
-		if (expression)
-			return ifTrue;
-		else
-			return ifFalse;
+//	public static Criterion ifTrue(Criterion ifTrue, Criterion ifFalse, boolean expression) {
+//		if (expression)
+//			return ifTrue;
+//		else
+//			return ifFalse;
+//	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<CustomerPrice> getAllCustomerPrices() {
+		return (List<CustomerPrice>) this.session.createCriteria(CustomerPrice.class)
+					.add(Restrictions.eq("disabled", Bool.False))
+					.list();
 	}
 }

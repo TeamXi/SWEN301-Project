@@ -1,6 +1,9 @@
 package nz.ac.victoria.ecs.kpsmart.state.manipulation;
 
+import java.util.Collection;
+
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
@@ -90,4 +93,11 @@ public interface StateManipulator extends ReadOnlyStateManipulator {
 	 * @return	The carrier or null if none was found
 	 */
 	public Carrier getCarrier(String name);
+	
+	/**
+	 * Get all the customer price information in the datasource.
+	 * 
+	 * @return	All the customer prices known to the datasource. Order is not guaranteed.
+	 */
+	public Collection<CustomerPrice> getAllCustomerPrices();
 }
