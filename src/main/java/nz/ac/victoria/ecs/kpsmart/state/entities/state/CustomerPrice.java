@@ -11,10 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice.CustomerPricePK.Direction;
+
 @Entity
 public class CustomerPrice extends StorageEntity implements Serializable {
 	@Id
-	private CustomerPricePK primaryKey;
+	private CustomerPricePK primaryKey = new CustomerPricePK();
 	
 	private float pricePerUnitWeight;
 	
@@ -22,17 +24,11 @@ public class CustomerPrice extends StorageEntity implements Serializable {
 	
 	@Embeddable
 	public static final class CustomerPricePK implements Serializable {
-		/**
-		 * May be null to designate new zealand
-		 */
-		@ManyToOne @Nullable
-		private Location startLocation;
+		@ManyToOne
+		private Location location;
 		
-		/**
-		 * May be null to designate new zealand
-		 */
-		@ManyToOne @Nullable
-		private Location endLocation;
+		@Enumerated(EnumType.STRING)
+		private Direction direction = Direction.From;
 		
 		@Enumerated(EnumType.STRING)
 		private Priority priority;
@@ -42,11 +38,11 @@ public class CustomerPrice extends StorageEntity implements Serializable {
 			final int prime = 31;
 			int result = 1;
 			result = prime * result
-					+ ((endLocation == null) ? 0 : endLocation.hashCode());
+					+ ((direction == null) ? 0 : direction.hashCode());
+			result = prime * result
+					+ ((location == null) ? 0 : location.hashCode());
 			result = prime * result
 					+ ((priority == null) ? 0 : priority.hashCode());
-			result = prime * result
-					+ ((startLocation == null) ? 0 : startLocation.hashCode());
 			return result;
 		}
 
@@ -59,19 +55,26 @@ public class CustomerPrice extends StorageEntity implements Serializable {
 			if (getClass() != obj.getClass())
 				return false;
 			CustomerPricePK other = (CustomerPricePK) obj;
-			if (endLocation == null) {
-				if (other.endLocation != null)
+			if (direction != other.direction)
+				return false;
+			if (location == null) {
+				if (other.location != null)
 					return false;
-			} else if (!endLocation.equals(other.endLocation))
+			} else if (!location.equals(other.location))
 				return false;
 			if (priority != other.priority)
 				return false;
-			if (startLocation == null) {
-				if (other.startLocation != null)
-					return false;
-			} else if (!startLocation.equals(other.startLocation))
-				return false;
 			return true;
+		}
+		
+		public static enum Direction {
+			From, To;
+		}
+
+		@Override
+		public String toString() {
+			return "CustomerPricePK [location=" + location + ", direction="
+					+ direction + ", priority=" + priority + "]";
 		}
 	}
 
@@ -79,28 +82,42 @@ public class CustomerPrice extends StorageEntity implements Serializable {
 	 * May be null to designate new zealand
 	 */
 	public Location getStartLocation() {
-		return getPrimaryKey().startLocation;
+		if (this.getPrimaryKey().direction == Direction.From)
+			return this.getPrimaryKey().location;
+		
+		return null;
 	}
 
 	/**
 	 * May be null to designate new zealand
 	 */
 	public void setStartLocation(Location startLocation) {
-		this.getPrimaryKey().startLocation = startLocation;
+		if (startLocation == null || !startLocation.isInternational())
+			return;
+		
+		this.getPrimaryKey().direction = Direction.From;
+		this.getPrimaryKey().location = startLocation;
 	}
 
 	/**
 	 * May be null to designate new zealand
 	 */
 	public Location getEndLocation() {
-		return getPrimaryKey().endLocation;
+		if (this.getPrimaryKey().direction == Direction.To)
+			return this.getPrimaryKey().location;
+		
+		return null;
 	}
 
 	/**
 	 * May be null to designate new zealand
 	 */
 	public void setEndLocation(Location endLocation) {
-		this.getPrimaryKey().endLocation = endLocation;
+		if (endLocation == null || !endLocation.isInternational())
+			return;
+		
+		this.getPrimaryKey().direction = Direction.To;
+		this.getPrimaryKey().location = endLocation;
 	}
 
 	public Priority getPriority() {
