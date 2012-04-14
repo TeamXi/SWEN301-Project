@@ -16,7 +16,7 @@ function performLogin(siteRoot,role){
 		window.location = url;
 	};
 
-	cls.submitForm = function(form, url, callback) {
+	cls.submitForm = function(form, url, callback) { // TODO: reason if not 200?
 		var values = {};
 		$(form).find("input, select").each(function(index, child) {
 			values[child.name] = child.value;

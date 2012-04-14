@@ -71,9 +71,7 @@ KPS.util.map = KPS.util.map || {};
 	};
 	
 	function updateRouteList(){
-		$.get("route?listfragment", function (data) {
-			$("#routeListContainer").html(data);
-		});
+		$("#routeListContainer").load("route?listfragment");
 	}
 	
 	cls.validateForm = function(form) {

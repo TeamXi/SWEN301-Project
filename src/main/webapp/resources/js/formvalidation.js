@@ -25,9 +25,13 @@ KPS.validation = KPS.validation || {};
 		var helptext = $(element).next(".help-block")[0];
 		if(!helptext) {
 			helptext = $("<p class='help-block'></p>");
-			var after = $(element).next(".add-on");
+			var after2 = $(element).nextAll(".add-on");
+			if(after2.length == 0) {
+				after2 = element;
+			}
+			var after = $(after2).nextAll(".help-inline");
 			if(after.length == 0) {
-				after = element;
+				after = after2;
 			}
 			$(after).after(helptext);
 		}

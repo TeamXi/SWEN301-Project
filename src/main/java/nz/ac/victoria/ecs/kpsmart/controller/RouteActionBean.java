@@ -73,7 +73,7 @@ public class RouteActionBean extends FormActionBean {
 	@HandlesEvent("new")
 	public Resolution newRouteInfo() {
 		Map<String,String> errors = new HashMap<String,String>();
-		Route newRoute = fillNewRoute(Route.newRoute());
+		Route newRoute = fillNewRoute(Route.newInstance());
 
 		newRoute.setStartingTime(Calendar.getInstance().getTime());
 
@@ -85,7 +85,7 @@ public class RouteActionBean extends FormActionBean {
 		}
 
 		if(!isValid){
-			return new FormValidationResolution(false,errors.keySet().toArray(new String[]{}),errors.values().toArray(new String[]{}));
+			return new FormValidationResolution(false,errors);
 		}
 		else {
 			RouteUpdateEvent event = new RouteUpdateEvent();

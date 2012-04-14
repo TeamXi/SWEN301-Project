@@ -96,7 +96,7 @@ public class EntityManager {
 		
 		CustomerPrice price = event.getCurrentPrice();
 		price.setPricePerUnitVolume(event.getNewVolumeUnitCost());
-		price.setPriceperUnitWeight(event.getNewWeightUnitCost());
+		price.setPricePerUnitWeight(event.getNewWeightUnitCost());
 		
 		manipulator.save(price);
 	}

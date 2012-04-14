@@ -93,4 +93,12 @@ public interface StateManipulator extends ReadOnlyStateManipulator {
 	 * @return	The carrier or null if none was found
 	 */
 	public Carrier getCarrier(String name);
+
+	/**
+	 * Get a customer price by its ID
+	 * 
+	 * @param id the id of the customer price
+	 * @return
+	 */
+	public CustomerPrice getCustomerPriceById(long id);
 }

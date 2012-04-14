@@ -226,6 +226,14 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 					.list();
 	}
 
+	@Override
+	public CustomerPrice getCustomerPriceById(long id) {
+		return (CustomerPrice) this.getSession().createCriteria(CustomerPrice.class)
+				.add(Restrictions.eq("uid.id", id))
+				.add(Restrictions.ne("disabled", Bool.True))
+				.uniqueResult();
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<AmountOfMail> getAmountsOfMailForAllRoutes() {
@@ -351,5 +359,5 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 		return this.getSession().createCriteria(Event.class)
 				.list()
 				.size();
-	}	
+	}
 }

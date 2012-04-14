@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=US-ASCII" pageEncoding="US-ASCII"%>
+<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <table class="table table-bordered table-striped">
 	<thead>
@@ -12,12 +13,14 @@
 	</thead>
 	<tbody>
 		<c:forEach var="price" items="${actionBean.stateManipulator.allCustomerPrices}">
+			<c:set value="${price.startLocation!=null?price.startLocation.name:'New Zealand'}" var="from"></c:set>
+			<c:set value="${price.endLocation!=null?price.endLocation.name:'New Zealand'}" var="to"></c:set>
 			<tr>
 				<td>
-					<c:out value="${price.startLocation?price.startLocation.name:'New Zealand'}"/>
+					<c:out value="${from}"/>
 				</td>
 				<td>
-					<c:out value="${price.endLocation?price.endLocation.name:'New Zealand'}"/>
+					<c:out value="${to}"/>
 				</td>
 				<td>
 					<c:out value="${price.priority}"/>
@@ -27,7 +30,7 @@
 				</td>
 				<td>
 					<c:out value="${price.pricePerUnitVolume}"/>
-					<span class="row-hover-controls"><a onclick="KPS.event.carrier.updateCarrier('${carrier.id}')">update</a> <a onclick="KPS.event.carrier.deleteCarrier('${carrier.name}', ${carrier.id})">delete</a></span>
+					<span class="row-hover-controls"><a onclick="KPS.event.customerprice.updateCustomerPrice(${price.id})">update</a> <a onclick="KPS.event.customerprice.deleteCustomerPrice('from ${from} to ${to}', ${price.id})">delete</a></span>
 				</td>
 			</tr>
 		</c:forEach>

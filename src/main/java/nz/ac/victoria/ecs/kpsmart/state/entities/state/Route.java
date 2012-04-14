@@ -96,7 +96,7 @@ public final class Route extends StorageEntity implements Serializable {
 		}
 	}
 	
-	public Route() {}
+	private Route() {}
 	public Route(final TransportMeans trans, final Location start, final Location end, final Carrier carrier) {
 		this.primaryKey.transportMeans = trans;
 		this.primaryKey.startPoint = start;
@@ -104,7 +104,7 @@ public final class Route extends StorageEntity implements Serializable {
 		this.primaryKey.carrier = carrier;
 	}
 	
-	public static Route newRoute() {
+	public static Route newInstance() {
 		Route r = new Route();
 		r.uid = new RouteID();
 		return r;

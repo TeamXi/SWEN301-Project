@@ -2,19 +2,24 @@ package nz.ac.victoria.ecs.kpsmart.state.entities.state;
 
 import java.io.Serializable;
 
-import javax.annotation.Nullable;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice.CustomerPricePK.Direction;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 public class CustomerPrice extends StorageEntity implements Serializable {
+	@Cascade(CascadeType.ALL)
+	@OneToOne
+	private CustomerPriceID uid;
+	
 	@Id
 	private CustomerPricePK primaryKey = new CustomerPricePK();
 	
@@ -66,16 +71,29 @@ public class CustomerPrice extends StorageEntity implements Serializable {
 				return false;
 			return true;
 		}
-		
-		public static enum Direction {
-			From, To;
-		}
 
 		@Override
 		public String toString() {
 			return "CustomerPricePK [location=" + location + ", direction="
 					+ direction + ", priority=" + priority + "]";
 		}
+	}
+	
+	public static CustomerPrice newInstance() {
+		CustomerPrice p = new CustomerPrice();
+		p.uid = new CustomerPriceID();
+		return p;
+	}
+	
+	private CustomerPrice() {
+	}
+	
+	public long getId() {
+		return uid.getId();
+	}
+	
+	public void setId(long id) {
+		uid.setId(id);
 	}
 
 	/**
@@ -136,11 +154,11 @@ public class CustomerPrice extends StorageEntity implements Serializable {
 		this.primaryKey = primaryKey;
 	}
 
-	public float getPriceperUnitWeight() {
+	public float getPricePerUnitWeight() {
 		return pricePerUnitWeight;
 	}
 
-	public void setPriceperUnitWeight(float price) {
+	public void setPricePerUnitWeight(float price) {
 		this.pricePerUnitWeight = price;
 	}
 
@@ -161,5 +179,21 @@ public class CustomerPrice extends StorageEntity implements Serializable {
 	@Transient
 	public float getCost(MailDelivery mail) {
 		return Math.max(mail.getVolume() * this.pricePerUnitVolume, mail.getWeight() * this.pricePerUnitWeight);
+	}
+	
+	public Location getLocation() {
+		return primaryKey.location;
+	}
+	
+	public void setLocation(Location l) {
+		primaryKey.location = l;
+	}
+	
+	public Direction getDirection() {
+		return primaryKey.direction;
+	}
+	
+	public void setDirection(Direction d) {
+		primaryKey.direction = d;
 	}
 }

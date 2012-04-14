@@ -13,6 +13,10 @@ public class FormValidationResolution extends JavaScriptResolution {
 		super(generateObjects(status, fieldNames, fieldMessages));
 	}
 	
+	public FormValidationResolution(boolean status, Map<String, String> map) {
+		super(generateObjects(status, map.keySet().toArray(new String[]{}), map.values().toArray(new String[]{})));
+	}
+		
 	private static Object generateObjects(boolean status, String[] fieldNames, String[] fieldMessages) {
 		Map<String, Object> rootObject = new HashMap<String, Object>();
 		rootObject.put("status", status);

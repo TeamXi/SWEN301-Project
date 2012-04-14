@@ -1,7 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="stripes"
-	uri="http://stripes.sourceforge.net/stripes.tld"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <div id="${actionBean.divId}">
 	<stripes:form id="${actionBean.formId}" class="form-horizontal" action="javascript:${actionBean.submitCallback}">
@@ -24,7 +23,9 @@
 				<stripes:label class="control-label" for="transportType">Transport type</stripes:label>
 				<div class="controls">
 					<stripes:select name="transportType" value="${actionBean.transportType}" disabled="${actionBean.disabledFormFields['transportType']}">
-						<option value="placeholder">Select a transport type</option>
+						<c:if test="${actionBean.transportType==null}">
+							<option value="placeholder">Select a transport type</option>
+						</c:if>
 						<stripes:options-enumeration enum="nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans" />
 					</stripes:select>
 				</div>

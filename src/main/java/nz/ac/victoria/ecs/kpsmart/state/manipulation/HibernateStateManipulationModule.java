@@ -13,6 +13,7 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.log.TransportCostUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.TransportDiscontinuedEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPriceID;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
@@ -62,6 +63,7 @@ public class HibernateStateManipulationModule extends AbstractModule {
 				Route.class,
 				RouteID.class,
 				CustomerPrice.class,
+				CustomerPriceID.class,
 				DomesticCustomerPrice.class
 		};
 		

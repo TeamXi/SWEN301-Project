@@ -1,6 +1,5 @@
 package nz.ac.victoria.ecs.kpsmart.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -12,7 +11,6 @@ import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 import nz.ac.victoria.ecs.kpsmart.resolutions.FormValidationResolution;
 import nz.ac.victoria.ecs.kpsmart.routefinder.RouteFinder;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
@@ -21,13 +19,9 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 public class MailActionBean extends AbstractActionBean {
 	
 	private String source;
-	
 	private String destination;
-
 	private Priority priority;
-	
 	private float weight;
-	
 	private float volume;
 	
 	@Inject
@@ -73,26 +67,6 @@ public class MailActionBean extends AbstractActionBean {
 		
 		return null;
 	}
-	
-	private List<Route> findRoute(String sourceName, String destinationName) {
-		Boolean routeIsValid = (((int)(Math.random() * 2)) == 1);
-		System.out.println(routeIsValid);
-		if(routeIsValid){
-			Route route = new Route();
-			Location locations[] = getStateManipulator().getAllLocations().toArray(new Location[]{});
-			Location source = locations[0];
-			Location dest = locations[1];
-			route.setStartPoint(source);
-			route.setEndPoint(dest);
-			
-			List<Route> routes = new ArrayList<Route>();
-			
-
-			routes.add(route);
-			return routes;
-		}
-		return null;
-	}
 
 	/**
 	 * @return the source
@@ -125,15 +99,15 @@ public class MailActionBean extends AbstractActionBean {
 	/**
 	 * @return the priority
 	 */
-	public String getPriority() {
-		return priority.toString();
+	public Priority getPriority() {
+		return priority;
 	}
 
 	/**
 	 * @param priority the priority to set
 	 */
-	public void setPriority(String priority) {
-		this.priority = Priority.valueOf(priority);
+	public void setPriority(Priority priority) {
+		this.priority = priority;
 	}
 
 	/**

@@ -50,7 +50,7 @@ final class Data {
 		 * Routes
 		 * 
 		 */
-		Route r1 = Route.newRoute();
+		Route r1 = Route.newInstance();
 		try {
 			r1.setCarrier(sm.getCarrier(1));
 			r1.setCarrierVolumeUnitCost((float) 10.9);
@@ -67,7 +67,7 @@ final class Data {
 		}
 		sm.saveRoute(r1);
 		
-		Route r2 = Route.newRoute();
+		Route r2 = Route.newInstance();
 		try {
 			r2.setCarrier(sm.getCarrier(1));
 			r2.setCarrierVolumeUnitCost((float) 8.0);
@@ -84,7 +84,7 @@ final class Data {
 		}
 		sm.saveRoute(r2);
 		
-		Route r3 = Route.newRoute();
+		Route r3 = Route.newInstance();
 		try {
 			r3.setCarrier(sm.getCarrier(1));
 			r3.setCarrierVolumeUnitCost((float) 8.0);
@@ -101,7 +101,7 @@ final class Data {
 		}
 		sm.save(r3);
 		
-		Route r4 = Route.newRoute();
+		Route r4 = Route.newInstance();
 		try {
 			r4.setCarrier(sm.getCarrier(1));
 			r4.setCarrierVolumeUnitCost((float) 8.0);
