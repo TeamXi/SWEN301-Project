@@ -1,12 +1,10 @@
 package nz.ac.victoria.ecs.kpsmart.state.manipulation;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertEquals;
 import nz.ac.victoria.ecs.kpsmart.GuiceServletContextListner;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
