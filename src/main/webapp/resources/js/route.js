@@ -207,9 +207,9 @@ KPS.util.map = KPS.util.map || {};
 		var location = searchResults[document.getElementById('newLocationMapLocationResults').value];
 		$.post("location?new", {
 			name: location.formatted_address,
-			longitude: location.geometry.location.Ya,
-			latitude: location.geometry.location.Xa,
-			isInternational: document.getElementById('newLocationMapLocationIsInternational').checked == true
+			longitude: location.geometry.location.Za,
+			latitude: location.geometry.location.Ya,
+			isInternational: document.getElementById('newLocationMapLocationIsInternational').checked == true ? 'true' : 'false'
 		}, function (data) {
 			KPS.data.locations.setNeedsUpdate();
 			KPS.data.locations.load(function () { // TODO: insert rather than reload
