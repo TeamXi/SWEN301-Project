@@ -14,6 +14,7 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.log.Event;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Bool;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.Direction;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
@@ -30,6 +31,10 @@ import com.google.inject.Inject;
 
 @InjectOnContruct
 public class HibernateImpl implements StateManipulator, ReportManager, LogManipulator {
+	// TODO: we should have checked exceptions and convert all
+	// unchecked exceptions to checked exceptions so that the
+	// controllers can deal with them nicely
+	
 	@Inject @PersistenceContext
 	private Session session;
 	
@@ -327,10 +332,26 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 
 	@Override
 	public CustomerPrice getCustomerPrice(Location start, Location end, Priority priority) {
+		if(start.isInternational() == end.isInternational()) {
+			throw new RuntimeException("start and end locations must be different with respect to international status");
+		}
+		
+		Location location;
+		Direction direction;
+		
+		if(start.isInternational()) {
+			location = start;
+			direction = Direction.From;
+		}
+		else {
+			location = end;
+			direction = Direction.To;
+		}
+		
 		return (CustomerPrice) this.getSession().createCriteria(CustomerPrice.class)
 				.add(Restrictions.eq("primaryKey.priority", priority))
-				.add(Restrictions.eq("primaryKey.startPoint", start))
-				.add(Restrictions.eq("primaryKey.endPoint", end))
+				.add(Restrictions.eq("primaryKey.location", location))
+				.add(Restrictions.eq("primaryKey.direction", direction))
 				.add(Restrictions.eq("disabled", Bool.False))
 				.uniqueResult();
 	}
