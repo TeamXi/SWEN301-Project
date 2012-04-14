@@ -27,7 +27,7 @@
 			<div id="menu" class="navbar navbar-fixed-top">
 				<div class="navbar-inner">
 					<div class="container-fluid">
-						<a href="${pageContext.request.contextPath}/dashboard" class="brand">KPSmart</a>
+						<a href="${pageContext.request.contextPath}/" class="brand">KPSmart</a>
 						<div class="nav-collapse">
 							<ul class="nav">
 								<li><a href="${pageContext.request.contextPath}/dashboard">Dashboard</a></li>
