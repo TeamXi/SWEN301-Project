@@ -225,6 +225,7 @@ function show(obj){
 	
 	$(document).ready(function() {
 		document.body.appendChild(cls.el);
+		$(".nav-collapse").click(function(){$(".btn-navbar").click();});
 		cls.$el.modal({show:false, keyboard:true, backdrop: 'static'});
 	});
 } (KPS.modal, jQuery));
