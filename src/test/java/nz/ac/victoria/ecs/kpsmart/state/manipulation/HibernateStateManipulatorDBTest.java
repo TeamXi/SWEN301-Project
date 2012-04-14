@@ -49,12 +49,12 @@ public class HibernateStateManipulatorDBTest {
 		l.setLongitude(1);
 		l.setName("fubar");
 		
-		assertEquals(Arrays.asList(l), new HibernateStateManipulator().getAllLocations());
+		assertEquals(Arrays.asList(l), new HibernateImpl().getAllLocations());
 	}
 	
 	@Test @InjectOnCall
 	public void testGetAllRoutes() throws Exception {
-		HibernateStateManipulator sm = new HibernateStateManipulator();
+		HibernateImpl sm = new HibernateImpl();
 		
 		Route r1 = new Route();
 		r1.setCarrier(sm.getCarrier(1));

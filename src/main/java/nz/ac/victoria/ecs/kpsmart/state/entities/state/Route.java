@@ -292,4 +292,8 @@ public final class Route extends StorageEntity implements Serializable {
 	public void setPrimaryKey(RoutePK primaryKey) {
 		this.primaryKey = primaryKey;
 	}
+	
+	public float getCost(MailDelivery mail) {
+		return Math.max(mail.getVolume() * this.getCarrierVolumeUnitCost(), mail.getWeight() * this.getCarrierWeightUnitCost());
+	}
 }

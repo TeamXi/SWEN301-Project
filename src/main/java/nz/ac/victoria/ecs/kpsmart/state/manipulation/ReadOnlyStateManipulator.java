@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
@@ -110,4 +111,21 @@ public interface ReadOnlyStateManipulator {
 	 * @return	The domestic customer price
 	 */
 	public DomesticCustomerPrice getDomesticCustomerPrice();
+	
+	/**
+	 * Get all the customer price information in the datasource.
+	 * 
+	 * @return	All the customer prices known to the datasource. Order is not guaranteed.
+	 */
+	public Collection<CustomerPrice> getAllCustomerPrices();
+	
+	/**
+	 * Get the customer price for the given ({@link Location}, {@link Location}, {@link Priority}) triple.
+	 * 
+	 * @param start	The start point
+	 * @param end	The end point
+	 * @param priority	The priority
+	 * @return	The price charged for this route
+	 */
+	public CustomerPrice getCustomerPrice(Location start, Location end, Priority priority);
 }

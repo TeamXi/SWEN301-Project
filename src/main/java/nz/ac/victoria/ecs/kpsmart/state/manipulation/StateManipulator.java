@@ -93,11 +93,4 @@ public interface StateManipulator extends ReadOnlyStateManipulator {
 	 * @return	The carrier or null if none was found
 	 */
 	public Carrier getCarrier(String name);
-	
-	/**
-	 * Get all the customer price information in the datasource.
-	 * 
-	 * @return	All the customer prices known to the datasource. Order is not guaranteed.
-	 */
-	public Collection<CustomerPrice> getAllCustomerPrices();
 }

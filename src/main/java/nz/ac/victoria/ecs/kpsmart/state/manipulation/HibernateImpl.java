@@ -1,11 +1,16 @@
 package nz.ac.victoria.ecs.kpsmart.state.manipulation;
 
+import static nz.ac.victoria.ecs.kpsmart.util.ListUtils.filter;
+
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.persistence.PersistenceContext;
 
 import nz.ac.victoria.ecs.kpsmart.InjectOnContruct;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.Event;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Bool;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
@@ -17,18 +22,14 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
 import nz.ac.victoria.ecs.kpsmart.util.Filter;
 
-import org.hibernate.FetchMode;
 import org.hibernate.Session;
-import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.sql.JoinType;
 
 import com.google.inject.Inject;
-import static nz.ac.victoria.ecs.kpsmart.util.ListUtils.filter;
 
 @InjectOnContruct
-public class HibernateStateManipulator implements StateManipulator {
+public class HibernateImpl implements StateManipulator, ReportManager, LogManipulator {
 	@Inject @PersistenceContext
 	private Session session;
 	
@@ -90,18 +91,6 @@ public class HibernateStateManipulator implements StateManipulator {
 		saveCarrier(carrier);
 	}
 
-//	@SuppressWarnings("unchecked")
-//	@Override
-//	public Collection<Route> getAllRoutesWithPoint(Location location) {
-//		return (Collection<Route>) this.session.createCriteria(Route.class)
-//				.add(Restrictions.ne("disabled", Bool.True))
-//				.add( Restrictions.disjunction()
-//						.add(Restrictions.eq("startPoint", location))
-//						.add(Restrictions.eq("endPoint", location))
-//				)
-//				.list();
-//	}
-
 	@Override
 	public Location getLocationForName(String name) {
 		return (Location) this.getSession().createCriteria(Location.class)
@@ -146,8 +135,6 @@ public class HibernateStateManipulator implements StateManipulator {
 
 	@Override
 	public void delete(StorageEntity entity) {
-//		entity.setDisabled(true);
-//		this.getSession().merge(entity);
 		this.deleteRelatedEntities(entity);
 		this.getSession().flush();
 	}
@@ -210,21 +197,6 @@ public class HibernateStateManipulator implements StateManipulator {
 						return !object.getStartPoint().isInternational() && !object.getEndPoint().isInternational();
 					}
 				});
-		
-//		String statement = "select route from Route as route " + 
-//				"inner join route.primaryKey.startPoint as startPoint " +
-//				"inner join route.primaryKey.endPoint as endPoint " +
-//			"where " +
-////				"route.primaryKey.transportMeans in :transportmeans and " + 
-//				"startPoint.international = :false and " +
-//				"endPoint.international = :false and " +
-//				"route.disabled = :disabled";
-		
-//		return this.getSession().createQuery(statement)
-////			.setParameter("transportmeans", priority.ValidTransportMeans)
-//			.setParameter("false", Bool.False)
-//			.setParameter("disabled", Bool.False)
-//			.list();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -245,13 +217,6 @@ public class HibernateStateManipulator implements StateManipulator {
 					.add(Restrictions.eq("disabled", Bool.False))
 					.uniqueResult();
 	}
-	
-//	public static Criterion ifTrue(Criterion ifTrue, Criterion ifFalse, boolean expression) {
-//		if (expression)
-//			return ifTrue;
-//		else
-//			return ifFalse;
-//	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -260,4 +225,131 @@ public class HibernateStateManipulator implements StateManipulator {
 					.add(Restrictions.eq("disabled", Bool.False))
 					.list();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<AmountOfMail> getAmountsOfMailForAllRoutes() {
+		Collection<Location> startPoints = this.getAllLocations();
+		Collection<Location> endPoints = this.getAllLocations();
+		Collection<MailDelivery> mailDeliveries = this.getSession().createCriteria(MailDelivery.class)
+				.add(Restrictions.eq("disabled", Bool.False))
+				.list();
+		Collection<AmountOfMail> result = new HashSet<AmountOfMail>();
+		
+		for (Location start : startPoints){
+			for (Location end : endPoints) {
+				if (start.equals(end))
+					continue;
+				
+				int count = 0;
+				double weight = 0;
+				double volume = 0;
+				
+				for (MailDelivery m : mailDeliveries) {
+					if (
+							!m.getRoute().get(0).getStartPoint().equals(start) || 
+							!m.getRoute().get(m.getRoute().size()-1).getEndPoint().equals(end))
+						continue;
+					
+					count++;
+					weight += m.getWeight();
+					volume += m.getVolume();
+				}
+				
+				result.add(new AmountOfMail(start, end, count, weight, volume));
+			}
+		}
+		
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<RevenueExpediture> getAllRevinueExpenditure() {
+		Collection<Location> startPoints = this.getAllLocations();
+		startPoints.add(null);
+		Collection<Location> endPoints = this.getAllLocations();
+		endPoints.add(null);
+		Collection<MailDelivery> mailDeliveries = this.getSession().createCriteria(MailDelivery.class)
+				.add(Restrictions.eq("disabled", Bool.False))
+				.list();
+		Collection<RevenueExpediture> result = new HashSet<RevenueExpediture>();
+		
+		for (Location start : startPoints) {
+			if (start != null && !start.isInternational())
+				continue;
+			
+			for (Location end : endPoints) {
+				if (start != null && end != null) {
+					if (start.equals(end) || !end.isInternational())
+						continue;
+				} else if (start == end)
+					continue;
+				
+				
+				for (Priority p : Priority.values()) {
+					double revinue = 0;
+					double expenditure = 0;
+					CustomerPrice price = this.getCustomerPrice(start, end, p);
+					
+					if (price == null)
+						continue;
+					
+					for (MailDelivery m : mailDeliveries) {
+						if (
+								!m.getPriority().equals(p) ||
+								!m.getRoute().get(0).getStartPoint().equals(start) || 
+								!m.getRoute().get(m.getRoute().size()-1).getEndPoint().equals(end)
+						)
+							continue;
+						
+						revinue += price.getCost(m);
+						
+						for (Route r : m.getRoute())
+							expenditure += r.getCost(m);
+					}
+					
+					result.add(new RevenueExpediture(start, end, p, revinue, expenditure));
+				}
+			}
+		}
+		
+		return result;
+	}
+
+	@Override
+	public CustomerPrice getCustomerPrice(Location start, Location end, Priority priority) {
+		return (CustomerPrice) this.getSession().createCriteria(CustomerPrice.class)
+				.add(Restrictions.eq("primaryKey.priority", priority))
+				.add(Restrictions.eq("primaryKey.startPoint", start))
+				.add(Restrictions.eq("primaryKey.endPoint", end))
+				.add(Restrictions.eq("disabled", Bool.False))
+				.uniqueResult();
+	}
+
+	@Override
+	public void save(Event event) {
+		event.setTimestamp(Calendar.getInstance().getTime());
+		this.getSession().save(event);
+	}
+
+	@Override
+	public Event getEvent(long id) {
+		return (Event) this.getSession().get(Event.class, id);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Event> getAllEvents() {
+		return (List<Event>) this.getSession().createCriteria(Event.class)
+				.addOrder(Order.asc("timestamp"))
+				.list();
+	}
+
+	@Override
+	public int getNumberOfEvents() {
+		return this.getSession().createCriteria(Event.class)
+				.list()
+				.size();
+	}	
 }

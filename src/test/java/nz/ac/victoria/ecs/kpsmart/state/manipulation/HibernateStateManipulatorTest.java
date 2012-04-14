@@ -38,7 +38,7 @@ public class HibernateStateManipulatorTest {
 	public void testGetMailDelivery() {
 		when(em.find(MailDelivery.class, (long) 1)).thenReturn(mailDelivery);
 		
-		assertEquals(this.mailDelivery, new HibernateStateManipulator().getMailDelivery(1));
+		assertEquals(this.mailDelivery, new HibernateImpl().getMailDelivery(1));
 		verify(em).find(MailDelivery.class, (long) 1);
 	}
 
@@ -46,7 +46,7 @@ public class HibernateStateManipulatorTest {
 	public void testSaveMailDelivery() {
 		when(em.merge(mailDelivery)).thenReturn(mailDelivery);
 		
-		new HibernateStateManipulator().saveMailDelivery(mailDelivery);
+		new HibernateImpl().saveMailDelivery(mailDelivery);
 		
 		verify(em).merge(mailDelivery);
 	}

@@ -12,7 +12,7 @@ import com.google.inject.name.Named;
  * @author hodderdani
  *
  */
-public class InMemoryStateManipulator extends HibernateStateManipulator {
+public class InMemoryStateManipulator extends HibernateImpl {
 	@Inject
 	@Named("memory")
 	private Session session;

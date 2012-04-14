@@ -31,7 +31,9 @@ public class HibernateStateManipulationModule extends AbstractModule {
 	@Override
 	public void configure() {
 		// General Bindings
-		bind(StateManipulator.class).to(HibernateStateManipulator.class);
+		bind(StateManipulator.class).to(HibernateImpl.class);
+		bind(ReportManager.class).to(HibernateImpl.class);
+		bind(LogManipulator.class).to(HibernateImpl.class);
 		
 		Session session = this.getSession("hibernate.properties");
 		session.beginTransaction();
@@ -59,7 +61,6 @@ public class HibernateStateManipulationModule extends AbstractModule {
 				MailDelivery.class,
 				Route.class,
 				RouteID.class,
-//				TransportMeans.class,
 				CustomerPrice.class,
 				DomesticCustomerPrice.class
 		};
