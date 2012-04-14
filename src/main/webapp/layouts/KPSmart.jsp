@@ -8,6 +8,7 @@
 		<head>
 			<title><stripes:layout-component name="title" /></title>
 			<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.css" />
+			<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap-responsive.css" />
 			<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css" />
 			<stripes:layout-component name="styles" />
 			<script type="text/javascript">
@@ -19,14 +20,19 @@
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/main.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/mail.js"></script>
-
+			<meta name = "viewport" content = "width = 450px">
 			<stripes:layout-component name="scripts" />
 		</head>
 		
-		<body>
+		<body data-spy="scroll" data-target=".subnav" data-offset="50" data-twttr-rendered="true">
 			<div id="menu" class="navbar navbar-fixed-top">
 				<div class="navbar-inner">
-					<div class="container-fluid">
+					<div class="container">
+					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+			            <span class="icon-bar"></span>
+			            <span class="icon-bar"></span>
+			            <span class="icon-bar"></span>
+			          </a>
 						<a href="${pageContext.request.contextPath}/" class="brand">KPSmart</a>
 						<div class="nav-collapse">
 							<ul class="nav">

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=US-ASCII" pageEncoding="US-ASCII"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped responsive-utilities">
 	<thead>
 		<tr>
 			<td>Name</td>
