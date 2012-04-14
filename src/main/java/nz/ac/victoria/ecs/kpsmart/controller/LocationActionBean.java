@@ -87,7 +87,7 @@ public class LocationActionBean extends AbstractActionBean {
 	/**
 	 * @param isInternational the isInternational to set
 	 */
-	public void setInternational(boolean isInternational) {
+	public void setIsInternational(boolean isInternational) {
 		this.isInternational = isInternational;
 	}
 }
