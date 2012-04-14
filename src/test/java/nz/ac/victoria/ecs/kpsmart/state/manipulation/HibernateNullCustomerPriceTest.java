@@ -19,12 +19,12 @@ public class HibernateNullCustomerPriceTest {
 	public void test() {
 		StateManipulator m = GuiceServletContextListner.getInjector().getInstance(StateManipulator.class);
 		
-		CustomerPrice price = new CustomerPrice();
+		CustomerPrice price = CustomerPrice.newInstance();
 		price.setStartLocation(null);
 		price.setEndLocation(m.getLocationForName("Rome"));
 		price.setProirity(Priority.Domestic_Air);
 		price.setPricePerUnitVolume(1);
-		price.setPriceperUnitWeight(1);
+		price.setPricePerUnitWeight(1);
 		m.save(price);
 		
 		assertEquals(price, m.getAllCustomerPrices().iterator().next());

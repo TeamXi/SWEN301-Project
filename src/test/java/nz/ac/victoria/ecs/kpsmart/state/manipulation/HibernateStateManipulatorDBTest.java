@@ -56,7 +56,7 @@ public class HibernateStateManipulatorDBTest {
 	public void testGetAllRoutes() throws Exception {
 		HibernateImpl sm = new HibernateImpl();
 		
-		Route r1 = new Route();
+		Route r1 = Route.newInstance();
 		r1.setCarrier(sm.getCarrier(1));
 		r1.setCarrierVolumeUnitCost((float) 10.9);
 		r1.setCarrierWeightUnitCost((float)10.9);
@@ -68,7 +68,7 @@ public class HibernateStateManipulatorDBTest {
 		r1.setStartingTime(new SimpleDateFormat("y-m-d h:m:s").parse("2012-03-27 11:18:18"));
 		r1.setTransportMeans(TransportMeans.Air);
 		
-		Route r2 = new Route();
+		Route r2 = Route.newInstance();
 		r2.setCarrier(sm.getCarrier(1));
 		r2.setCarrierVolumeUnitCost((float) 8.0);
 		r2.setCarrierWeightUnitCost((float)8.9);
