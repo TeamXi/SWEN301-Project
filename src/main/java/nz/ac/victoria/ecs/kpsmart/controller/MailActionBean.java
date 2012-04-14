@@ -2,6 +2,9 @@ package nz.ac.victoria.ecs.kpsmart.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
 
 import net.sourceforge.stripes.action.DefaultHandler;
@@ -11,12 +14,15 @@ import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 import nz.ac.victoria.ecs.kpsmart.resolutions.FormValidationResolution;
 import nz.ac.victoria.ecs.kpsmart.routefinder.RouteFinder;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 
 @UrlBinding("/event/mail?{$event}")
 public class MailActionBean extends AbstractActionBean {
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	
 	private String source;
 	private String destination;
@@ -39,31 +45,40 @@ public class MailActionBean extends AbstractActionBean {
 			return new FormValidationResolution(true, null, null);
 		}
 		else {
-			return new FormValidationResolution(false,new String[]{"destination"},new String[]{"There is no route from "+source+" to "+destination});
+			return new FormValidationResolution(false,new String[]{"destination"},new String[]{"KPS does not deliver mail from "+source+" to "+destination});
 		}
 	}
 	
 	private MailDelivery processDelivery() {
-		do{
-			MailDelivery delivery = new MailDelivery();
-			
+		Location from = getStateManipulator().getLocationForName(source);
+		Location to = getStateManipulator().getLocationForName(destination);
+		
+		CustomerPrice price = getStateManipulator().getCustomerPrice(from, to, priority);
+		if(price != null) {
 			List<Route> route = this.routeFinder.calculateRoute(
 					priority, 
-					this.getEntityManager().getData().getLocationForName(source), 
-					this.getEntityManager().getData().getLocationForName(destination), 
+					from, 
+					to, 
 					weight, 
 					volume);
 			
-			if(route == null) break;
+			if(route != null) {
+				MailDelivery delivery = new MailDelivery();
+				
+				delivery.setVolume(volume);
+				delivery.setWeight(weight);
+				delivery.setPriority(priority);
+				delivery.setRoute(route);
 			
-			delivery.setVolume(volume);
-			delivery.setWeight(weight);
-			delivery.setPriority(priority);
-			delivery.setRoute(route);
-			
-		return delivery;
-		
-		}while(false);
+				return delivery;
+			}
+			else {
+				log.info("Rejecting mail: there is no route");
+			}
+		}
+		else {
+			log.info("Rejecting mail: there is no customer price");
+		}
 		
 		return null;
 	}
