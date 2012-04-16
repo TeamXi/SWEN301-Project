@@ -21,6 +21,10 @@ KPS.util.map = KPS.util.map || {};
 	var newForm = undefined;
 	var updateForm = undefined;
 	
+	var globalMap = undefined;
+	var $mapEl = $('<div id="globalMap"></div>');
+	var infoWindow = undefined;
+	
 	var addModalConfiguration = {
 			title: "Add route",
 			okButton: {
@@ -149,6 +153,89 @@ KPS.util.map = KPS.util.map || {};
 			});
 		}
 	};
+	cls.showLocationMap = function(){
+	
+		KPS.modal.configure({title:"All Locations"});
+		KPS.modal.carrousel.$body.html($mapEl);
+		KPS.modal.show();
+		if(!globalMap){
+			createWorldMap();
+		}
+		cls.search();
+		
+	};
+	function createWorldMap() {
+		var myOptions = {
+			zoom : 2,
+			center : new google.maps.LatLng(-34.397, 150.644),
+			disableDefaultUI: true,
+			mapTypeControlOptions : {
+				mapTypeIds : [ google.maps.MapTypeId.ROADMAP, 'kpsmartstyle' ]
+			}
+		};
+		
+		globalMap = new google.maps.Map(document.getElementById('globalMap'), myOptions);
+
+		var mapStyles = [ {
+			stylers : [ {
+				visibility : "off"
+			} ]
+		}, {
+			featureType : "administrative.country",
+			stylers : [ {
+				visibility : "on"
+			} ]
+		}, {
+			featureType : "administrative.locality",
+			stylers : [ {
+				visibility : "on"
+			} ]
+		}, {
+			featureType : "water",
+			elementType : "geometry",
+			stylers : [ {
+				visibility : "on"
+			} ]
+		}, {
+			featureType : "water",
+			stylers : [ {
+				invert_lightness : true
+			}, {
+				hue : "#0066ff"
+			} ]
+		} ];
+		
+		var styledMapOptions = {
+			name : "KPSmart Style"
+		};
+
+		var mapType = new google.maps.StyledMapType(mapStyles, styledMapOptions);
+
+		globalMap.mapTypes.set('kpsmartstyle', mapType);
+		globalMap.setMapTypeId('kpsmartstyle');
+		infoWindow = new google.maps.InfoWindow();
+	};
+	
+	cls.search = function() {
+			for(locIdx in allLocations){
+				var location = allLocations[locIdx];
+					var marker = new google.maps.Marker({
+						map: globalMap, 
+						position: new google.maps.LatLng(location.latitude, location.longitude),
+						title:location.name
+					});
+					google.maps.event.addListener(marker, "mouseover", function(event) {
+						infoWindow.setContent(this.title);
+						infoWindow.setPosition(event.latLng);
+						infoWindow.open(globalMap);
+					});
+					google.maps.event.addListener(marker, "mouseout", function(event) {
+						infoWindow.close();
+					});
+				}
+			
+		};
+	
 	
 	$(document).ready(function() {
 		if(window.location.hash == "#new") {

@@ -79,7 +79,7 @@
 				</div>
 			</div>
 
-			<div class="container">
+			<div class="container content">
 				<div class="row-fluid">
 					<stripes:layout-component name="content" />
 				</div>

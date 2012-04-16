@@ -8,15 +8,17 @@
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/route.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/formvalidation.js"></script>
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+		<script type="text/javascript" > var allLocations = eval(<jsp:include page="locationListJSON.jsp"></jsp:include>);</script>
 	</stripes:layout-component>
 	<stripes:layout-component name="content">
 		<div class="span12">
 			<h1 class="pull-left">Routes</h1>
 			<button class="btn btn-success smallMargin" onclick="KPS.event.route.addRoute();">Add new</button>
+			<button class="btn btn-info smallMargin pull-right" onclick="KPS.event.route.showLocationMap();">See all Locations</button>
 			
 			<div id="routeListContainer">
 				<jsp:include page="routeList.jsp"></jsp:include>
-			</div>
+			</div>	
 		</div>
 		
 		<div style="display: none">

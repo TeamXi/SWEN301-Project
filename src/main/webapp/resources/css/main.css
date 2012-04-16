@@ -1,6 +1,6 @@
 @CHARSET "US-ASCII";
 
-container {
+.content {
 	padding-top: 90px;
 }
 
@@ -46,6 +46,10 @@ tr:hover .row-hover-controls {
 #newLocationMap {
 	height: 350px;
 	width: 100%;
+}
+#globalMap{
+	height: 700px;
+	width: 900px;
 }
 
 /*

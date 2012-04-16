@@ -5,5 +5,7 @@
 	<json:object>
 		<json:property name="name" value="${location.name}"/>
 		<json:property name="international" value="${location.international}"/>
+		<json:property name="longitude" value="${location.longitude}"/>
+		<json:property name="latitude" value="${location.latitude}"/>
 	</json:object>
 </json:array>
