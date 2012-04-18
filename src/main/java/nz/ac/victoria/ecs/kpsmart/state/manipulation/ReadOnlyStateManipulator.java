@@ -8,6 +8,7 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.Price;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 
@@ -128,6 +129,16 @@ public interface ReadOnlyStateManipulator {
 	 * @return	The price charged for this route
 	 */
 	public CustomerPrice getCustomerPrice(Location start, Location end, Priority priority);
+	
+	/**
+	 * Get the price for the given ({@link Location}, {@link Location}, {@link Priority}) triple.
+	 * 
+	 * @param start	The start point
+	 * @param end	The end point
+	 * @param priority	The priority
+	 * @return	The price charged for this route
+	 */
+	public Price getPrice(Location start, Location end, Priority priority);
 	
 	/**
 	 * Get all the mail deliveries known to the datasource

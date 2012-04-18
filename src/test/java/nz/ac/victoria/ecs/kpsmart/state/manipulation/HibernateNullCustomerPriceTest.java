@@ -22,7 +22,7 @@ public class HibernateNullCustomerPriceTest {
 		CustomerPrice price = CustomerPrice.newInstance();
 		price.setStartLocation(null);
 		price.setEndLocation(m.getLocationForName("Rome"));
-		price.setProirity(Priority.Domestic_Air);
+		price.setPriority(Priority.Domestic_Air);
 		price.setPricePerUnitVolume(1);
 		price.setPricePerUnitWeight(1);
 		m.save(price);

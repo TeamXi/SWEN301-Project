@@ -52,6 +52,14 @@ tr:hover .row-hover-controls {
 	width: 900px;
 }
 
+.color-red {
+	color: #B94A48;
+}
+
+.color-green {
+	color: #468847;
+}
+
 /*
  *Carrousel
  */

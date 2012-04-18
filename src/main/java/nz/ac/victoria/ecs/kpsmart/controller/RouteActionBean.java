@@ -10,8 +10,8 @@ import net.sourceforge.stripes.action.HandlesEvent;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 import nz.ac.victoria.ecs.kpsmart.resolutions.FormValidationResolution;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityDeleteEvent.RouteDeleteEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityUpdateEvent.RouteUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.RouteDeleteEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.RouteUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans;
 

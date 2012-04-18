@@ -9,11 +9,13 @@
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/formvalidation.js"></script>
 	</stripes:layout-component>
 	<stripes:layout-component name="content">
-		<div class="span12">
-			<h1 class="pull-left">Carriers</h1>
-			<button class="btn btn-success smallMargin" onclick="KPS.event.carrier.addCarrier();">Add new</button>
-			<div id="carrierListContainer">
-				<jsp:include page="carrierList.jsp"></jsp:include>
+		<div class="row-fluid">
+			<div class="span12">
+				<h1 class="pull-left">Carriers</h1>
+				<button class="btn btn-success smallMargin" onclick="KPS.event.carrier.addCarrier();">Add new</button>
+				<div id="carrierListContainer">
+					<jsp:include page="carrierList.jsp"></jsp:include>
+				</div>
 			</div>
 		</div>
 	</stripes:layout-component>

@@ -27,7 +27,7 @@ public interface ReportManager {
 	 * 
 	 * @return	All the information about revenue and expenditure.
 	 */
-	public Collection<RevenueExpediture> getAllRevinueExpenditure();
+	public Collection<RevenueExpediture> getAllRevenueExpenditure();
 	
 	/**
 	 * Get the number of events since the initialization of the system.
@@ -46,41 +46,41 @@ public interface ReportManager {
 		/**
 		 * The start point
 		 */
-		public final Location StartPoint;
+		private final Location startPoint;
 		
 		/**
 		 * The end point
 		 */
-		public final Location EndPoint;
+		private final Location endPoint;
 		
 		/**
 		 * The total number of items transfered over the route.
 		 */
-		public final int Items;
+		private final int items;
 		
 		/**
 		 * The total weight of items transfered over the route
 		 */
-		public final double TotalWeight;
+		private final double totalWeight;
 		
 		/**
 		 * The total volume of items transfered over the route
 		 */
-		public final double TotalVolume;
+		public final double totalVolume;
 		
 		public AmountOfMail(Location start, Location end, int items, double weight, double volume) {
-			this.StartPoint = start;
-			this.EndPoint = end;
-			this.Items = items;
-			this.TotalWeight = weight;
-			this.TotalVolume = volume;
+			this.startPoint = start;
+			this.endPoint = end;
+			this.items = items;
+			this.totalWeight = weight;
+			this.totalVolume = volume;
 		}
 
 		@Override
 		public String toString() {
-			return "AmountOfMail [StartPoint=" + StartPoint + ", EndPoint="
-					+ EndPoint + ", Items=" + Items + ", TotalWeight="
-					+ TotalWeight + ", TotalVolume=" + TotalVolume + "]";
+			return "AmountOfMail [StartPoint=" + startPoint + ", EndPoint="
+					+ endPoint + ", Items=" + items + ", TotalWeight="
+					+ totalWeight + ", TotalVolume=" + totalVolume + "]";
 		}
 
 		@Override
@@ -88,14 +88,14 @@ public interface ReportManager {
 			final int prime = 31;
 			int result = 1;
 			result = prime * result
-					+ ((EndPoint == null) ? 0 : EndPoint.hashCode());
-			result = prime * result + Items;
+					+ ((endPoint == null) ? 0 : endPoint.hashCode());
+			result = prime * result + items;
 			result = prime * result
-					+ ((StartPoint == null) ? 0 : StartPoint.hashCode());
+					+ ((startPoint == null) ? 0 : startPoint.hashCode());
 			long temp;
-			temp = Double.doubleToLongBits(TotalVolume);
+			temp = Double.doubleToLongBits(totalVolume);
 			result = prime * result + (int) (temp ^ (temp >>> 32));
-			temp = Double.doubleToLongBits(TotalWeight);
+			temp = Double.doubleToLongBits(totalWeight);
 			result = prime * result + (int) (temp ^ (temp >>> 32));
 			return result;
 		}
@@ -109,25 +109,45 @@ public interface ReportManager {
 			if (getClass() != obj.getClass())
 				return false;
 			AmountOfMail other = (AmountOfMail) obj;
-			if (EndPoint == null) {
-				if (other.EndPoint != null)
+			if (endPoint == null) {
+				if (other.endPoint != null)
 					return false;
-			} else if (!EndPoint.equals(other.EndPoint))
+			} else if (!endPoint.equals(other.endPoint))
 				return false;
-			if (Items != other.Items)
+			if (items != other.items)
 				return false;
-			if (StartPoint == null) {
-				if (other.StartPoint != null)
+			if (startPoint == null) {
+				if (other.startPoint != null)
 					return false;
-			} else if (!StartPoint.equals(other.StartPoint))
+			} else if (!startPoint.equals(other.startPoint))
 				return false;
-			if (Double.doubleToLongBits(TotalVolume) != Double
-					.doubleToLongBits(other.TotalVolume))
+			if (Double.doubleToLongBits(totalVolume) != Double
+					.doubleToLongBits(other.totalVolume))
 				return false;
-			if (Double.doubleToLongBits(TotalWeight) != Double
-					.doubleToLongBits(other.TotalWeight))
+			if (Double.doubleToLongBits(totalWeight) != Double
+					.doubleToLongBits(other.totalWeight))
 				return false;
 			return true;
+		}
+
+		public Location getStartPoint() {
+			return startPoint;
+		}
+
+		public Location getEndPoint() {
+			return endPoint;
+		}
+
+		public int getItems() {
+			return items;
+		}
+
+		public double getTotalWeight() {
+			return totalWeight;
+		}
+
+		public double getTotalVolume() {
+			return totalVolume;
 		}
 	}
 	
@@ -141,41 +161,41 @@ public interface ReportManager {
 		/**
 		 * The start point
 		 */
-		public final Location StartPoint;
+		private final Location startPoint;
 		
 		/**
 		 * The end point
 		 */
-		public final Location EndPoint;
+		private final Location endPoint;
 		
 		/**
 		 * The priority
 		 */
-		public final Priority Priority;
+		private final Priority priority;
 		
 		/**
 		 * The revenue generated from this route
 		 */
-		public final double Revenue;
+		private final double revenue;
 		
 		/**
 		 * The expenditure generated from this route
 		 */
-		public final double Expenditure;
+		private final double expenditure;
 		
 		public RevenueExpediture(Location start, Location end, Priority priority, double revenue, double expenditure) {
-			this.StartPoint = start;
-			this.EndPoint = end;
-			this.Priority = priority;
-			this.Revenue = revenue;
-			this.Expenditure = expenditure;
+			this.startPoint = start;
+			this.endPoint = end;
+			this.priority = priority;
+			this.revenue = revenue;
+			this.expenditure = expenditure;
 		}
 
 		@Override
 		public String toString() {
-			return "RevenueExpediture [StartPoint=" + StartPoint
-					+ ", EndPoint=" + EndPoint + ", Priority=" + Priority
-					+ ", Revenue=" + Revenue + ", Expenditure=" + Expenditure
+			return "RevenueExpediture [StartPoint=" + startPoint
+					+ ", EndPoint=" + endPoint + ", Priority=" + priority
+					+ ", Revenue=" + revenue + ", Expenditure=" + expenditure
 					+ "]";
 		}
 
@@ -184,16 +204,16 @@ public interface ReportManager {
 			final int prime = 31;
 			int result = 1;
 			result = prime * result
-					+ ((EndPoint == null) ? 0 : EndPoint.hashCode());
+					+ ((endPoint == null) ? 0 : endPoint.hashCode());
 			long temp;
-			temp = Double.doubleToLongBits(Expenditure);
+			temp = Double.doubleToLongBits(expenditure);
 			result = prime * result + (int) (temp ^ (temp >>> 32));
 			result = prime * result
-					+ ((Priority == null) ? 0 : Priority.hashCode());
-			temp = Double.doubleToLongBits(Revenue);
+					+ ((priority == null) ? 0 : priority.hashCode());
+			temp = Double.doubleToLongBits(revenue);
 			result = prime * result + (int) (temp ^ (temp >>> 32));
 			result = prime * result
-					+ ((StartPoint == null) ? 0 : StartPoint.hashCode());
+					+ ((startPoint == null) ? 0 : startPoint.hashCode());
 			return result;
 		}
 
@@ -206,25 +226,45 @@ public interface ReportManager {
 			if (getClass() != obj.getClass())
 				return false;
 			RevenueExpediture other = (RevenueExpediture) obj;
-			if (EndPoint == null) {
-				if (other.EndPoint != null)
+			if (endPoint == null) {
+				if (other.endPoint != null)
 					return false;
-			} else if (!EndPoint.equals(other.EndPoint))
+			} else if (!endPoint.equals(other.endPoint))
 				return false;
-			if (Double.doubleToLongBits(Expenditure) != Double
-					.doubleToLongBits(other.Expenditure))
+			if (Double.doubleToLongBits(expenditure) != Double
+					.doubleToLongBits(other.expenditure))
 				return false;
-			if (Priority != other.Priority)
+			if (priority != other.priority)
 				return false;
-			if (Double.doubleToLongBits(Revenue) != Double
-					.doubleToLongBits(other.Revenue))
+			if (Double.doubleToLongBits(revenue) != Double
+					.doubleToLongBits(other.revenue))
 				return false;
-			if (StartPoint == null) {
-				if (other.StartPoint != null)
+			if (startPoint == null) {
+				if (other.startPoint != null)
 					return false;
-			} else if (!StartPoint.equals(other.StartPoint))
+			} else if (!startPoint.equals(other.startPoint))
 				return false;
 			return true;
+		}
+
+		public Location getStartPoint() {
+			return startPoint;
+		}
+
+		public Location getEndPoint() {
+			return endPoint;
+		}
+
+		public Priority getPriority() {
+			return priority;
+		}
+
+		public double getRevenue() {
+			return revenue;
+		}
+
+		public double getExpenditure() {
+			return expenditure;
 		}
 	}
 }

@@ -15,7 +15,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 @Entity
-public class CustomerPrice extends StorageEntity implements Serializable {
+public class CustomerPrice extends StorageEntity implements Serializable, Price {
 	@Cascade(CascadeType.ALL)
 	@OneToOne
 	private CustomerPriceID uid;
@@ -138,11 +138,13 @@ public class CustomerPrice extends StorageEntity implements Serializable {
 		this.getPrimaryKey().location = endLocation;
 	}
 
+	@Override
 	public Priority getPriority() {
 		return getPrimaryKey().priority;
 	}
 
-	public void setProirity(Priority prority) {
+	@Override
+	public void setPriority(Priority prority) {
 		this.getPrimaryKey().priority = prority;
 	}
 
@@ -154,28 +156,27 @@ public class CustomerPrice extends StorageEntity implements Serializable {
 		this.primaryKey = primaryKey;
 	}
 
+	@Override
 	public float getPricePerUnitWeight() {
 		return pricePerUnitWeight;
 	}
 
+	@Override
 	public void setPricePerUnitWeight(float price) {
 		this.pricePerUnitWeight = price;
 	}
 
+	@Override
 	public float getPricePerUnitVolume() {
 		return pricePerUnitVolume;
 	}
 
+	@Override
 	public void setPricePerUnitVolume(float pricePerUnitVolume) {
 		this.pricePerUnitVolume = pricePerUnitVolume;
 	}
 	
-	/**
-	 * Get the price for a given mail delivery
-	 * 
-	 * @param mail	The mail delivery
-	 * @return	The cost of that mail delivery
-	 */
+	@Override
 	@Transient
 	public float getCost(MailDelivery mail) {
 		return Math.max(mail.getVolume() * this.pricePerUnitVolume, mail.getWeight() * this.pricePerUnitWeight);

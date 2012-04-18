@@ -80,9 +80,7 @@
 			</div>
 
 			<div class="container content">
-				<div class="row-fluid">
-					<stripes:layout-component name="content" />
-				</div>
+				<stripes:layout-component name="content" />
 			</div>
 		</body>
 	</html>

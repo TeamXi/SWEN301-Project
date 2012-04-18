@@ -9,8 +9,8 @@ import net.sourceforge.stripes.action.HandlesEvent;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 import nz.ac.victoria.ecs.kpsmart.resolutions.FormValidationResolution;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityUpdateEvent.CustomerPriceUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityDeleteEvent.CustomerPriceDeleteEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.CustomerPriceDeleteEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.CustomerPriceUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Direction;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
@@ -92,7 +92,7 @@ public class CustomerPriceActionBean extends FormActionBean {
 		price.setDirection(direction.flip());
 		price.setPricePerUnitVolume(volumePrice);
 		price.setPricePerUnitWeight(weightPrice);
-		price.setProirity(priority);
+		price.setPriority(priority);
 	}
 	
 	@HandlesEvent("update")

@@ -20,6 +20,7 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.Direction;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.Price;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
@@ -283,30 +284,21 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<RevenueExpediture> getAllRevinueExpenditure() {
-		Collection<Location> startPoints = this.getAllLocations();
-		startPoints.add(null);
-		Collection<Location> endPoints = this.getAllLocations();
-		endPoints.add(null);
+	public Collection<RevenueExpediture> getAllRevenueExpenditure() {
+		Collection<Location> allLocations = this.getAllLocations();
 		Collection<MailDelivery> mailDeliveries = this.getAllMailDeliveries();
 		Collection<RevenueExpediture> result = new HashSet<RevenueExpediture>();
 		
-		for (Location start : startPoints) {
-			if (start != null && !start.isInternational())
-				continue;
-			
-			for (Location end : endPoints) {
-				if (start != null && end != null) {
-					if (start.equals(end) || !end.isInternational())
+		for (Location start : allLocations) {
+			for (Location end : allLocations) {
+				if ((start.isInternational() && end.isInternational()) || start.equals(end))
 						continue;
-				} else if (start == end)
-					continue;
-				
 				
 				for (Priority p : Priority.values()) {
 					double revinue = 0;
 					double expenditure = 0;
-					CustomerPrice price = this.getCustomerPrice(start, end, p);
+					
+					Price price = this.getPrice(start, end, p);
 					
 					if (price == null)
 						continue;
@@ -334,21 +326,49 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 	}
 
 	@Override
-	public CustomerPrice getCustomerPrice(Location start, Location end, Priority priority) {
-		if(start.isInternational() == end.isInternational()) {
-			throw new RuntimeException("start and end locations must be different with respect to international status");
+	public Price getPrice(Location start, Location end, Priority priority) {
+		if(!start.isInternational() && !end.isInternational()) {
+			return this.getDomesticCustomerPrice();
 		}
-		
+		else {
+			return this.getCustomerPrice(start, end, priority);
+		}
+	}
+	
+	@Override
+	public CustomerPrice getCustomerPrice(Location start, Location end, Priority priority) {
 		Location location;
 		Direction direction;
 		
-		if(start.isInternational()) {
-			location = start;
-			direction = Direction.From;
+		if(start != null && end != null) { // Neither null
+			if(start.isInternational() == end.isInternational()) {
+				throw new RuntimeException("start and end locations must be different with respect to international status");
+			}
+			else { // One international, one domestic
+				if(start.isInternational()) {
+					location = start;
+					direction = Direction.From;
+				}
+				else {
+					location = end;
+					direction = Direction.To;
+				}
+			}
 		}
-		else {
-			location = end;
-			direction = Direction.To;
+		else { // One or both null
+			if(start == null && end == null) { // Both null
+				throw new RuntimeException("start and end locations must not both be null");
+			}
+			else { // Only one is null (representing new zealand)
+				if(start != null) {
+					location = start;
+					direction = Direction.From;
+				}
+				else {
+					location = end;
+					direction = Direction.To;
+				}
+			}
 		}
 		
 		return (CustomerPrice) this.getSession().createCriteria(CustomerPrice.class)
