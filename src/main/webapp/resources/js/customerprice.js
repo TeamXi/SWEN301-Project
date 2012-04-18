@@ -142,5 +142,9 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 		if(window.location.hash == "#new") {
 			cls.addCustomerPrice();
 		}
+		
+		$("#menu-newCustomerPriceDropdown").click(function () {
+			cls.addCustomerPrice();
+		});
 	});
 }(KPS.event.customerprice,  jQuery));

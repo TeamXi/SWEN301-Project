@@ -57,7 +57,7 @@
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown">Customer prices<b class="caret"></b></a>
 										<ul class="dropdown-menu">
 											<li><a href="${pageContext.request.contextPath}/event/customerprice">List</a></li>
-											<li><a id="menu-newCarrierDropdown" href="${pageContext.request.contextPath}/event/customerprice#new">New</a></li>
+											<li><a id="menu-newCustomerPriceDropdown" href="${pageContext.request.contextPath}/event/customerprice#new">New</a></li>
 										</ul>
 									</li>
 									<li><a href="${pageContext.request.contextPath}/event/location?map" class="new-mail-delivery-link">Locations map</a>
