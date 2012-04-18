@@ -191,7 +191,7 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 
 	@Override
 	public void save(DomesticCustomerPrice domesticPrice) {
-		this.getSession().createQuery("DELETE FROM "+DomesticCustomerPrice.class.getSimpleName())
+		this.getSession().createQuery("DELETE FROM "+DomesticCustomerPrice.class.getSimpleName()+" where priority="+domesticPrice.getPriority())
 				.executeUpdate();
 		this.getSession().save(domesticPrice);
 	}
