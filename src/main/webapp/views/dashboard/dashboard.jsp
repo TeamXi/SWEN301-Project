@@ -65,18 +65,21 @@
 							<td>Priority</td>
 							<td>Revenue</td>
 							<td>Expenditure</td>
+							<td>Average delivery time</td>
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach var="revenueExpenditure" items="${actionBean.reportManager.allRevenueExpenditure}">
 							<c:set value="${revenueExpenditure.revenue}" var="revenue"></c:set>
 							<c:set value="${revenueExpenditure.expenditure}" var="expenditure"></c:set>
+							<c:set value="${revenueExpenditure.averageDeliveryTime}" var="averageDeliveryTime"></c:set>
 							<tr class="${expenditure>revenue?'color-red':''}">
 								<td><c:out value="${revenueExpenditure.startPoint.name}"></c:out></td>
 								<td><c:out value="${revenueExpenditure.endPoint.name}"></c:out></td>
 								<td><c:out value="${revenueExpenditure.priority}"></c:out></td>
-								<td><c:out value="${revenue}"></c:out></td>
-								<td><c:out value="${expenditure}"></c:out></td>
+								<td><c:out value="$${revenue}"></c:out></td>
+								<td><c:out value="$${expenditure}"></c:out></td>
+								<td><c:out value="${averageDeliveryTime=='NaN'?'No data':averageDeliveryTime}${averageDeliveryTime=='NaN'?'':' hours'}"></c:out></td>
 							</tr>
 						</c:forEach>
 					</tbody>

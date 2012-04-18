@@ -38,6 +38,8 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 	// unchecked exceptions to checked exceptions so that the
 	// controllers can deal with them nicely
 	
+	private static final long msinhour = 60*60*1000;
+	
 	@Inject @PersistenceContext
 	private Session session;
 	
@@ -297,6 +299,8 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 				for (Priority p : Priority.values()) {
 					double revinue = 0;
 					double expenditure = 0;
+					double totalDeliveryTime = 0;
+					long mailCount = 0;
 					
 					Price price = this.getPrice(start, end, p);
 					
@@ -312,12 +316,14 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 							continue;
 						
 						revinue += price.getCost(m);
+						totalDeliveryTime += m.getShippingDuration()/msinhour;
+						mailCount++;
 						
 						for (Route r : m.getRoute())
 							expenditure += r.getCost(m);
 					}
 					
-					result.add(new RevenueExpediture(start, end, p, revinue, expenditure));
+					result.add(new RevenueExpediture(start, end, p, revinue, expenditure, totalDeliveryTime/(double)mailCount));
 				}
 			}
 		}

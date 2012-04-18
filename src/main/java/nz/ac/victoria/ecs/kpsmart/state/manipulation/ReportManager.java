@@ -197,12 +197,18 @@ public interface ReportManager {
 		 */
 		private final double expenditure;
 		
-		public RevenueExpediture(Location start, Location end, Priority priority, double revenue, double expenditure) {
+		/**
+		 * The average delivery time of mail for this route (in hours)
+		 */
+		private final double averageDeliveryTime;
+		
+		public RevenueExpediture(Location start, Location end, Priority priority, double revenue, double expenditure, double averageDeliveryTime) {
 			this.startPoint = start;
 			this.endPoint = end;
 			this.priority = priority;
 			this.revenue = revenue;
 			this.expenditure = expenditure;
+			this.averageDeliveryTime = averageDeliveryTime;
 		}
 
 		@Override
@@ -279,6 +285,10 @@ public interface ReportManager {
 
 		public double getExpenditure() {
 			return expenditure;
+		}
+
+		public double getAverageDeliveryTime() {
+			return averageDeliveryTime;
 		}
 	}
 }
