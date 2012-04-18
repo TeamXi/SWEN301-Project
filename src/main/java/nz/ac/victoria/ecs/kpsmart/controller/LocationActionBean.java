@@ -22,6 +22,11 @@ public class LocationActionBean extends AbstractActionBean {
 		return new ForwardResolution("/views/event/locationListJSON.jsp"); // TODO: not in /event?
 	}
 	
+	@HandlesEvent("map")
+	public Resolution locationMap() {
+		return new ForwardResolution("/views/event/locationMap.jsp"); // TODO: not in /event?
+	}
+	
 	@HandlesEvent("new")
 	public Resolution addNewLocation() {
 		Location location = new Location();

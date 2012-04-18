@@ -38,7 +38,7 @@
 							<ul class="nav">
 								<li><a href="${pageContext.request.contextPath}/dashboard">Dashboard</a></li>
 								<c:if test="<%= isClerk() %>">
-									<li><a href="#" class="new-mail-delivery-link">Mail Delivery</a>
+									<li><a href="#" class="new-mail-delivery-link">Mail delivery</a>
 									<li class="dropdown">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown">Routes<b class="caret"></b></a>
 										<ul class="dropdown-menu">
@@ -54,12 +54,13 @@
 										</ul>
 									</li>
 									<li class="dropdown">
-										<a href="#" class="dropdown-toggle" data-toggle="dropdown">Customer Prices<b class="caret"></b></a>
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown">Customer prices<b class="caret"></b></a>
 										<ul class="dropdown-menu">
 											<li><a href="${pageContext.request.contextPath}/event/customerprice">List</a></li>
 											<li><a id="menu-newCarrierDropdown" href="${pageContext.request.contextPath}/event/customerprice#new">New</a></li>
 										</ul>
 									</li>
+									<li><a href="${pageContext.request.contextPath}/event/location?map" class="new-mail-delivery-link">Locations map</a>
 								</c:if>
 							</ul>
 							

@@ -1,4 +1,5 @@
 KPS.util = KPS.util || {};
+KPS.util.map = KPS.util.map || {};
 KPS.modal = KPS.modal || {};
 KPS.data = KPS.data || {};
 KPS.data.locations = KPS.data.locations || {};
@@ -30,6 +31,64 @@ function performLogin(siteRoot,role){
 		$("input").attr("autocomplete", "off");
 	};
 } (KPS.util, jQuery));
+
+(function(cls, $, undefined) {
+	cls.addMarker = function(map, marker) {
+		if(!map.markers) {
+			map.markers = [];
+		}
+		map.markers.push(marker);
+	};
+	
+	cls.clearMarkers = function(map) {
+		if(map.markers) {
+			for(var i=0; i < map.markers.length; i++){
+				map.markers[i].setMap(null);
+			}
+			map.markers = [];
+		}
+	};
+	
+	cls.style = function(map) {
+		var mapStyles = [ {
+			stylers : [ {
+				visibility : "off"
+			} ]
+		}, {
+			featureType : "administrative.country",
+			stylers : [ {
+				visibility : "on"
+			} ]
+		}, {
+			featureType : "administrative.locality",
+			stylers : [ {
+				visibility : "on"
+			} ]
+		}, {
+			featureType : "water",
+			elementType : "geometry",
+			stylers : [ {
+				visibility : "on"
+			} ]
+		}, {
+			featureType : "water",
+			stylers : [ {
+				invert_lightness : true
+			}, {
+				hue : "#0066ff"
+			} ]
+		} ];
+		
+		var styledMapOptions = {
+			name : "KPSmart Style"
+		};
+
+		var mapType = new google.maps.StyledMapType(mapStyles, styledMapOptions);
+
+		map.mapTypes.set('kpsmartstyle', mapType);
+		map.setMapTypeId('kpsmartstyle');
+	};
+}(KPS.util.map, jQuery));
 
 function show(obj){
 	alert(JSON.stringify(obj, null, "\t"));
@@ -263,7 +322,7 @@ function show(obj){
 				locationDataDirty = false;
 
 				if(callback) {
-					callback();
+					callback(locationList);
 				}
 			});
 		}
@@ -304,6 +363,10 @@ function show(obj){
 			}
 		}
 		return undefined;
+	};
+	
+	cls.locationList = function() {
+		return locationList;
 	};
 }(KPS.data.locations, jQuery));
 
