@@ -7,6 +7,7 @@
 	<html>
 		<head>
 			<title><stripes:layout-component name="title" /></title>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
 			<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.css" />
 			<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap-responsive.css" />
 			<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css" />
@@ -20,7 +21,6 @@
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/main.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/mail.js"></script>
-			<meta name = "viewport" content = "width = 450px">
 			<stripes:layout-component name="scripts" />
 		</head>
 		
