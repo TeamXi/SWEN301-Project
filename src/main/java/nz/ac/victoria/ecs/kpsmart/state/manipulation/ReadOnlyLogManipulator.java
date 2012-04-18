@@ -25,4 +25,12 @@ public interface ReadOnlyLogManipulator {
 	 * @return	A list of all events that have ever occurred
 	 */
 	public List<Event> getAllEvents();
+
+	/**
+	 * Get all the events before, or at, this point in time
+	 * 
+	 * @param id	The ID of an event. 
+	 * @return	The list of events preceading, and incuding the event
+	 */
+	public List<Event> getAllEventsBefore(long id);
 }

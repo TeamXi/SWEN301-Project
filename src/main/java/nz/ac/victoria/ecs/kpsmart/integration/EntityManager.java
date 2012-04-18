@@ -1,5 +1,7 @@
 package nz.ac.victoria.ecs.kpsmart.integration;
 
+import java.util.List;
+
 import nz.ac.victoria.ecs.kpsmart.InjectOnCall;
 import nz.ac.victoria.ecs.kpsmart.InjectOnContruct;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.CustomerPriceUpdateEvent;
@@ -53,7 +55,7 @@ public class EntityManager {
 	public void performEvent(EntityUpdateEvent<? extends StorageEntity> event) {
 		logger.info("Performing entity update event: {}", event);
 		
-		getManipulator().save(event.getEntity());
+		getStateManipulator().save(event.getEntity());
 	}
 	
 	/**
@@ -64,7 +66,7 @@ public class EntityManager {
 	public void performEvent(EntityDeleteEvent<? extends StorageEntity> event) {
 		logger.info("Performing entity delete event: {}", event);
 		
-		getManipulator().delete(event.getEntity());
+		getStateManipulator().delete(event.getEntity());
 	}
 	
 	/**
@@ -75,7 +77,7 @@ public class EntityManager {
 	public void performEvent(TransportDiscontinuedEvent event) {
 		logger.info("Performing transport discontinued event: {}", event);
 		
-		getManipulator().delete(event.getRoute());
+		getStateManipulator().delete(event.getRoute());
 	}
 	
 	/**
@@ -90,7 +92,7 @@ public class EntityManager {
 		route.setCarrierVolumeUnitCost(event.getNewVolumeUnitCost());
 		route.setCarrierWeightUnitCost(event.getNewWeightUnitCost());
 		
-		getManipulator().save(route);
+		getStateManipulator().save(route);
 	}
 	
 //<<<<<<< .mine
@@ -128,7 +130,7 @@ public class EntityManager {
 	public void performEvent(DomesticCustomerPriceUpdateEvent event) {
 		logger.info("Performing domestic customer price event: {}", event);
 		
-		getManipulator().save(event.getPrice());
+		getStateManipulator().save(event.getPrice());
 	}
 	
 	/**
@@ -139,7 +141,7 @@ public class EntityManager {
 	public void performEvent(MailDeliveryEvent event) {
 		logger.info("Performing mail devlivery event: {}", event);
 		
-		getManipulator().save(event.getDelivery());
+		getStateManipulator().save(event.getDelivery());
 	}
 	
 	/**
@@ -171,7 +173,7 @@ public class EntityManager {
 	public ReadOnlyStateManipulator getData() {
 		logger.debug("Getting read only state manipulator");
 		
-		return getManipulator();
+		return getStateManipulator();
 	}
 	
 	/**
@@ -180,11 +182,11 @@ public class EntityManager {
 	 * @return	The read only copy of the log, or null if logging is diabled.
 	 */
 	public ReadOnlyLogManipulator getLog() {
-		return log;
+		return getLogManipulator();
 	}
 	
 	public ReportManager getReports() {
-		return this.report;
+		return this.getReportManager();
 	}
 	
 	/**
@@ -199,14 +201,87 @@ public class EntityManager {
 			private StateManipulator memoryState;
 			
 			@Override @InjectOnCall
-			protected StateManipulator getManipulator() {
+			protected StateManipulator getStateManipulator() {
 				return this.memoryState;
 			}
 		};
 	}
 	
-	protected StateManipulator getManipulator() {
+	public EntityManager getEntityManagerAtEventPoint(long id) {
+		final List<Event> events = this.getLog().getAllEventsBefore(id);
+		
+		return new EntityManager() {
+			{
+				for (Event e : events)
+					super.performEvent(e);
+			}
+			
+			@Inject
+			@Named("memory")
+			private StateManipulator memoryState;
+			
+			@Override @InjectOnCall
+			protected StateManipulator getStateManipulator() {
+				return this.memoryState;
+			}
+			
+			@Override 
+			protected ReportManager getReportManager() {
+				return this.memoryState;
+			}
+			
+			@Override
+			protected LogManipulator getLogManipulator() {
+				return null;
+			}
+			
+			@Override
+			public void performEvent(Event e) {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void performEvent(EntityUpdateEvent<? extends StorageEntity> event) {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void performEvent(EntityDeleteEvent<? extends StorageEntity> event) {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void performEvent(TransportDiscontinuedEvent event) {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void performEvent(TransportCostUpdateEvent event) {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void performEvent(DomesticCustomerPriceUpdateEvent event) {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public void performEvent(MailDeliveryEvent event) {
+				throw new UnsupportedOperationException();
+			}
+		};
+	}
+	
+	protected StateManipulator getStateManipulator() {
 		return manipulator;
+	}
+
+	protected ReportManager getReportManager() {
+		return report;
+	}
+	
+	protected LogManipulator getLogManipulator() {
+		return log;
 	}
 
 	public static final class Module extends AbstractModule {

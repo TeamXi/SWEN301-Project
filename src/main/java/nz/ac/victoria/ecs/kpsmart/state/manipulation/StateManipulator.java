@@ -16,7 +16,7 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
  * @author hodderdani
  *
  */
-public interface StateManipulator extends ReadOnlyStateManipulator {
+public interface StateManipulator extends ReadOnlyStateManipulator, ReportManager {
 	/**
 	 * Save a mail delivery to the underlying state represnetation.
 	 * 

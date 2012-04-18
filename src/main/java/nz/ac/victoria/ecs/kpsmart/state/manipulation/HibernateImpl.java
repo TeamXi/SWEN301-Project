@@ -469,4 +469,20 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 		
 		return sum;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Event> getAllEventsBefore(long id) {
+		return sort((List<Event>) this.getSession().createCriteria(Event.class)
+				.add(Restrictions.lt("uid.id", id))
+				.addOrder(Order.asc("uid.Id"))
+				.list(),
+			new Comparator<Event>() {
+				@Override
+				public int compare(Event o1, Event o2) {
+					return ((Long) o1.getId()).compareTo(o2.getId());
+				}
+			}
+		);
+	}
 }

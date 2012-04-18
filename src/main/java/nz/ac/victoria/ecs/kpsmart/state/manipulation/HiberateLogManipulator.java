@@ -25,4 +25,10 @@ public class HiberateLogManipulator implements LogManipulator {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public List<Event> getAllEventsBefore(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
