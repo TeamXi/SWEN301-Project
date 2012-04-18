@@ -17,13 +17,13 @@
 			<div class="span4">
 				<div class="well">
 					Revenue
-					<h1 class="color-green">$1382.32</h1>
+					<h1 class="color-green">$${actionBean.reportManager.totalRevenue}</h1>
 				</div>
 			</div>
 			<div class="span4">
 				<div class="well">
 					Expenditure
-					<h1 class="color-red">$993.65</h1>
+					<h1 class="color-red">$${actionBean.reportManager.totalExpenditure}</h1>
 				</div>
 			</div>
 			<div class="span4">
