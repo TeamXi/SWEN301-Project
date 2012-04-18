@@ -14,6 +14,7 @@ import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 import nz.ac.victoria.ecs.kpsmart.resolutions.FormValidationResolution;
 import nz.ac.victoria.ecs.kpsmart.routefinder.RouteFinder;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.MailDeliveryEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Price;
@@ -42,6 +43,9 @@ public class MailActionBean extends AbstractActionBean {
 	public Resolution newMailDelivery() {
 		MailDelivery delivery = processDelivery();
 		if(delivery != null) {
+			MailDeliveryEvent event = new MailDeliveryEvent();
+			event.setDelivery(delivery);
+			getEntityManager().performEvent(event);
 			return new FormValidationResolution(true, null, null);
 		}
 		else {
