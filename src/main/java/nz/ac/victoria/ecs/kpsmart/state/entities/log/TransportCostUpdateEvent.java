@@ -46,7 +46,7 @@ public final class TransportCostUpdateEvent extends Event {
 
 	@Override
 	public String toString() {
-		return "TransportCostUpdateEvent [id=" + id + ", route=" + route
+		return "TransportCostUpdateEvent [id=" + getId() + ", route=" + route
 				+ ", newWeightUnitCost=" + newWeightUnitCost
 				+ ", newVolumeUnitCost=" + newVolumeUnitCost + "]";
 	}
@@ -55,7 +55,7 @@ public final class TransportCostUpdateEvent extends Event {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + (int) (getId() ^ (getId() >>> 32));
 		result = prime * result + Float.floatToIntBits(newVolumeUnitCost);
 		result = prime * result + Float.floatToIntBits(newWeightUnitCost);
 		result = prime * result + ((route == null) ? 0 : route.hashCode());
@@ -71,7 +71,7 @@ public final class TransportCostUpdateEvent extends Event {
 		if (getClass() != obj.getClass())
 			return false;
 		TransportCostUpdateEvent other = (TransportCostUpdateEvent) obj;
-		if (id != other.id)
+		if (getId() != other.getId())
 			return false;
 		if (Float.floatToIntBits(newVolumeUnitCost) != Float
 				.floatToIntBits(other.newVolumeUnitCost))

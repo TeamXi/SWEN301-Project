@@ -9,6 +9,10 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
 public abstract class EntityOperationEvent<E extends StorageEntity> extends Event {
 	@OneToOne
 	protected E entity;
+	
+	protected EntityOperationEvent(E entity) {
+		this.entity = entity;
+	}
 
 	public E getEntity() {
 		return entity;
@@ -23,7 +27,7 @@ public abstract class EntityOperationEvent<E extends StorageEntity> extends Even
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((entity == null) ? 0 : entity.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + (int) (getId() ^ (getId() >>> 32));
 		return result;
 	}
 
@@ -41,7 +45,7 @@ public abstract class EntityOperationEvent<E extends StorageEntity> extends Even
 				return false;
 		} else if (!entity.equals(other.entity))
 			return false;
-		if (id != other.id)
+		if (getId() != other.getId())
 			return false;
 		return true;
 	}

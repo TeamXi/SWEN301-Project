@@ -20,7 +20,7 @@ import org.hibernate.annotations.CascadeType;
 public final class Route extends StorageEntity implements Serializable {
 	@Cascade(CascadeType.ALL)
 	@OneToOne
-	private RouteID uid;
+	private EntityID uid;
 	
 	@Id
 	private RoutePK primaryKey = new RoutePK();
@@ -102,11 +102,12 @@ public final class Route extends StorageEntity implements Serializable {
 		this.primaryKey.startPoint = start;
 		this.primaryKey.endPoint = end;
 		this.primaryKey.carrier = carrier;
+		this.uid = new EntityID();
 	}
 	
 	public static Route newInstance() {
 		Route r = new Route();
-		r.uid = new RouteID();
+		r.uid = new EntityID();
 		return r;
 	}
 	
@@ -118,11 +119,11 @@ public final class Route extends StorageEntity implements Serializable {
 		return (uid == null)?0:uid.getId();
 	}
 
-	public RouteID getUid() {
+	public EntityID getUid() {
 		return uid;
 	}
 
-	public void setUid(RouteID uid) {
+	public void setUid(EntityID uid) {
 		this.uid = uid;
 	}
 

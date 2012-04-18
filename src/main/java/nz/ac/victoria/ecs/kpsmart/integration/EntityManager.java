@@ -1,10 +1,12 @@
 package nz.ac.victoria.ecs.kpsmart.integration;
 
+import nz.ac.victoria.ecs.kpsmart.InjectOnCall;
 import nz.ac.victoria.ecs.kpsmart.InjectOnContruct;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.CustomerPriceUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.DomesticCustomerPriceUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityDeleteEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.Event;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.MailDeliveryEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.TransportCostUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.TransportDiscontinuedEvent;
@@ -14,6 +16,7 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.LogManipulator;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReadOnlyLogManipulator;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReadOnlyStateManipulator;
+import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReportManager;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.StateManipulator;
 
 import org.slf4j.Logger;
@@ -21,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 /**
  * Handles calls down to the various state mechanisms. 
@@ -37,6 +41,9 @@ public class EntityManager {
 	private LogManipulator log;
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
+
+	@Inject
+	private ReportManager report;
 	
 	/**
 	 * Perform an entity update event on the datasource
@@ -46,7 +53,7 @@ public class EntityManager {
 	public void performEvent(EntityUpdateEvent<? extends StorageEntity> event) {
 		logger.info("Performing entity update event: {}", event);
 		
-		manipulator.save(event.getEntity());
+		getManipulator().save(event.getEntity());
 	}
 	
 	/**
@@ -57,7 +64,7 @@ public class EntityManager {
 	public void performEvent(EntityDeleteEvent<? extends StorageEntity> event) {
 		logger.info("Performing entity delete event: {}", event);
 		
-		manipulator.delete(event.getEntity());
+		getManipulator().delete(event.getEntity());
 	}
 	
 	/**
@@ -68,7 +75,7 @@ public class EntityManager {
 	public void performEvent(TransportDiscontinuedEvent event) {
 		logger.info("Performing transport discontinued event: {}", event);
 		
-		manipulator.delete(event.getRoute());
+		getManipulator().delete(event.getRoute());
 	}
 	
 	/**
@@ -83,28 +90,45 @@ public class EntityManager {
 		route.setCarrierVolumeUnitCost(event.getNewVolumeUnitCost());
 		route.setCarrierWeightUnitCost(event.getNewWeightUnitCost());
 		
-		manipulator.save(route);
+		getManipulator().save(route);
 	}
 	
-	/**
-	 * Perform a customer price update event
-	 * 
-	 * @param event	The event to apply
-	 */
-	public void performEvent(CustomerPriceUpdateEvent event) {
-		logger.info("Performing customer price update event: {}", event);
-		
-		CustomerPrice price = event.getCurrentPrice();
-		price.setPricePerUnitVolume(event.getNewVolumeUnitCost());
-		price.setPricePerUnitWeight(event.getNewWeightUnitCost());
-		
-		manipulator.save(price);
-	}
+//<<<<<<< .mine
+////	/**
+////	 * Perform a customer price update event
+////	 * 
+////	 * @param event	The event to apply
+////	 */
+////	public void performEvent(CustomerPriceUpdateEvent event) {
+////		logger.info("Performing customer price update event: {}", event);
+////		
+////		CustomerPrice price = event.getCurrentPrice();
+////		price.setPricePerUnitVolume(event.getNewVolumeUnitCost());
+////		price.setPriceperUnitWeight(event.getNewWeightUnitCost());
+////		
+////		getManipulator().save(price);
+////	}
+//=======
+//	/**
+//	 * Perform a customer price update event
+//	 * 
+//	 * @param event	The event to apply
+//	 */
+//	public void performEvent(CustomerPriceUpdateEvent event) {
+//		logger.info("Performing customer price update event: {}", event);
+//		
+//		CustomerPrice price = event.getCurrentPrice();
+//		price.setPricePerUnitVolume(event.getNewVolumeUnitCost());
+//		price.setPricePerUnitWeight(event.getNewWeightUnitCost());
+//		
+//		manipulator.save(price);
+//	}
+//>>>>>>> .r83
 	
 	public void performEvent(DomesticCustomerPriceUpdateEvent event) {
 		logger.info("Performing domestic customer price event: {}", event);
 		
-		manipulator.save(event.getPrice());
+		getManipulator().save(event.getPrice());
 	}
 	
 	/**
@@ -115,7 +139,28 @@ public class EntityManager {
 	public void performEvent(MailDeliveryEvent event) {
 		logger.info("Performing mail devlivery event: {}", event);
 		
-		manipulator.save(event.getDelivery());
+		getManipulator().save(event.getDelivery());
+	}
+	
+	/**
+	 * Perform some event.
+	 * 
+	 * @param e	The event to perform
+	 */
+	@SuppressWarnings("unchecked")
+	public void performEvent(Event e) {
+		if (e instanceof EntityUpdateEvent)
+			this.performEvent((EntityUpdateEvent<? extends StorageEntity>) e);
+		if (e instanceof EntityDeleteEvent)
+			this.performEvent((EntityDeleteEvent<? extends StorageEntity>) e);
+		if (e instanceof TransportDiscontinuedEvent)
+			this.performEvent((TransportDiscontinuedEvent) e);
+		if (e instanceof TransportCostUpdateEvent)
+			this.performEvent((TransportCostUpdateEvent) e);
+		if (e instanceof DomesticCustomerPriceUpdateEvent)
+			this.performEvent((DomesticCustomerPriceUpdateEvent) e);
+		if (e instanceof MailDeliveryEvent)
+			this.performEvent((MailDeliveryEvent) e);
 	}
 	
 	/**
@@ -126,7 +171,7 @@ public class EntityManager {
 	public ReadOnlyStateManipulator getData() {
 		logger.debug("Getting read only state manipulator");
 		
-		return manipulator;
+		return getManipulator();
 	}
 	
 	/**
@@ -138,6 +183,32 @@ public class EntityManager {
 		return log;
 	}
 	
+	public ReportManager getReports() {
+		return this.report;
+	}
+	
+	/**
+	 * Creates and returns a new in-memory entity manager
+	 * 
+	 * @return
+	 */
+	public EntityManager getNewInMemoryEntityManager() {
+		return new EntityManager() {
+			@Inject
+			@Named("memory")
+			private StateManipulator memoryState;
+			
+			@Override @InjectOnCall
+			protected StateManipulator getManipulator() {
+				return this.memoryState;
+			}
+		};
+	}
+	
+	protected StateManipulator getManipulator() {
+		return manipulator;
+	}
+
 	public static final class Module extends AbstractModule {
 		@Override
 		protected void configure() {

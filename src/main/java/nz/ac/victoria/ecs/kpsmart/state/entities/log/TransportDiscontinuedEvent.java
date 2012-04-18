@@ -26,7 +26,7 @@ public final class TransportDiscontinuedEvent extends Event {
 
 	@Override
 	public String toString() {
-		return "TransportDiscontinuedEvent [id=" + id + ", route=" + route
+		return "TransportDiscontinuedEvent [id=" + getId() + ", route=" + route
 				+ "]";
 	}
 
@@ -34,7 +34,7 @@ public final class TransportDiscontinuedEvent extends Event {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + (int) (getId() ^ (getId() >>> 32));
 		result = prime * result + ((route == null) ? 0 : route.hashCode());
 		return result;
 	}
@@ -48,7 +48,7 @@ public final class TransportDiscontinuedEvent extends Event {
 		if (getClass() != obj.getClass())
 			return false;
 		TransportDiscontinuedEvent other = (TransportDiscontinuedEvent) obj;
-		if (id != other.id)
+		if (getId() != other.getId())
 			return false;
 		if (route == null) {
 			if (other.route != null)

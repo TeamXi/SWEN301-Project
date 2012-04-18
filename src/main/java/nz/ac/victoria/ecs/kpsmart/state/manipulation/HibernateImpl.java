@@ -1,9 +1,11 @@
 package nz.ac.victoria.ecs.kpsmart.state.manipulation;
 
+import static nz.ac.victoria.ecs.kpsmart.util.ListUtils.sort;
 import static nz.ac.victoria.ecs.kpsmart.util.ListUtils.filter;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -70,9 +72,9 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 
 	@Override
 	public void saveRoute(Route route) {
-		this.session.merge(route.getUid());
-		this.session.merge(route);
-		this.session.flush();
+		this.getSession().save(route.getUid());
+		this.getSession().save(route);
+		this.getSession().flush();
 	}
 
 	@Override
@@ -85,13 +87,13 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 	}
 
 	@Override
-	public void saveCarrier(StorageEntity carier) {
+	public void saveCarrier(Carrier carier) {
 		this.getSession().merge(carier);
 		this.getSession().flush();
 	}
 	
 	@Override
-	public void deleteCarrier(StorageEntity carrier) {
+	public void deleteCarrier(Carrier carrier) {
 		carrier.setDisabled(true);
 		saveCarrier(carrier);
 	}
@@ -134,6 +136,11 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 
 	@Override
 	public void save(StorageEntity entity) {
+		if (entity instanceof Route) {
+			this.saveRoute((Route) entity);
+			return;
+		}
+		
 		this.getSession().save(entity);
 		this.getSession().flush();
 	}
@@ -244,9 +251,7 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 	public Collection<AmountOfMail> getAmountsOfMailForAllRoutes() {
 		Collection<Location> startPoints = this.getAllLocations();
 		Collection<Location> endPoints = this.getAllLocations();
-		Collection<MailDelivery> mailDeliveries = this.getSession().createCriteria(MailDelivery.class)
-				.add(Restrictions.eq("disabled", Bool.False))
-				.list();
+		Collection<MailDelivery> mailDeliveries = this.getAllMailDeliveries();
 		Collection<AmountOfMail> result = new HashSet<AmountOfMail>();
 		
 		for (Location start : startPoints){
@@ -283,9 +288,7 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 		startPoints.add(null);
 		Collection<Location> endPoints = this.getAllLocations();
 		endPoints.add(null);
-		Collection<MailDelivery> mailDeliveries = this.getSession().createCriteria(MailDelivery.class)
-				.add(Restrictions.eq("disabled", Bool.False))
-				.list();
+		Collection<MailDelivery> mailDeliveries = this.getAllMailDeliveries();
 		Collection<RevenueExpediture> result = new HashSet<RevenueExpediture>();
 		
 		for (Location start : startPoints) {
@@ -359,6 +362,7 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 	@Override
 	public void save(Event event) {
 		event.setTimestamp(Calendar.getInstance().getTime());
+		this.getSession().save(event.getUid());
 		this.getSession().save(event);
 	}
 
@@ -370,9 +374,17 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Event> getAllEvents() {
-		return (List<Event>) this.getSession().createCriteria(Event.class)
-				.addOrder(Order.asc("timestamp"))
-				.list();
+		return sort((List<Event>) this.getSession().createCriteria(Event.class)
+				.addOrder(Order.asc("uid.Id"))
+//				.addOrder(Order.asc("timestamp"))
+				.list(),
+			new Comparator<Event>() {
+				@Override
+				public int compare(Event o1, Event o2) {
+					return ((Long) o1.getId()).compareTo(o2.getId());
+				}
+			}
+		);
 	}
 
 	@Override
@@ -380,5 +392,31 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 		return this.getSession().createCriteria(Event.class)
 				.list()
 				.size();
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof HibernateImpl))
+			return false;
+		
+		HibernateImpl other = (HibernateImpl) o;
+		return 	this.getAllCarriers().equals(other.getAllCarriers()) &&
+				this.getAllCustomerPrices().equals(other.getAllCustomerPrices()) &&
+				this.getAllLocations().equals(other.getAllLocations()) &&
+				this.getAllRoute().equals(other.getAllRoute()) &&
+				(
+						(this.getDomesticCustomerPrice() == null && other.getDomesticCustomerPrice() == null) ||
+						this.getDomesticCustomerPrice().equals(other.getDomesticCustomerPrice())
+				) &&
+				this.getAllMailDeliveries().equals(other.getAllMailDeliveries());
+				
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<MailDelivery> getAllMailDeliveries() {
+		return (Collection<MailDelivery>) this.getSession().createCriteria(MailDelivery.class)
+				.add(Restrictions.eq("disabled", Bool.False))
+				.list();
 	}
 }

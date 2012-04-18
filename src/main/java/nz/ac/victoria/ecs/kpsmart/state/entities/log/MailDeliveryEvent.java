@@ -47,7 +47,7 @@ public final class MailDeliveryEvent extends Event {
 
 	@Override
 	public String toString() {
-		return "MailDeliveryEvent [delivery=" + delivery + ", id=" + id + "]";
+		return "MailDeliveryEvent [delivery=" + delivery + ", id=" + getId() + "]";
 	}
 
 	

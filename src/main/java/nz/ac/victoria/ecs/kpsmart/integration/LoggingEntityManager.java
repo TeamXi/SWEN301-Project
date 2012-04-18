@@ -48,13 +48,6 @@ public class LoggingEntityManager extends EntityManager {
 	}
 	
 	@Override
-	public void performEvent(CustomerPriceUpdateEvent event) {
-		log.save(event);
-		
-		super.performEvent(event);
-	}
-	
-	@Override
 	public void performEvent(DomesticCustomerPriceUpdateEvent event) {
 		log.save(event);
 		

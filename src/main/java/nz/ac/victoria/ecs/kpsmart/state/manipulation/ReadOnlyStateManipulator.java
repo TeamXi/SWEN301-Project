@@ -128,4 +128,11 @@ public interface ReadOnlyStateManipulator {
 	 * @return	The price charged for this route
 	 */
 	public CustomerPrice getCustomerPrice(Location start, Location end, Priority priority);
+	
+	/**
+	 * Get all the mail deliveries known to the datasource
+	 * 
+	 * @return	The mail deliveries
+	 */
+	public Collection<MailDelivery> getAllMailDeliveries();
 }

@@ -21,7 +21,7 @@ public final class DomesticCustomerPriceUpdateEvent extends Event {
 	@Override
 	public String toString() {
 		return "DomesticCustomerPriceUpdateEvent [price=" + price + ", id="
-				+ id + "]";
+				+ getId() + "]";
 	}
 
 	@Override

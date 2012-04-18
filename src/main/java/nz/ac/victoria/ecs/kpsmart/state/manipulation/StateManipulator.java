@@ -47,7 +47,7 @@ public interface StateManipulator extends ReadOnlyStateManipulator {
 	 * @param carier	The carrier to save
 	 */
 	@Deprecated
-	public void saveCarrier(final StorageEntity carier);
+	public void saveCarrier(final Carrier carier);
 	
 	/**
 	 * Delete the specified carrier from the datasource
@@ -55,7 +55,7 @@ public interface StateManipulator extends ReadOnlyStateManipulator {
 	 * @param carrier	The carrier to delete
 	 */
 	@Deprecated
-	public void deleteCarrier(final StorageEntity carrier);
+	public void deleteCarrier(final Carrier carrier);
 
 	/**
 	 * Save a location to the database

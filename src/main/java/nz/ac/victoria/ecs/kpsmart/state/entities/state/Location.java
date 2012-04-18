@@ -6,8 +6,6 @@ import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -15,8 +13,9 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(uniqueConstraints=@UniqueConstraint(columnNames={"name"}))
 public final class Location extends StorageEntity implements Serializable {
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
+//	@Cascade(CascadeType.ALL)
+//	@OneToOne
+//	private EntityID id;
 	
 	private String name;
 	
@@ -61,6 +60,12 @@ public final class Location extends StorageEntity implements Serializable {
 				return false;
 			return true;
 		}
+
+		@Override
+		public String toString() {
+			return "LocationPK [latitude=" + latitude + ", longitude="
+					+ longitude + "]";
+		}
 	}
 	
 	public Location() {}
@@ -69,15 +74,16 @@ public final class Location extends StorageEntity implements Serializable {
 		this.primaryKey.latitude = latitude;
 		this.primaryKey.longitude = longitude;
 		this.international = international ? Bool.True : Bool.False;
+//		this.uid = new EntityID();
 	}
 
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
+//	public long getId() {
+//		return uid.getId();
+//	}
+//
+//	public void setId(long id) {
+//		this.uid.setId(id);
+//	}
 
 	public String getName() {
 		return name;
@@ -110,24 +116,19 @@ public final class Location extends StorageEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Location [id=" + id + ", name=" + name + ", latitude="
-				+ getPrimaryKey().latitude + ", longitude=" + getPrimaryKey().longitude + ", international="
-				+ international.name() + "]";
+		return "Location [name=" + name + ", primaryKey=" + primaryKey
+				+ ", international=" + international + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result
 				+ ((international == null) ? 0 : international.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(getPrimaryKey().latitude);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(getPrimaryKey().longitude);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((primaryKey == null) ? 0 : primaryKey.hashCode());
 		return result;
 	}
 
@@ -140,20 +141,17 @@ public final class Location extends StorageEntity implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Location other = (Location) obj;
-		if (id != other.id)
-			return false;
 		if (international != other.international)
-			return false;
-		if (Double.doubleToLongBits(getPrimaryKey().latitude) != Double
-				.doubleToLongBits(other.getPrimaryKey().latitude))
-			return false;
-		if (Double.doubleToLongBits(getPrimaryKey().longitude) != Double
-				.doubleToLongBits(other.getPrimaryKey().longitude))
 			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
+			return false;
+		if (primaryKey == null) {
+			if (other.primaryKey != null)
+				return false;
+		} else if (!primaryKey.equals(other.primaryKey))
 			return false;
 		return true;
 	}

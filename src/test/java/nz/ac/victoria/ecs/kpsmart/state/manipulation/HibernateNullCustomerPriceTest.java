@@ -29,5 +29,4 @@ public class HibernateNullCustomerPriceTest {
 		
 		assertEquals(price, m.getAllCustomerPrices().iterator().next());
 	}
-
 }

@@ -6,6 +6,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
+import nz.ac.victoria.ecs.kpsmart.integration.LoggingEntityManager;
 import nz.ac.victoria.ecs.kpsmart.routefinder.DijkstraRouteFinder;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.HibernateStateManipulationModule;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.InMemoryStateManipulationModule;
@@ -30,7 +31,7 @@ public final class GuiceServletContextListner implements ServletContextListener 
 		Module[] modules = {
 				new HibernateStateManipulationModule(),
 				new InMemoryStateManipulationModule(),
-				new EntityManager.Module(),
+				new LoggingEntityManager.Module(),
 				new DijkstraRouteFinder.Module()
 		};
 		
