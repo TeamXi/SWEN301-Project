@@ -1,6 +1,7 @@
 package nz.ac.victoria.ecs.kpsmart.state.entities.state;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -26,6 +27,10 @@ public final class MailDelivery extends StorageEntity implements Serializable {
 	private float weight;
 	
 	private float volume;
+	
+	private Date submissionDate;
+	
+	private long shippingDuration;
 	
 	public boolean isInternational() {
 		for (Route r : this.route)
@@ -122,5 +127,21 @@ public final class MailDelivery extends StorageEntity implements Serializable {
 
 	public void setVolume(float volume) {
 		this.volume = volume;
+	}
+
+	public Date getSubmissionDate() {
+		return submissionDate;
+	}
+
+	public void setSubmissionDate(Date submissionDate) {
+		this.submissionDate = submissionDate;
+	}
+
+	public long getShippingDuration() {
+		return shippingDuration;
+	}
+
+	public void setShippingDuration(long shippingDuration) {
+		this.shippingDuration = shippingDuration;
 	}
 }

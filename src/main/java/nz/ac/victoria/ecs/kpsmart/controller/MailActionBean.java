@@ -1,5 +1,6 @@
 package nz.ac.victoria.ecs.kpsmart.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Price;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
+import nz.ac.victoria.ecs.kpsmart.util.RouteDurationCalculator;
 
 @UrlBinding("/event/mail?{$event}")
 public class MailActionBean extends AbstractActionBean {
@@ -69,10 +71,15 @@ public class MailActionBean extends AbstractActionBean {
 			if(route != null) {
 				MailDelivery delivery = new MailDelivery();
 				
+				Date now = new Date();
+				long shippingDuration = RouteDurationCalculator.calculate(route, now);
+				
 				delivery.setVolume(volume);
 				delivery.setWeight(weight);
 				delivery.setPriority(priority);
 				delivery.setRoute(route);
+				delivery.setSubmissionDate(now);
+				delivery.setShippingDuration(shippingDuration);
 			
 				return delivery;
 			}

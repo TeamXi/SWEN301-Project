@@ -278,10 +278,18 @@ public final class Route extends StorageEntity implements Serializable {
 		this.frequency = frequency;
 	}
 
+	/**
+	 * get the duration of the delivery in ms
+	 * @return
+	 */
 	public int getDuration() {
 		return duration;
 	}
 
+	/**
+	 * set the duration of the delivery in ms
+	 * @param duration
+	 */
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
