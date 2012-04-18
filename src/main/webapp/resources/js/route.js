@@ -122,6 +122,7 @@ KPS.util.map = KPS.util.map || {};
 				KPS.data.locations.setupPortEntryTypeahead();
 			});
 			KPS.data.carriers.setupCarrierEntryTypeahead();
+			KPS.modal.carrousel.show(0, false);
 			KPS.modal.show();
 		});
 	};
@@ -136,6 +137,7 @@ KPS.util.map = KPS.util.map || {};
 				KPS.data.locations.setupPortEntryTypeahead();
 			});
 			KPS.data.carriers.setupCarrierEntryTypeahead();
+			KPS.modal.carrousel.show(0, false);
 			KPS.modal.show();
 		});
 	};
@@ -157,6 +159,7 @@ KPS.util.map = KPS.util.map || {};
 	
 		KPS.modal.configure({title:"All Locations"});
 		KPS.modal.carrousel.$body.html($mapEl);
+		KPS.modal.carrousel.show(0, false);
 		KPS.modal.show();
 		if(!globalMap){
 			createWorldMap();

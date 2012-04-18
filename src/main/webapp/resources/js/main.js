@@ -68,9 +68,15 @@ function show(obj){
 		});
 	};
 	
-	pack.carrousel.prototype.show = function(num) {
+	pack.carrousel.prototype.show = function(num, animated) {
 		if(this.currentPage != num) {
-			this.$body.animate({marginLeft:(num*-(this.width+this.spacing))+"px"},400);
+			var margin = (num*-(this.width+this.spacing))+"px";
+			if(animated === undefined || animated === true) {
+				this.$body.animate({marginLeft:margin},400);
+			}
+			else { // Animated is false
+				this.$body.css("margin-left", margin);
+			}
 		}
 		this.currentPage = num;
 	};
