@@ -143,7 +143,6 @@ public class CustomerPrice extends StorageEntity implements Serializable, Price 
 		return getPrimaryKey().priority;
 	}
 
-	@Override
 	public void setPriority(Priority prority) {
 		this.getPrimaryKey().priority = prority;
 	}
@@ -196,5 +195,52 @@ public class CustomerPrice extends StorageEntity implements Serializable, Price 
 	
 	public void setDirection(Direction d) {
 		primaryKey.direction = d;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Float.floatToIntBits(pricePerUnitVolume);
+		result = prime * result + Float.floatToIntBits(pricePerUnitWeight);
+		result = prime * result
+				+ ((primaryKey == null) ? 0 : primaryKey.hashCode());
+		result = prime * result + ((uid == null) ? 0 : uid.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CustomerPrice other = (CustomerPrice) obj;
+		if (Float.floatToIntBits(pricePerUnitVolume) != Float
+				.floatToIntBits(other.pricePerUnitVolume))
+			return false;
+		if (Float.floatToIntBits(pricePerUnitWeight) != Float
+				.floatToIntBits(other.pricePerUnitWeight))
+			return false;
+		if (primaryKey == null) {
+			if (other.primaryKey != null)
+				return false;
+		} else if (!primaryKey.equals(other.primaryKey))
+			return false;
+		if (uid == null) {
+			if (other.uid != null)
+				return false;
+		} else if (!uid.equals(other.uid))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "CustomerPrice [uid=" + uid + ", primaryKey=" + primaryKey
+				+ ", pricePerUnitWeight=" + pricePerUnitWeight
+				+ ", pricePerUnitVolume=" + pricePerUnitVolume + "]";
 	}
 }

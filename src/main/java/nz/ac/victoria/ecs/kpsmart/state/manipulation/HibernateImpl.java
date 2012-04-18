@@ -429,7 +429,6 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 						this.getDomesticCustomerPrice().equals(other.getDomesticCustomerPrice())
 				) &&
 				this.getAllMailDeliveries().equals(other.getAllMailDeliveries());
-				
 	}
 
 	@SuppressWarnings("unchecked")
@@ -438,5 +437,30 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 		return (Collection<MailDelivery>) this.getSession().createCriteria(MailDelivery.class)
 				.add(Restrictions.eq("disabled", Bool.False))
 				.list();
+	}
+
+	@Override
+	public double getTotalExpenditure() {
+		double sum = 0;
+		for (MailDelivery m : this.getAllMailDeliveries())
+			for (Route r : m.getRoute())
+				sum += r.getCost(m);
+		
+		return sum;
+	}
+
+	@Override
+	public double getTotalRevenue() {
+		double sum = 0;
+		for (MailDelivery m : this.getAllMailDeliveries()) {
+			CustomerPrice p = this.getCustomerPrice(
+					m.getRoute().get(0).getStartPoint(), 
+					m.getRoute().get(m.getRoute().size()-1).getEndPoint(), 
+					m.getPriority());
+			
+			sum += p.getCost(m);
+		}
+		
+		return sum;
 	}
 }

@@ -37,6 +37,20 @@ public interface ReportManager {
 	public int getNumberOfEvents();
 	
 	/**
+	 * Get the total expenditure.
+	 * 
+	 * @return	The total amount of money spent by KPS
+	 */
+	public double getTotalExpenditure();
+	
+	/**
+	 * Get the total revenue of KPS
+	 * 
+	 * @return	The total revenue
+	 */
+	public double getTotalRevenue();
+	
+	/**
 	 * Represents the amount of mail for a given source-destination pair.
 	 * 
 	 * @author hodderdani

@@ -28,6 +28,14 @@ public final class GuiceServletContextListner implements ServletContextListener 
 		if (initilized)
 			return;
 		
+		initNoData();
+		new Data().createData();
+	}
+	
+	public static synchronized void initNoData() {
+		if (initilized)
+			return;
+		
 		Module[] modules = {
 				new HibernateStateManipulationModule(),
 				new InMemoryStateManipulationModule(),
@@ -36,8 +44,6 @@ public final class GuiceServletContextListner implements ServletContextListener 
 		};
 		
 		injectors.push(new History(Guice.createInjector(modules), modules));
-		
-		new Data().createData();
 		
 		initilized = true;
 	}

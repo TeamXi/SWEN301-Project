@@ -10,6 +10,11 @@ public final class MailDeliveryEvent extends Event {
 	
 	@ManyToOne
 	private MailDelivery delivery;
+	
+	public MailDeliveryEvent() {}
+	public MailDeliveryEvent(MailDelivery md) {
+		this.setDelivery(md);
+	}
 
 	public MailDelivery getDelivery() {
 		return delivery;

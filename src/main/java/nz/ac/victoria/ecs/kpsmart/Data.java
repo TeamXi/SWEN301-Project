@@ -5,10 +5,13 @@ import java.text.SimpleDateFormat;
 
 import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.CarrierUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.CustomerPriceUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.LocationUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.RouteUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans;
 
@@ -120,6 +123,14 @@ final class Data {
 			throw new RuntimeException(e);
 		}
 		sm.performEvent(new RouteUpdateEvent(r4));
+		
+		CustomerPrice price = CustomerPrice.newInstance();
+		price.setStartLocation(null);
+		price.setEndLocation(sm.getData().getLocationForName("Rome"));
+		price.setPricePerUnitVolume(1);
+		price.setPricePerUnitWeight(1);
+		price.setPriority(Priority.International_Air);
+		sm.performEvent(new CustomerPriceUpdateEvent(price));
 	}
 
 	public Location createLocation(boolean international, double lat, double lon, String name) {
