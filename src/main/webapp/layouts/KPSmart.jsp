@@ -60,7 +60,7 @@
 											<li><a id="menu-newCustomerPriceDropdown" href="${pageContext.request.contextPath}/event/customerprice#new">New</a></li>
 										</ul>
 									</li>
-									<li><a href="${pageContext.request.contextPath}/event/location?map" class="new-mail-delivery-link">Locations map</a>
+									<li><a href="${pageContext.request.contextPath}/event/location?map">Locations map</a>
 								</c:if>
 							</ul>
 							
