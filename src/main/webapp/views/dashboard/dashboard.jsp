@@ -35,55 +35,65 @@
 		</div>
 		<div class="row-fluid">
 			<div class="span12">
-				<table class="table table-bordered table-striped responsive-utilities">
-					<thead>
-						<tr>
-							<td>Source</td>
-							<td>Destination</td>
-							<td>Priority</td>
-							<td>Revenue</td>
-							<td>Expenditure</td>
-							<td>Average delivery time</td>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach var="revenueExpenditure" items="${actionBean.reportManager.allRevenueExpenditure}">
-							<c:set value="${revenueExpenditure.revenue}" var="revenue"></c:set>
-							<c:set value="${revenueExpenditure.expenditure}" var="expenditure"></c:set>
-							<c:set value="${revenueExpenditure.averageDeliveryTime}" var="averageDeliveryTime"></c:set>
-							<tr class="${expenditure>revenue?'color-red':''}">
-								<td><c:out value="${revenueExpenditure.startPoint.name}"></c:out></td>
-								<td><c:out value="${revenueExpenditure.endPoint.name}"></c:out></td>
-								<td><c:out value="${revenueExpenditure.priority}"></c:out></td>
-								<td><c:out value="$${revenue}"></c:out></td>
-								<td><c:out value="$${expenditure}"></c:out></td>
-								<td><c:out value="${averageDeliveryTime=='NaN'?'No data':averageDeliveryTime}${averageDeliveryTime=='NaN'?'':' hours'}"></c:out></td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-				<table class="table table-bordered table-striped responsive-utilities">
-					<thead>
-						<tr>
-							<td>Source</td>
-							<td>Destination</td>
-							<td>Number of items</td>
-							<td>Total weight</td>
-							<td>Total volume</td>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach var="mailCount" items="${actionBean.reportManager.amountsOfMailForAllRoutes}">
-							<tr>
-								<td><c:out value="${mailCount.startPoint.name}"></c:out></td>
-								<td><c:out value="${mailCount.endPoint.name}"></c:out></td>
-								<td><c:out value="${mailCount.items}"></c:out></td>
-								<td><c:out value="${mailCount.totalWeight}"></c:out></td>
-								<td><c:out value="${mailCount.totalVolume}"></c:out></td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
+				<div class="tabbable">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#dashboard-tab-rawdata" data-toggle="tab">Raw data</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="dashboard-tab-rawdata">
+							<table class="table table-bordered table-striped responsive-utilities">
+								<thead>
+									<tr>
+										<td>Source</td>
+										<td>Destination</td>
+										<td>Priority</td>
+										<td>Revenue</td>
+										<td>Expenditure</td>
+										<td>Average delivery time</td>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="revenueExpenditure"
+										items="${actionBean.reportManager.allRevenueExpenditure}">
+										<c:set value="${revenueExpenditure.revenue}" var="revenue"></c:set>
+										<c:set value="${revenueExpenditure.expenditure}" var="expenditure"></c:set>
+										<c:set value="${revenueExpenditure.averageDeliveryTime}" var="averageDeliveryTime"></c:set>
+										<tr class="${expenditure>revenue?'color-red':''}">
+											<td><c:out value="${revenueExpenditure.startPoint.name}"></c:out></td>
+											<td><c:out value="${revenueExpenditure.endPoint.name}"></c:out></td>
+											<td><c:out value="${revenueExpenditure.priority}"></c:out></td>
+											<td><c:out value="$${revenue}"></c:out></td>
+											<td><c:out value="$${expenditure}"></c:out></td>
+											<td><c:out value="${averageDeliveryTime=='NaN'?'No data':averageDeliveryTime}${averageDeliveryTime=='NaN'?'':' hours'}"></c:out></td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+							<table class="table table-bordered table-striped responsive-utilities">
+								<thead>
+									<tr>
+										<td>Source</td>
+										<td>Destination</td>
+										<td>Number of items</td>
+										<td>Total weight</td>
+										<td>Total volume</td>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="mailCount" items="${actionBean.reportManager.amountsOfMailForAllRoutes}">
+										<tr>
+											<td><c:out value="${mailCount.startPoint.name}"></c:out></td>
+											<td><c:out value="${mailCount.endPoint.name}"></c:out></td>
+											<td><c:out value="${mailCount.items}"></c:out></td>
+											<td><c:out value="${mailCount.totalWeight}"></c:out></td>
+											<td><c:out value="${mailCount.totalVolume}"></c:out></td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</stripes:layout-component>
