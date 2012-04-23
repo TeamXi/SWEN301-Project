@@ -18,7 +18,7 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 		var form = document.getElementById(id);
 		if(!validateForm(form)) return;
 		
-		KPS.util.submitForm(form, "/kpsmart/event/mail?new", function(data){
+		KPS.util.submitForm(form, KPS.siteRoot+"/event/mail?new", function(data){
 			var returnObj = eval(data);
 			var status = returnObj.status;
 			
@@ -93,7 +93,7 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 		
 		$(".new-mail-delivery-link").each(function (index, child) {
 			$(child).click(function () {
-				KPS.modal.load("/kpsmart/event/mail", function(){
+				KPS.modal.load(KPS.siteRoot+"/event/mail", function(){
 					KPS.util.disableInputAutocomplete();
 					
 					KPS.modal.configure(modalConfiguration);
