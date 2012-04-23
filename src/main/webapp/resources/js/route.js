@@ -207,8 +207,8 @@ KPS.event.location = KPS.event.location || {};
 		var location = searchResults[document.getElementById('newLocationMapLocationResults').value];
 		$.post("location?new", {
 			name: location.formatted_address,
-			longitude: location.geometry.location.Za,
-			latitude: location.geometry.location.Ya,
+			longitude: location.geometry.location.lng(),
+			latitude: location.geometry.location.lat(),
 			isInternational: document.getElementById('newLocationMapLocationIsInternational').checked == true ? 'true' : 'false'
 		}, function (data) {
 			KPS.data.locations.setNeedsUpdate();
