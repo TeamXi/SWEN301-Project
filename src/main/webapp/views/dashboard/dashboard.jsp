@@ -40,28 +40,6 @@
 						<tr>
 							<td>Source</td>
 							<td>Destination</td>
-							<td>Number of items</td>
-							<td>Total weight</td>
-							<td>Total volume</td>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach var="mailCount" items="${actionBean.reportManager.amountsOfMailForAllRoutes}">
-							<tr>
-								<td><c:out value="${mailCount.startPoint.name}"></c:out></td>
-								<td><c:out value="${mailCount.endPoint.name}"></c:out></td>
-								<td><c:out value="${mailCount.items}"></c:out></td>
-								<td><c:out value="${mailCount.totalWeight}"></c:out></td>
-								<td><c:out value="${mailCount.totalVolume}"></c:out></td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-				<table class="table table-bordered table-striped responsive-utilities">
-					<thead>
-						<tr>
-							<td>Source</td>
-							<td>Destination</td>
 							<td>Priority</td>
 							<td>Revenue</td>
 							<td>Expenditure</td>
@@ -80,6 +58,28 @@
 								<td><c:out value="$${revenue}"></c:out></td>
 								<td><c:out value="$${expenditure}"></c:out></td>
 								<td><c:out value="${averageDeliveryTime=='NaN'?'No data':averageDeliveryTime}${averageDeliveryTime=='NaN'?'':' hours'}"></c:out></td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+				<table class="table table-bordered table-striped responsive-utilities">
+					<thead>
+						<tr>
+							<td>Source</td>
+							<td>Destination</td>
+							<td>Number of items</td>
+							<td>Total weight</td>
+							<td>Total volume</td>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="mailCount" items="${actionBean.reportManager.amountsOfMailForAllRoutes}">
+							<tr>
+								<td><c:out value="${mailCount.startPoint.name}"></c:out></td>
+								<td><c:out value="${mailCount.endPoint.name}"></c:out></td>
+								<td><c:out value="${mailCount.items}"></c:out></td>
+								<td><c:out value="${mailCount.totalWeight}"></c:out></td>
+								<td><c:out value="${mailCount.totalVolume}"></c:out></td>
 							</tr>
 						</c:forEach>
 					</tbody>
