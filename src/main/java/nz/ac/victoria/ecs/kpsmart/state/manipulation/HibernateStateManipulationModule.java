@@ -3,24 +3,27 @@ package nz.ac.victoria.ecs.kpsmart.state.manipulation;
 import java.io.IOException;
 import java.util.Properties;
 
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.CarrierDeleteEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.CarrierUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.CustomerPriceDeleteEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.CustomerPriceUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.Event;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.DomesticCustomerPriceDeleteEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.DomesticCustomerPriceUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.EventID;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.LocationDeleteEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.LocationUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.MailDeliveryEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.MailDeliveryDeleteEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.MailDeliveryUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.RouteDeleteEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.RouteUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.TransportCostUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.TransportDiscontinuedEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPriceID;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.DomesticCustomerPrice;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.EntityID;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.EntityID;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
 
 import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
@@ -47,18 +50,29 @@ public class HibernateStateManipulationModule extends AbstractModule {
 		// Configure hibernate
 		final Class<?>[] annotatedClasses = {
 				CustomerPriceUpdateEvent.class,
-				MailDeliveryEvent.class,
-				TransportCostUpdateEvent.class,
-				TransportDiscontinuedEvent.class,
-				CustomerPriceUpdateEvent.class,
+				CustomerPriceDeleteEvent.class,
+				
+				MailDeliveryUpdateEvent.class,
+				MailDeliveryDeleteEvent.class,
+				
 				CarrierUpdateEvent.class,
+				CarrierDeleteEvent.class,
+				
+				DomesticCustomerPriceUpdateEvent.class,
+				DomesticCustomerPriceDeleteEvent.class,
+				
 				RouteUpdateEvent.class,
+				RouteDeleteEvent.class,
+				
 				LocationUpdateEvent.class,
-				CustomerPriceUpdateEvent.class,
-				Event.class,
+				LocationDeleteEvent.class,
+				
+				
+				
+////				Event.class,
 				EventID.class,
-						
-				StorageEntity.class,
+//						
+//				StorageEntity.class,
 				Carrier.class,
 				Location.class,
 				MailDelivery.class,

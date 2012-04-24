@@ -1,9 +1,9 @@
 package nz.ac.victoria.ecs.kpsmart.integration;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertEquals;
 import nz.ac.victoria.ecs.kpsmart.GuiceServletContextListner;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.Event;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityOperationEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -20,7 +20,7 @@ public class EntityManagerTest {
 		EntityManager em = GuiceServletContextListner.getInjector().getInstance(EntityManager.class);
 		EntityManager memory = em.getNewInMemoryEntityManager();
 		
-		for (Event e : em.getLog().getAllEvents())
+		for (EntityOperationEvent<? extends StorageEntity> e : em.getLog().getAllEvents())
 			memory.performEvent(e);
 		
 		assertEquals(em.getData(), memory.getData());

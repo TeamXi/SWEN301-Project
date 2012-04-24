@@ -1,7 +1,7 @@
 package nz.ac.victoria.ecs.kpsmart.state.manipulation;
 
-import static nz.ac.victoria.ecs.kpsmart.util.ListUtils.sort;
 import static nz.ac.victoria.ecs.kpsmart.util.ListUtils.filter;
+import static nz.ac.victoria.ecs.kpsmart.util.ListUtils.sort;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -12,7 +12,7 @@ import java.util.List;
 import javax.persistence.PersistenceContext;
 
 import nz.ac.victoria.ecs.kpsmart.InjectOnContruct;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.Event;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityOperationEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Bool;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
@@ -26,6 +26,7 @@ import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
 import nz.ac.victoria.ecs.kpsmart.util.Filter;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -49,9 +50,12 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 
 	@Override
 	public MailDelivery getMailDelivery(final long id) {		
-		return (MailDelivery) getSession().get(MailDelivery.class, id);
+		return (MailDelivery) this.getEntityCriteria(MailDelivery.class)
+				.add(Restrictions.eq("id", id))
+				.uniqueResult();
+				
 	}
-
+	
 	@Override
 	public void saveMailDelivery(final MailDelivery delivery) {
 		this.getSession().merge(delivery);
@@ -61,14 +65,13 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Location> getAllLocations() {
-		return (Collection<Location>) this.getSession().createCriteria(Location.class).list();
+		return (Collection<Location>) this.getEntityCriteria(Location.class).list();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Route> getAllRoute() {
-		return (List<Route>) this.getSession().createCriteria(Route.class)
-				.add(Restrictions.eq("disabled", Bool.False))
+		return (List<Route>) this.getEntityCriteria(Route.class)
 				.addOrder(Order.asc("uid.id"))
 				.list();
 	}
@@ -83,8 +86,7 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 	@Override
 	public Carrier getCarrier(long id) {
 //		return (Carrier) this.session.get(Carrier.class, id);
-		return (Carrier) this.getSession().createCriteria(Carrier.class)
-				.add(Restrictions.eq("disabled", Bool.False))
+		return (Carrier) this.getEntityCriteria(Carrier.class)
 				.add(Restrictions.eq("id", id))
 				.uniqueResult();
 	}
@@ -103,9 +105,8 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 
 	@Override
 	public Location getLocationForName(String name) {
-		return (Location) this.getSession().createCriteria(Location.class)
+		return (Location) this.getEntityCriteria(Location.class)
 				.add(Restrictions.eq("name", name))
-				.add(Restrictions.ne("disabled", Bool.True))
 				.uniqueResult();
 	}
 
@@ -118,16 +119,14 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Carrier> getAllCarriers() {
-		return (Collection<Carrier>) this.getSession().createCriteria(Carrier.class)
-				.add(Restrictions.eq("disabled", Bool.False))
+		return (Collection<Carrier>) this.getEntityCriteria(Carrier.class)
 				.list();
 	}
 
 	@Override
 	public Route getRouteByID(long id) {
-		return (Route) this.getSession().createCriteria(Route.class)
+		return (Route) this.getEntityCriteria(Route.class)
 				.add(Restrictions.eq("uid.id", id))
-				.add(Restrictions.ne("disabled", Bool.True))
 				.uniqueResult();
 	}
 
@@ -185,7 +184,7 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 
 	@Override
 	public DomesticCustomerPrice getDomesticCustomerPrice() {
-		return (DomesticCustomerPrice) this.getSession().createCriteria(DomesticCustomerPrice.class)
+		return (DomesticCustomerPrice) this.getEntityCriteria(DomesticCustomerPrice.class)
 					.uniqueResult();
 	}
 
@@ -199,9 +198,8 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Route> getAllRoutesForPriority(final Priority priority) {
-		return filter((List<Route>) this.getSession().createCriteria(Route.class)
+		return filter((List<Route>) this.getEntityCriteria(Route.class)
 					.add(Restrictions.in("primaryKey.transportMeans", priority.ValidTransportMeans))
-					.add(Restrictions.eq("disabled", Bool.False))
 					.list(),
 				new Filter<Route>() {
 					@Override
@@ -217,35 +215,31 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Route> getRoutesBetween(Location start, Location end, Priority priority) {
-		return (Collection<Route>) this.getSession().createCriteria(Route.class)
+		return (Collection<Route>) this.getEntityCriteria(Route.class)
 					.add(Restrictions.eq("primaryKey.startPoint", start))
 					.add(Restrictions.eq("primaryKey.endPoint", end))
 					.add(Restrictions.in("primaryKey.transportMeans", priority.ValidTransportMeans))
-					.add(Restrictions.eq("disabled", Bool.False))
 					.list();
 	}
 
 	@Override
 	public Carrier getCarrier(String name) {
-		return (Carrier) this.session.createCriteria(Carrier.class)
+		return (Carrier) this.getEntityCriteria(Carrier.class)
 					.add(Restrictions.eq("name", name))
-					.add(Restrictions.eq("disabled", Bool.False))
 					.uniqueResult();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<CustomerPrice> getAllCustomerPrices() {
-		return (List<CustomerPrice>) this.session.createCriteria(CustomerPrice.class)
-					.add(Restrictions.eq("disabled", Bool.False))
+		return (List<CustomerPrice>) this.getEntityCriteria(CustomerPrice.class)
 					.list();
 	}
 
 	@Override
 	public CustomerPrice getCustomerPriceById(long id) {
-		return (CustomerPrice) this.getSession().createCriteria(CustomerPrice.class)
+		return (CustomerPrice) this.getEntityCriteria(CustomerPrice.class)
 				.add(Restrictions.eq("uid.id", id))
-				.add(Restrictions.ne("disabled", Bool.True))
 				.uniqueResult();
 	}
 
@@ -377,36 +371,38 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 			}
 		}
 		
-		return (CustomerPrice) this.getSession().createCriteria(CustomerPrice.class)
+		return (CustomerPrice) this.getEntityCriteria(CustomerPrice.class)
 				.add(Restrictions.eq("primaryKey.priority", priority))
 				.add(Restrictions.eq("primaryKey.location", location))
 				.add(Restrictions.eq("primaryKey.direction", direction))
-				.add(Restrictions.eq("disabled", Bool.False))
 				.uniqueResult();
 	}
 
 	@Override
-	public void save(Event event) {
+	public void save(EntityOperationEvent<? extends StorageEntity> event) {
 		event.setTimestamp(Calendar.getInstance().getTime());
 		this.getSession().save(event.getUid());
 		this.getSession().save(event);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Event getEvent(long id) {
-		return (Event) this.getSession().get(Event.class, id);
+	public EntityOperationEvent<? extends StorageEntity> getEvent(long id) {
+		return (EntityOperationEvent<? extends StorageEntity>) this.getEventCriteria(EntityOperationEvent.class)
+				.add(Restrictions.eq("uid.id", id))
+				.uniqueResult();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Event> getAllEvents() {
-		return sort((List<Event>) this.getSession().createCriteria(Event.class)
+	public List<EntityOperationEvent<? extends StorageEntity>> getAllEvents() {
+		return sort((List<EntityOperationEvent<? extends StorageEntity>>) this.getEventCriteria(EntityOperationEvent.class)
 				.addOrder(Order.asc("uid.Id"))
 //				.addOrder(Order.asc("timestamp"))
 				.list(),
-			new Comparator<Event>() {
+			new Comparator<EntityOperationEvent<? extends StorageEntity>>() {
 				@Override
-				public int compare(Event o1, Event o2) {
+				public int compare(EntityOperationEvent<? extends StorageEntity> o1, EntityOperationEvent<? extends StorageEntity> o2) {
 					return ((Long) o1.getId()).compareTo(o2.getId());
 				}
 			}
@@ -415,7 +411,7 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 
 	@Override
 	public int getNumberOfEvents() {
-		return this.getSession().createCriteria(Event.class)
+		return this.getEventCriteria(EntityOperationEvent.class)
 				.list()
 				.size();
 	}
@@ -440,8 +436,7 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<MailDelivery> getAllMailDeliveries() {
-		return (Collection<MailDelivery>) this.getSession().createCriteria(MailDelivery.class)
-				.add(Restrictions.eq("disabled", Bool.False))
+		return (Collection<MailDelivery>) this.getEntityCriteria(MailDelivery.class)
 				.list();
 	}
 
@@ -449,8 +444,7 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 	public double getTotalExpenditure() {
 		double sum = 0;
 		for (MailDelivery m : this.getAllMailDeliveries())
-			for (Route r : m.getRoute())
-				sum += r.getCost(m);
+			sum+= m.getCost();
 		
 		return sum;
 	}
@@ -458,31 +452,34 @@ public class HibernateImpl implements StateManipulator, ReportManager, LogManipu
 	@Override
 	public double getTotalRevenue() {
 		double sum = 0;
-		for (MailDelivery m : this.getAllMailDeliveries()) {
-			CustomerPrice p = this.getCustomerPrice(
-					m.getRoute().get(0).getStartPoint(), 
-					m.getRoute().get(m.getRoute().size()-1).getEndPoint(), 
-					m.getPriority());
-			
-			sum += p.getCost(m);
-		}
+		for (MailDelivery m : this.getAllMailDeliveries())
+			sum += m.getPrice();
 		
 		return sum;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Event> getAllEventsBefore(long id) {
-		return sort((List<Event>) this.getSession().createCriteria(Event.class)
+	public List<EntityOperationEvent<? extends StorageEntity>> getAllEventsBefore(long id) {
+		return sort((List<EntityOperationEvent<? extends StorageEntity>>) this.getEventCriteria(EntityOperationEvent.class)
 				.add(Restrictions.lt("uid.id", id))
 				.addOrder(Order.asc("uid.Id"))
 				.list(),
-			new Comparator<Event>() {
+			new Comparator<EntityOperationEvent<? extends StorageEntity>>() {
 				@Override
-				public int compare(Event o1, Event o2) {
+				public int compare(EntityOperationEvent<? extends StorageEntity> o1, EntityOperationEvent<? extends StorageEntity> o2) {
 					return ((Long) o1.getId()).compareTo(o2.getId());
 				}
 			}
 		);
+	}
+	
+	protected Criteria getEntityCriteria(Class<? extends StorageEntity> clazz) {
+		return this.getSession().createCriteria(clazz)
+				.add(Restrictions.eq("disabled", Bool.False));
+	}
+	
+	protected Criteria getEventCriteria(Class<? extends EntityOperationEvent> clazz) {
+		return this.getSession().createCriteria(clazz);
 	}
 }

@@ -2,14 +2,14 @@ package nz.ac.victoria.ecs.kpsmart.state.entities.state;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import org.slf4j.LoggerFactory;
+
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityOperationEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.EventID;
 
 /**
  * An abstract class representing any entity.
@@ -18,15 +18,12 @@ import org.hibernate.annotations.CascadeType;
  *
  */
 @MappedSuperclass
-@Table(uniqueConstraints=@UniqueConstraint(columnNames={"uid"}))
 public abstract class StorageEntity {
-
 	@Enumerated(EnumType.STRING)
 	protected Bool disabled = Bool.False;
 	
-//	@ManyToOne
-//	@Cascade(CascadeType.ALL)
-//	protected EntityID uid;
+	@ManyToOne
+	protected EventID relateEventID;
 
 	public Bool getDisabled() {
 		return disabled;
@@ -44,11 +41,13 @@ public abstract class StorageEntity {
 		this.disabled = disabled ? Bool.True : Bool.False;
 	}
 
-//	public EntityID getUid() {
-//		return uid;
-//	}
-//
-//	public void setUid(EntityID uid) {
-//		this.uid = uid;
-//	}	
+	public EventID getRelateEventID() {
+		return relateEventID;
+	}
+
+	public void setRelateEventID(EventID relateEventID) {
+		LoggerFactory.getLogger(getClass()).trace("Setting related ID to {}", relateEventID);
+		
+		this.relateEventID = relateEventID;
+	}
 }

@@ -1,6 +1,7 @@
 package nz.ac.victoria.ecs.kpsmart.state.manipulation;
 
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.Event;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityOperationEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
 
 /**
  * Persist and get log events from a backend
@@ -14,5 +15,5 @@ public interface LogManipulator extends ReadOnlyLogManipulator {
 	 * 
 	 * @param event
 	 */
-	public void save(Event event);
+	public void save(EntityOperationEvent<? extends StorageEntity> event);
 }

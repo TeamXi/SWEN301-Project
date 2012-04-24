@@ -11,7 +11,7 @@ import nz.ac.victoria.ecs.kpsmart.DataTest;
 import nz.ac.victoria.ecs.kpsmart.InjectOnCall;
 import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.CustomerPriceUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.MailDeliveryEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.MailDeliveryUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
@@ -40,7 +40,7 @@ public class HibernateReportTest extends DataTest {
 		m.setRoute((List<Route>) manager.getData().getRoutesBetween(manager.getData().getLocationForName("Wellington"), manager.getData().getLocationForName("Rome"), Priority.International_Air));
 		m.setVolume(1);
 		m.setWeight(1);
-		manager.performEvent(new MailDeliveryEvent(m));
+		manager.performEvent(new MailDeliveryUpdateEvent(m));
 	}
 	
 	@Test

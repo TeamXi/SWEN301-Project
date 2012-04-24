@@ -1,26 +1,20 @@
 package nz.ac.victoria.ecs.kpsmart.integration;
 
-import java.util.List;
-
 import nz.ac.victoria.ecs.kpsmart.InjectOnCall;
 import nz.ac.victoria.ecs.kpsmart.InjectOnContruct;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.CustomerPriceUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.DomesticCustomerPriceUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityDeleteEvent;
+import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityOperationEvent;
 import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.Event;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.MailDeliveryEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.TransportCostUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.TransportDiscontinuedEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
+import nz.ac.victoria.ecs.kpsmart.state.manipulation.HibernateImpl;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.LogManipulator;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReadOnlyLogManipulator;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReadOnlyStateManipulator;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReportManager;
 import nz.ac.victoria.ecs.kpsmart.state.manipulation.StateManipulator;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,6 +49,7 @@ public class EntityManager {
 	public void performEvent(EntityUpdateEvent<? extends StorageEntity> event) {
 		logger.info("Performing entity update event: {}", event);
 		
+		event.getEntity().setRelateEventID(event.getUid());
 		getStateManipulator().save(event.getEntity());
 	}
 	
@@ -69,100 +64,18 @@ public class EntityManager {
 		getStateManipulator().delete(event.getEntity());
 	}
 	
-	/**
-	 * Perform a route discontinued event.
-	 * 
-	 * @param event	The event to execute
-	 */
-	public void performEvent(TransportDiscontinuedEvent event) {
-		logger.info("Performing transport discontinued event: {}", event);
 		
-		getStateManipulator().delete(event.getRoute());
-	}
-	
-	/**
-	 * Perform a transport cost update event
-	 * 
-	 * @param event	The event to apply
-	 */
-	public void performEvent(TransportCostUpdateEvent event) {
-		logger.info("Performing transport cost update event: {}", event);
-		
-		Route route = event.getRoute();
-		route.setCarrierVolumeUnitCost(event.getNewVolumeUnitCost());
-		route.setCarrierWeightUnitCost(event.getNewWeightUnitCost());
-		
-		getStateManipulator().save(route);
-	}
-	
-//<<<<<<< .mine
-////	/**
-////	 * Perform a customer price update event
-////	 * 
-////	 * @param event	The event to apply
-////	 */
-////	public void performEvent(CustomerPriceUpdateEvent event) {
-////		logger.info("Performing customer price update event: {}", event);
-////		
-////		CustomerPrice price = event.getCurrentPrice();
-////		price.setPricePerUnitVolume(event.getNewVolumeUnitCost());
-////		price.setPriceperUnitWeight(event.getNewWeightUnitCost());
-////		
-////		getManipulator().save(price);
-////	}
-//=======
-//	/**
-//	 * Perform a customer price update event
-//	 * 
-//	 * @param event	The event to apply
-//	 */
-//	public void performEvent(CustomerPriceUpdateEvent event) {
-//		logger.info("Performing customer price update event: {}", event);
-//		
-//		CustomerPrice price = event.getCurrentPrice();
-//		price.setPricePerUnitVolume(event.getNewVolumeUnitCost());
-//		price.setPricePerUnitWeight(event.getNewWeightUnitCost());
-//		
-//		manipulator.save(price);
-//	}
-//>>>>>>> .r83
-	
-	public void performEvent(DomesticCustomerPriceUpdateEvent event) {
-		logger.info("Performing domestic customer price event: {}", event);
-		
-		getStateManipulator().save(event.getPrice());
-	}
-	
-	/**
-	 * Perform a mail delivery event.
-	 * 
-	 * @param event	The event to process
-	 */
-	public void performEvent(MailDeliveryEvent event) {
-		logger.info("Performing mail devlivery event: {}", event);
-		
-		getStateManipulator().save(event.getDelivery());
-	}
-	
 	/**
 	 * Perform some event.
 	 * 
 	 * @param e	The event to perform
 	 */
 	@SuppressWarnings("unchecked")
-	public void performEvent(Event e) {
+	public void performEvent(EntityOperationEvent<? extends StorageEntity> e) {
 		if (e instanceof EntityUpdateEvent)
 			this.performEvent((EntityUpdateEvent<? extends StorageEntity>) e);
 		if (e instanceof EntityDeleteEvent)
 			this.performEvent((EntityDeleteEvent<? extends StorageEntity>) e);
-		if (e instanceof TransportDiscontinuedEvent)
-			this.performEvent((TransportDiscontinuedEvent) e);
-		if (e instanceof TransportCostUpdateEvent)
-			this.performEvent((TransportCostUpdateEvent) e);
-		if (e instanceof DomesticCustomerPriceUpdateEvent)
-			this.performEvent((DomesticCustomerPriceUpdateEvent) e);
-		if (e instanceof MailDeliveryEvent)
-			this.performEvent((MailDeliveryEvent) e);
 	}
 	
 	/**
@@ -207,32 +120,48 @@ public class EntityManager {
 		};
 	}
 	
-	public EntityManager getEntityManagerAtEventPoint(long id) {
-		final List<Event> events = this.getLog().getAllEventsBefore(id);
+	public final EntityManager getEntityManagerAtEventPoint(final long id) {
+		logger.info("Getting state at event ID {}", id);
 		
 		return new EntityManager() {
-			{
-				for (Event e : events)
-					super.performEvent(e);
-			}
+			protected HibernateImpl state = 
+				new HibernateImpl() {
+					@Override
+					protected Criteria getEntityCriteria(Class<? extends StorageEntity> clazz) {
+						return super.getEntityCriteria(clazz)
+								.add(Restrictions.le("relateEventID.Id", id));
+					}
+					
+					@Override
+					protected Criteria getEventCriteria(Class<? extends EntityOperationEvent> clazz) {
+						return super.getEventCriteria(clazz)
+								.add(Restrictions.le("uid.Id", id));
+					}
+				};
 			
-			@Inject
-			@Named("memory")
-			private StateManipulator memoryState;
-			
-			@Override @InjectOnCall
+			@Override
 			protected StateManipulator getStateManipulator() {
-				return this.memoryState;
+				return state;
 			}
 			
-			@Override 
+			@Override
 			protected ReportManager getReportManager() {
-				return this.memoryState;
+				return state;
 			}
 			
 			@Override
 			protected LogManipulator getLogManipulator() {
-				return null;
+				return state;
+			}
+			
+			@Override
+			public void performEvent(EntityUpdateEvent<? extends StorageEntity> event) {
+				throw new UnsupportedOperationException("Can no perform events on past states");
+			}
+			
+			@Override
+			public void performEvent(EntityDeleteEvent<? extends StorageEntity> event) {
+				throw new UnsupportedOperationException("Can no perform events on past states");
 			}
 		};
 	}

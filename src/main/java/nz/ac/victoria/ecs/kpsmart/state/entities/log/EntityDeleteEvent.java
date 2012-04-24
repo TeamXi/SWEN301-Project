@@ -5,7 +5,7 @@ import javax.persistence.MappedSuperclass;
 import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
 
 @MappedSuperclass
-public class EntityDeleteEvent<EntityType extends StorageEntity> extends EntityOperationEvent<EntityType> {
+public abstract class EntityDeleteEvent<EntityType extends StorageEntity> extends EntityOperationEvent<EntityType> {
 
 	protected EntityDeleteEvent(EntityType entity) {
 		super(entity);

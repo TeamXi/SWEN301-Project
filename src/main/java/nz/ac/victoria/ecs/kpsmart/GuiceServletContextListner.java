@@ -38,7 +38,7 @@ public final class GuiceServletContextListner implements ServletContextListener 
 		
 		Module[] modules = {
 				new HibernateStateManipulationModule(),
-				new InMemoryStateManipulationModule(),
+//				new InMemoryStateManipulationModule(),
 				new LoggingEntityManager.Module(),
 				new DijkstraRouteFinder.Module()
 		};
