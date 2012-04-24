@@ -46,7 +46,7 @@ public class CarrierInfoActionBean extends FormActionBean {
 	
 	@HandlesEvent("updateform")
 	public Resolution updateForm() {
-		name = getStateManipulator().getCarrier(carrierId).getName();
+		name = getState().getCarrier(carrierId).getName();
 		return new ForwardResolution("/views/event/carrierForm.jsp");
 	}
 	
@@ -57,7 +57,7 @@ public class CarrierInfoActionBean extends FormActionBean {
 	
 	@HandlesEvent("update")
 	public Resolution submitupdate() {
-		Carrier carrier = getStateManipulator().getCarrier(carrierId);
+		Carrier carrier = getState().getCarrier(carrierId);
 		configureCarrier(carrier);
 		CarrierUpdateEvent event = new CarrierUpdateEvent();
 		event.setEntity(carrier);
@@ -68,7 +68,7 @@ public class CarrierInfoActionBean extends FormActionBean {
 	@HandlesEvent("delete")
 	public Resolution deleteCarrier() {
 		CarrierDeleteEvent event = new CarrierDeleteEvent();
-		event.setEntity(getStateManipulator().getCarrier(carrierId));
+		event.setEntity(getState().getCarrier(carrierId));
 		getEntityManager().performEvent(event);
 		return new FormValidationResolution(true, null, null);
 	}

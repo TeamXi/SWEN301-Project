@@ -12,7 +12,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<c:forEach var="route" items="${actionBean.stateManipulator.allRoute}">
+		<c:forEach var="route" items="${actionBean.state.allRoute}">
 			<tr>
 				<td><c:out value="${route.startPoint.name}" /></td>
 				<td><c:out value="${route.endPoint.name}" /></td>

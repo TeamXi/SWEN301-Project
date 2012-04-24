@@ -234,41 +234,6 @@ public class EntityManager {
 			protected LogManipulator getLogManipulator() {
 				return null;
 			}
-			
-			@Override
-			public void performEvent(Event e) {
-				throw new UnsupportedOperationException();
-			}
-			
-			@Override
-			public void performEvent(EntityUpdateEvent<? extends StorageEntity> event) {
-				throw new UnsupportedOperationException();
-			}
-			
-			@Override
-			public void performEvent(EntityDeleteEvent<? extends StorageEntity> event) {
-				throw new UnsupportedOperationException();
-			}
-			
-			@Override
-			public void performEvent(TransportDiscontinuedEvent event) {
-				throw new UnsupportedOperationException();
-			}
-			
-			@Override
-			public void performEvent(TransportCostUpdateEvent event) {
-				throw new UnsupportedOperationException();
-			}
-			
-			@Override
-			public void performEvent(DomesticCustomerPriceUpdateEvent event) {
-				throw new UnsupportedOperationException();
-			}
-			
-			@Override
-			public void performEvent(MailDeliveryEvent event) {
-				throw new UnsupportedOperationException();
-			}
 		};
 	}
 	

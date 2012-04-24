@@ -146,4 +146,21 @@ public interface ReadOnlyStateManipulator {
 	 * @return	The mail deliveries
 	 */
 	public Collection<MailDelivery> getAllMailDeliveries();
+	
+
+	/**
+	 * Get a carrier by it's unique name
+	 * 
+	 * @param name	The name of the carrier
+	 * @return	The carrier or null if none was found
+	 */
+	public Carrier getCarrier(String name);
+
+	/**
+	 * Get a customer price by its ID
+	 * 
+	 * @param id the id of the customer price
+	 * @return
+	 */
+	public CustomerPrice getCustomerPriceById(long id);
 }

@@ -56,10 +56,10 @@ public class MailActionBean extends AbstractActionBean {
 	}
 	
 	private MailDelivery processDelivery() {
-		Location from = getStateManipulator().getLocationForName(source);
-		Location to = getStateManipulator().getLocationForName(destination);
+		Location from = getState().getLocationForName(source);
+		Location to = getState().getLocationForName(destination);
 		
-		Price price = getStateManipulator().getPrice(from, to, priority);
+		Price price = getState().getPrice(from, to, priority);
 		if(price != null) {
 			List<Route> route = this.routeFinder.calculateRoute(
 					priority, 

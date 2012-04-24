@@ -12,7 +12,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<c:forEach var="price" items="${actionBean.stateManipulator.allCustomerPrices}">
+		<c:forEach var="price" items="${actionBean.state.allCustomerPrices}">
 			<c:set value="${price.startLocation!=null?price.startLocation.name:'New Zealand'}" var="from"></c:set>
 			<c:set value="${price.endLocation!=null?price.endLocation.name:'New Zealand'}" var="to"></c:set>
 			<tr>

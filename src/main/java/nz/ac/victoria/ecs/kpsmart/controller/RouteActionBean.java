@@ -42,7 +42,7 @@ public class RouteActionBean extends FormActionBean {
 	public Resolution updateRouteScreen() {
 		disableFormField(new String[]{"source", "destination", "transportType", "carrier"});
 		
-		Route route = getStateManipulator().getRouteByID(routeId);
+		Route route = getState().getRouteByID(routeId);
 		source = route.getStartPoint().getName();
 		destination = route.getEndPoint().getName();
 		transportType = route.getTransportMeans();
@@ -62,7 +62,7 @@ public class RouteActionBean extends FormActionBean {
 	
 	@HandlesEvent("update")
 	public Resolution updateRouteInfo(){
-		Route updatedRoute = fillUpdateRoute(getStateManipulator().getRouteByID(routeId));
+		Route updatedRoute = fillUpdateRoute(getState().getRouteByID(routeId));
 		RouteUpdateEvent event = new RouteUpdateEvent();
 		event.setEntity(updatedRoute);
 		getEntityManager().performEvent(event);
@@ -98,16 +98,16 @@ public class RouteActionBean extends FormActionBean {
 	@HandlesEvent("delete")
 	public Resolution deleteRoute() {
 		RouteDeleteEvent event = new RouteDeleteEvent();
-		event.setEntity(getStateManipulator().getRouteByID(routeId));
+		event.setEntity(getState().getRouteByID(routeId));
 		getEntityManager().performEvent(event);
 		return new FormValidationResolution(true, null, null);
 	}
 
 	private Route fillNewRoute(Route newRoute) {
-		newRoute.setStartPoint(getStateManipulator().getLocationForName(source));
-		newRoute.setEndPoint(getStateManipulator().getLocationForName(destination));
+		newRoute.setStartPoint(getState().getLocationForName(source));
+		newRoute.setEndPoint(getState().getLocationForName(destination));
 		newRoute.setTransportMeans(transportType);
-		newRoute.setCarrier(getStateManipulator().getCarrier(carrier));
+		newRoute.setCarrier(getState().getCarrier(carrier));
 		newRoute.setCarrierVolumeUnitCost(volumeCost);
 		newRoute.setCarrierWeightUnitCost(weightCost);
 		newRoute.setFrequency(frequency);

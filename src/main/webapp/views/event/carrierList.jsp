@@ -7,7 +7,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<c:forEach var="carrier" items="${actionBean.stateManipulator.allCarriers}">
+		<c:forEach var="carrier" items="${actionBean.state.allCarriers}">
 			<tr>
 				<td>
 					<c:out value="${carrier.name}"/>

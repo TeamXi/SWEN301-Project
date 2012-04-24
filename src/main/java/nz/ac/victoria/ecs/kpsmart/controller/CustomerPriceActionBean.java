@@ -38,7 +38,7 @@ public class CustomerPriceActionBean extends FormActionBean {
 	public Resolution updateCustomerPriceScreen() {
 		disableFormField(new String[] {"direction", "location", "priority"});
 		
-		CustomerPrice price = getStateManipulator().getCustomerPriceById(priceId);
+		CustomerPrice price = getState().getCustomerPriceById(priceId);
 		location = price.getLocation().getName();
 		direction = price.getDirection().flip();
 		priority = price.getPriority();
@@ -88,7 +88,7 @@ public class CustomerPriceActionBean extends FormActionBean {
 	}
 
 	private void fillPrice(CustomerPrice price) {
-		price.setLocation(getStateManipulator().getLocationForName(location));
+		price.setLocation(getState().getLocationForName(location));
 		price.setDirection(direction.flip());
 		price.setPricePerUnitVolume(volumePrice);
 		price.setPricePerUnitWeight(weightPrice);
@@ -97,7 +97,7 @@ public class CustomerPriceActionBean extends FormActionBean {
 	
 	@HandlesEvent("update")
 	public Resolution updateCustomerPrice() {
-		CustomerPrice price = getStateManipulator().getCustomerPriceById(priceId);
+		CustomerPrice price = getState().getCustomerPriceById(priceId);
 		updatePrice(price);
 		
 		Resolution validation = validatePrice(price);
@@ -120,7 +120,7 @@ public class CustomerPriceActionBean extends FormActionBean {
 	@HandlesEvent("delete")
 	public Resolution deletePrice() {
 		CustomerPriceDeleteEvent event = new CustomerPriceDeleteEvent();
-		event.setEntity(getStateManipulator().getCustomerPriceById(priceId));
+		event.setEntity(getState().getCustomerPriceById(priceId));
 		getEntityManager().performEvent(event);
 		return new FormValidationResolution(true, null, null);
 	}

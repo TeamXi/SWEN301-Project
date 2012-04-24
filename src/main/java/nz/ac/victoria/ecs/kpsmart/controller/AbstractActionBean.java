@@ -6,16 +6,19 @@ import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import nz.ac.victoria.ecs.kpsmart.InjectOnContruct;
 import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.StateManipulator;
+import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReadOnlyLogManipulator;
+import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReadOnlyStateManipulator;
 
 @InjectOnContruct
 public abstract class AbstractActionBean implements ActionBean {
 	private ActionBeanContext context;
 	
-	@Inject
-	private StateManipulator stateManipulator;
-	public StateManipulator getStateManipulator() {
-		return stateManipulator;
+	public ReadOnlyStateManipulator getState() {
+		return getEntityManager().getData();
+	}
+	
+	public ReadOnlyLogManipulator getLog() {
+		return getEntityManager().getLog();
 	}
 	
 	@Inject
