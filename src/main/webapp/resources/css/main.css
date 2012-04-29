@@ -80,3 +80,49 @@ tr:hover .row-hover-controls {
 .kps-carrousel > .kps-carrousel-body > div {
 	float: left;
 }
+#chart-modal{
+	display: none;
+	height: 580px;
+	width: 980px;
+	margin-left: -470px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	margin-top: -300px;
+	
+}
+#chart-modal .modal-body{
+	height: 900px;
+	max-height: 900px
+}
+#chart-modal .modal-footer{
+	
+}
+.graph{
+	position: absolute;
+	
+}
+#printButton, #exportButton{
+	display: none;
+}
+#profitsChart{
+	height: 270px;
+	left: -40px;
+	top: 60px;
+}
+#expensesChart{
+	height: 270px;
+	left: 450px;
+	top: 60px;
+}
+#eventsTimeChart{
+	top: 350px;
+	height: 300px;
+	margin-bottom: 100px;
+	width: 900px;
+}
+#financesTimeChart{
+	top: 650px;
+	height: 300px;
+	margin-bottom: 100px;
+	width: 900px;
+}

@@ -18,9 +18,12 @@
 				};
 			</script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jQuery-1.7.0.min.js"></script>
+			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/highcharts.js"></script>
+			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/exporting.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/main.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/mail.js"></script>
+			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/charts.js"></script>
 			<stripes:layout-component name="scripts" />
 		</head>
 		
@@ -38,7 +41,7 @@
 							<ul class="nav">
 								<li><a href="${pageContext.request.contextPath}/dashboard">Dashboard</a></li>
 								<c:if test="<%= isClerk() %>">
-									<li><a href="#" class="new-mail-delivery-link">Mail delivery</a>
+									<li><a href="#" class="new-mail-delivery-link">Mail delivery</a></li>
 									<li class="dropdown">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown">Routes<b class="caret"></b></a>
 										<ul class="dropdown-menu">
@@ -60,7 +63,8 @@
 											<li><a id="menu-newCustomerPriceDropdown" href="${pageContext.request.contextPath}/event/customerprice#new">New</a></li>
 										</ul>
 									</li>
-									<li><a href="${pageContext.request.contextPath}/event/location?map">Locations map</a>
+									<li><a href="${pageContext.request.contextPath}/event/location?map">Locations map</a></li>
+									<li><a href="#" class="stats-dropdown-link">Statistics</a></li>
 								</c:if>
 							</ul>
 							
