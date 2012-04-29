@@ -13,60 +13,22 @@
 				var eventList = document.getElementById("eventlist");
 				
 				for(var n=0;n<events.length;n++) {
-					var eventEl = document.createElement('li');
-					eventEl.setAttribute('class', 'event');
+					var eventEl = document.createElement('a');
+					eventEl.innerHTML = events[n].id;
 					(function(event) {
 						$(eventEl).tooltip({title: new Date(event.timestamp).format("h:Mtt ddd dS mmm 'yy")}).click(function() {
 							window.location = KPS.siteRoot + "/dashboard?atevent="+event.id;
 						});
 					}(events[n]));
-					eventList.appendChild(eventEl);
+					var td = document.createElement('td');
+					td.appendChild(eventEl);
+					eventList.appendChild(td);
 				}
 			});
 		</script>
 	</stripes:layout-component>
 	<stripes:layout-component name="styles">
-		<style type="text/css">
-			#eventscrubber {
-				margin-bottom: 10px;
-			}
-			
-			#eventscrubber .clip-box {
-				width: 100%;
-				height: 30px;
-				margin-left: 20px;
-				margin-right: 20px;
-				overflow: hidden;
-				display: inline-block;
-			}
-			
-			#eventscrubber ul {
-				list-style: none;
-				padding: 0;
-				margin: 0;
-/*				margin-left: -50px; */
-			}
-			
-			#eventscrubber ul > li {
-				float: left;
-				margin-right: 5px;
-			}
-			
-			#eventscrubber li {
-				background-color: red;
-			}
-			
-			#eventscrubber li.event {
-				width: 10px;
-				height: 22px;
-				margin-top: 8px;
-			}
-			
-			#eventscrubber li.marker {
-				width: 5px;
-				height: 30px;
-			}
-		</style>
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/dashboard.css" />
 	</stripes:layout-component>
 	<stripes:layout-component name="content">
 		<div class="row-fluid">
@@ -76,13 +38,20 @@
 		</div>
 		
 		<div class="row-fluid">
-				<div class="span12" id="eventscrubber">
-				<span>&lt;</span>
-				<div class="clip-box">
-					<ul id="eventlist">
-					</ul>
-				</div>
-				<span>&gt;</span>
+			<div class="span12" id="eventscrubber">
+					<table id="eventpager">
+						<tr>
+							<td><a href="#">&larr;</a></td>
+							<td>
+								<div>
+									<table class="nested">
+										<tr id="eventlist"></tr>
+									</table>
+								</div>
+							</td>
+							<td><a href="#">&rarr;</a></td>
+						</tr>
+					</table>
 			</div>
 		</div>
 		<div class="row-fluid">
