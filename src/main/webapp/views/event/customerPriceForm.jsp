@@ -9,7 +9,7 @@
 			<div class="controls">
 				<stripes:text class="portEntry" name="location" value="${actionBean.location}" disabled="${actionBean.disabledFormFields['location']}"/>
 				<stripes:select name="direction" style="width:65px" value="${actionBean.direction}" disabled="${actionBean.disabledFormFields['direction']}">
-					<stripes:options-enumeration enum="nz.ac.victoria.ecs.kpsmart.state.entities.state.Direction" />
+					<stripes:options-enumeration enum="nz.ac.victoria.ecs.kpsmart.entities.state.Direction" />
 				</stripes:select>
 				<span class="help-inline">New Zealand</span>
 			</div>

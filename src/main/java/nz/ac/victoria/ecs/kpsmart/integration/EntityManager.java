@@ -47,7 +47,7 @@ public class EntityManager {
 		logger.info("Performing entity update event: {}", event);
 		
 		event.getEntity().setRelateEventID(event.getUid());
-		getStateManipulator().save(event.getEntity());
+		getState().save(event.getEntity());
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public class EntityManager {
 	public void performEvent(EntityDeleteEvent<? extends StorageEntity> event) {
 		logger.info("Performing entity delete event: {}", event);
 		
-		getStateManipulator().delete(event.getEntity());
+		getState().delete(event.getEntity());
 	}
 	
 		
@@ -67,12 +67,13 @@ public class EntityManager {
 	 * 
 	 * @param e	The event to perform
 	 */
-	@SuppressWarnings("unchecked")
 	public void performEvent(EntityOperationEvent<? extends StorageEntity> e) {
 		if (e instanceof EntityUpdateEvent)
 			this.performEvent((EntityUpdateEvent<? extends StorageEntity>) e);
-		if (e instanceof EntityDeleteEvent)
+		else if (e instanceof EntityDeleteEvent)
 			this.performEvent((EntityDeleteEvent<? extends StorageEntity>) e);
+		else
+			throw new IllegalStateException("The event type "+e.getClass().getName()+" is not a recognized event");
 	}
 	
 	/**
@@ -83,7 +84,7 @@ public class EntityManager {
 	public ReadOnlyState getData() {
 		logger.debug("Getting read only state manipulator");
 		
-		return getStateManipulator();
+		return getState();
 	}
 	
 	/**
@@ -96,7 +97,7 @@ public class EntityManager {
 	}
 	
 	public Report getReports() {
-		return this.getReportManager();
+		return this.getReport();
 	}
 	
 	/**
@@ -112,7 +113,7 @@ public class EntityManager {
 			private State memoryState;
 			
 			@Override @InjectOnCall
-			protected State getStateManipulator() {
+			protected State getState() {
 				return this.memoryState;
 			}
 		};
@@ -121,20 +122,31 @@ public class EntityManager {
 	public final EntityManager getEntityManagerAtEventPoint(final long id) {
 		logger.info("Getting state at event ID {}", id);
 		
-		return new EntityManager() {			
-			@Override
-			protected State getStateManipulator() {
-				return state.getAtEventID(id);
+		return new EntityManager() {	
+			private State state;
+			private Report report;
+			private Log log;
+			
+			{
+				this.state = EntityManager.this.state.getAtEventID(id);
+				this.report = EntityManager.this.report.getAtEventID(id);
+				if (EntityManager.this.log != null)
+					this.log = EntityManager.this.log.getAtEventID(id);
 			}
 			
 			@Override
-			protected Report getReportManager() {
-				return report.getAtEventID(id);
+			protected State getState() {
+				return this.state;
+			}
+			
+			@Override
+			protected Report getReport() {
+				return this.report;
 			}
 			
 			@Override
 			protected Log getLogManipulator() {
-				return log.getAtEventID(id);
+				return this.log;
 			}
 			
 			@Override
@@ -149,11 +161,11 @@ public class EntityManager {
 		};
 	}
 	
-	protected State getStateManipulator() {
+	protected State getState() {
 		return state;
 	}
 
-	protected Report getReportManager() {
+	protected Report getReport() {
 		return report;
 	}
 	

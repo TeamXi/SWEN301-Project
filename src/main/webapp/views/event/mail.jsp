@@ -35,7 +35,7 @@
 					<stripes:select name="priority">
 						<option value="placeholder">Select a Priority</option>
 						<stripes:options-enumeration
-							enum="nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority" />
+							enum="nz.ac.victoria.ecs.kpsmart.entities.state.Priority" />
 					</stripes:select>
 				</div>
 			</div>

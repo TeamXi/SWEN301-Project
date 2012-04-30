@@ -7,30 +7,32 @@ import java.util.List;
 import net.sourceforge.stripes.action.After;
 import nz.ac.victoria.ecs.kpsmart.GuiceServletContextListner;
 import nz.ac.victoria.ecs.kpsmart.InjectOnCall;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.InMemoryStateManipulationModule;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.StateManipulator;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Carrier;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Location;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Priority;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Route;
+import nz.ac.victoria.ecs.kpsmart.entities.state.TransportMeans;
+import nz.ac.victoria.ecs.kpsmart.integration.HibernateModule;
+import nz.ac.victoria.ecs.kpsmart.state.State;
+import nz.ac.victoria.ecs.kpsmart.state.impl.HibernateState;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 
 public class DijkstraRouteFinderTest {
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		GuiceServletContextListner.init();
+		GuiceServletContextListner.initNoData();
 	}
 	
 	@Before
 	public void setUp() throws Exception {
-		GuiceServletContextListner.overloadModules(new InMemoryStateManipulationModule(true));
+		GuiceServletContextListner.createNewInjector(
+				new HibernateState.Module(), 
+				new HibernateModule("hibernate.memory.properties"));
 		
 		this.route = new DijkstraRouteFinder();
 	}
@@ -42,14 +44,14 @@ public class DijkstraRouteFinderTest {
 	
 	private DijkstraRouteFinder route;
 	
-	@Inject @Named("memory")
-	private StateManipulator state;
+	@Inject
+	private State state;
 
 	@Test @InjectOnCall
 	public void testSingleEdge() {
 		this.state.save(new Carrier("Foo"));
 		this.state.save(new Location("A", 0, 0, false));
-		this.state.save(new Location("B", 0, 0, false));
+		this.state.save(new Location("B", 1, 1, false));
 		this.state.save(new Route(
 				TransportMeans.Air, 
 				this.state.getLocationForName("A"), 

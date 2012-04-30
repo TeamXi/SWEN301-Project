@@ -18,7 +18,6 @@ public class LoggingEntityManager extends EntityManager {
 	public void performEvent(EntityUpdateEvent<? extends StorageEntity> event) {
 		log.save(event);
 		
-		
 		super.performEvent(event);
 	}
 	

@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.util.RouteDurationCalculator;
 
 public class RouteDurationTest {

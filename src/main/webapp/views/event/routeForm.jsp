@@ -26,7 +26,7 @@
 						<c:if test="${actionBean.transportType==null}">
 							<option value="placeholder">Select a transport type</option>
 						</c:if>
-						<stripes:options-enumeration enum="nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans" />
+						<stripes:options-enumeration enum="nz.ac.victoria.ecs.kpsmart.entities.state.TransportMeans" />
 					</stripes:select>
 				</div>
 			</div>
