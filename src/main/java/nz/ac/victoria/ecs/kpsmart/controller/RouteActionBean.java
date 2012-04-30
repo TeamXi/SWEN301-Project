@@ -9,11 +9,11 @@ import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.HandlesEvent;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.RouteDeleteEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.RouteUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Route;
+import nz.ac.victoria.ecs.kpsmart.entities.state.TransportMeans;
 import nz.ac.victoria.ecs.kpsmart.resolutions.FormValidationResolution;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.RouteDeleteEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.RouteUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans;
 
 @UrlBinding("/event/route?{$event}")
 public class RouteActionBean extends FormActionBean {

@@ -8,12 +8,12 @@ import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.HandlesEvent;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.CustomerPriceDeleteEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.CustomerPriceUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.state.CustomerPrice;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Direction;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.resolutions.FormValidationResolution;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.CustomerPriceDeleteEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.CustomerPriceUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Direction;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
 
 @UrlBinding("/event/customerprice?{$event}")
 public class CustomerPriceActionBean extends FormActionBean {

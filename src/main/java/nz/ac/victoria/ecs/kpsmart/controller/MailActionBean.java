@@ -13,14 +13,14 @@ import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.HandlesEvent;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.MailDeliveryUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Location;
+import nz.ac.victoria.ecs.kpsmart.entities.state.MailDelivery;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Price;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Priority;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.resolutions.FormValidationResolution;
 import nz.ac.victoria.ecs.kpsmart.routefinder.RouteFinder;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.MailDeliveryUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.MailDelivery;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Price;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.util.RouteDurationCalculator;
 
 @UrlBinding("/event/mail?{$event}")

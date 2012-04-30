@@ -3,17 +3,17 @@ package nz.ac.victoria.ecs.kpsmart;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import nz.ac.victoria.ecs.kpsmart.entities.logging.CarrierUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.CustomerPriceUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.LocationUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.RouteUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Carrier;
+import nz.ac.victoria.ecs.kpsmart.entities.state.CustomerPrice;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Location;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Priority;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Route;
+import nz.ac.victoria.ecs.kpsmart.entities.state.TransportMeans;
 import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.CarrierUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.CustomerPriceUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.LocationUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.RouteUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.CustomerPrice;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.TransportMeans;
 
 import com.google.inject.Inject;
 
@@ -49,7 +49,7 @@ final class Data {
 		sm.performEvent(new LocationUpdateEvent(l4));
 		Location l5 = createLocation(true, 52.749594, 5.998535, "Amsterdam");
 		sm.performEvent(new LocationUpdateEvent(l5));
-		Location l6 = createLocation(false, -1, -1, "Christchurch");
+		Location l6 = createLocation(false, -43.53, 172.620278, "Christchurch");
 		sm.performEvent(new LocationUpdateEvent(l6));
 		/*
 		 * 

@@ -6,8 +6,8 @@ import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReadOnlyLogManipulator;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReportManager;
+import nz.ac.victoria.ecs.kpsmart.logging.ReadOnlyLog;
+import nz.ac.victoria.ecs.kpsmart.reporting.Report;
 
 @UrlBinding("/dashboard")
 public class DashboardActionBean extends AbstractActionBean {
@@ -19,7 +19,7 @@ public class DashboardActionBean extends AbstractActionBean {
 		return new ForwardResolution("/views/dashboard/dashboard.jsp");
 	}
 	
-	public ReportManager getReportManager() {
+	public Report getReportManager() {
 		return getEntityManager().getReports();
 	}
 	
@@ -29,7 +29,7 @@ public class DashboardActionBean extends AbstractActionBean {
 	}
 	
 	@Override
-	public ReadOnlyLogManipulator getLog() {
+	public ReadOnlyLog getLog() {
 		return super.getEntityManager().getLog();
 	}
 

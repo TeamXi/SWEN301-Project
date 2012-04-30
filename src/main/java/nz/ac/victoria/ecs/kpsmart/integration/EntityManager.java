@@ -2,19 +2,16 @@ package nz.ac.victoria.ecs.kpsmart.integration;
 
 import nz.ac.victoria.ecs.kpsmart.InjectOnCall;
 import nz.ac.victoria.ecs.kpsmart.InjectOnContruct;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityDeleteEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityOperationEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.HibernateImpl;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.LogManipulator;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReadOnlyLogManipulator;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReadOnlyStateManipulator;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReportManager;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.StateManipulator;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.EntityDeleteEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.EntityOperationEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.EntityUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.state.StorageEntity;
+import nz.ac.victoria.ecs.kpsmart.logging.Log;
+import nz.ac.victoria.ecs.kpsmart.logging.ReadOnlyLog;
+import nz.ac.victoria.ecs.kpsmart.reporting.Report;
+import nz.ac.victoria.ecs.kpsmart.state.ReadOnlyState;
+import nz.ac.victoria.ecs.kpsmart.state.State;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,15 +28,15 @@ import com.google.inject.name.Named;
 @InjectOnContruct
 public class EntityManager {
 	@Inject
-	private StateManipulator manipulator;
+	private State state;
 	
 	@Inject(optional=true)
-	private LogManipulator log;
+	private Log log;
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Inject
-	private ReportManager report;
+	private Report report;
 	
 	/**
 	 * Perform an entity update event on the datasource
@@ -83,7 +80,7 @@ public class EntityManager {
 	 * 
 	 * @return	The read only state manipulator for accessing the current state
 	 */
-	public ReadOnlyStateManipulator getData() {
+	public ReadOnlyState getData() {
 		logger.debug("Getting read only state manipulator");
 		
 		return getStateManipulator();
@@ -94,11 +91,11 @@ public class EntityManager {
 	 * 
 	 * @return	The read only copy of the log, or null if logging is diabled.
 	 */
-	public ReadOnlyLogManipulator getLog() {
+	public ReadOnlyLog getLog() {
 		return getLogManipulator();
 	}
 	
-	public ReportManager getReports() {
+	public Report getReports() {
 		return this.getReportManager();
 	}
 	
@@ -107,14 +104,15 @@ public class EntityManager {
 	 * 
 	 * @return
 	 */
+	@Deprecated
 	public EntityManager getNewInMemoryEntityManager() {
 		return new EntityManager() {
 			@Inject
 			@Named("memory")
-			private StateManipulator memoryState;
+			private State memoryState;
 			
 			@Override @InjectOnCall
-			protected StateManipulator getStateManipulator() {
+			protected State getStateManipulator() {
 				return this.memoryState;
 			}
 		};
@@ -123,35 +121,20 @@ public class EntityManager {
 	public final EntityManager getEntityManagerAtEventPoint(final long id) {
 		logger.info("Getting state at event ID {}", id);
 		
-		return new EntityManager() {
-			protected HibernateImpl state = 
-				new HibernateImpl() {
-					@Override
-					protected Criteria getEntityCriteria(Class<? extends StorageEntity> clazz) {
-						return super.getEntityCriteria(clazz)
-								.add(Restrictions.le("relateEventID.Id", id));
-					}
-					
-					@Override
-					protected Criteria getEventCriteria(Class<? extends EntityOperationEvent> clazz) {
-						return super.getEventCriteria(clazz)
-								.add(Restrictions.le("uid.Id", id));
-					}
-				};
-			
+		return new EntityManager() {			
 			@Override
-			protected StateManipulator getStateManipulator() {
-				return state;
+			protected State getStateManipulator() {
+				return state.getAtEventID(id);
 			}
 			
 			@Override
-			protected ReportManager getReportManager() {
-				return state;
+			protected Report getReportManager() {
+				return report.getAtEventID(id);
 			}
 			
 			@Override
-			protected LogManipulator getLogManipulator() {
-				return state;
+			protected Log getLogManipulator() {
+				return log.getAtEventID(id);
 			}
 			
 			@Override
@@ -166,15 +149,15 @@ public class EntityManager {
 		};
 	}
 	
-	protected StateManipulator getStateManipulator() {
-		return manipulator;
+	protected State getStateManipulator() {
+		return state;
 	}
 
-	protected ReportManager getReportManager() {
+	protected Report getReportManager() {
 		return report;
 	}
 	
-	protected LogManipulator getLogManipulator() {
+	protected Log getLogManipulator() {
 		return log;
 	}
 

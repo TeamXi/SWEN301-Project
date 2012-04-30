@@ -2,9 +2,9 @@ package nz.ac.victoria.ecs.kpsmart.routefinder;
 
 import java.util.List;
 
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Location;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Priority;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Route;
 
 /**
  * Defines an interface that will find a route for mail.

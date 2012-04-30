@@ -5,10 +5,10 @@ import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.HandlesEvent;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.CarrierDeleteEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.CarrierUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Carrier;
 import nz.ac.victoria.ecs.kpsmart.resolutions.FormValidationResolution;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.CarrierDeleteEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.CarrierUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Carrier;
 
 @UrlBinding("/event/carrier?{$event}")
 public class CarrierInfoActionBean extends FormActionBean {

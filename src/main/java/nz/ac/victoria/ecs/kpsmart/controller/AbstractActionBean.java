@@ -6,18 +6,18 @@ import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import nz.ac.victoria.ecs.kpsmart.InjectOnContruct;
 import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReadOnlyLogManipulator;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReadOnlyStateManipulator;
+import nz.ac.victoria.ecs.kpsmart.logging.ReadOnlyLog;
+import nz.ac.victoria.ecs.kpsmart.state.ReadOnlyState;
 
 @InjectOnContruct
 public abstract class AbstractActionBean implements ActionBean {
 	private ActionBeanContext context;
 	
-	public ReadOnlyStateManipulator getState() {
+	public ReadOnlyState getState() {
 		return getEntityManager().getData();
 	}
 	
-	public ReadOnlyLogManipulator getLog() {
+	public ReadOnlyLog getLog() {
 		return getEntityManager().getLog();
 	}
 	

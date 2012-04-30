@@ -3,7 +3,7 @@ package nz.ac.victoria.ecs.kpsmart.util;
 import java.util.Date;
 import java.util.List;
 
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Route;
 
 public class RouteDurationCalculator {
 	private static final long msinhour = 60 * 60 * 1000;

@@ -12,10 +12,10 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 import nz.ac.victoria.ecs.kpsmart.InjectOnContruct;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Location;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Priority;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.Route;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.StateManipulator;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Location;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Priority;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Route;
+import nz.ac.victoria.ecs.kpsmart.state.State;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -23,7 +23,7 @@ import com.google.inject.Inject;
 @InjectOnContruct
 public final class DijkstraRouteFinder implements RouteFinder {
 	@Inject
-	private StateManipulator state;
+	private State state;
 	
 	@Override
 	public List<Route> calculateRoute(Priority priority, Location startPoint, Location endPoint, float weight, float volume) {

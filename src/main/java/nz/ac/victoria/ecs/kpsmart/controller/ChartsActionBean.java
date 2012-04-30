@@ -6,7 +6,7 @@ import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 import net.sourceforge.stripes.ajax.JavaScriptResolution;
 import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.ReportManager;
+import nz.ac.victoria.ecs.kpsmart.reporting.Report;
 
 @UrlBinding("/charts")
 public class ChartsActionBean extends AbstractActionBean{
@@ -18,7 +18,7 @@ public class ChartsActionBean extends AbstractActionBean{
 		return new ForwardResolution("/views/event/charts.jsp");
 	}
 	
-	public ReportManager getReportManager() {
+	public Report getReportManager() {
 		return getEntityManager().getReports();
 	}
 	

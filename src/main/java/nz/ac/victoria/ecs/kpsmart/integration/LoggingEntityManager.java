@@ -1,10 +1,10 @@
 package nz.ac.victoria.ecs.kpsmart.integration;
 
 import nz.ac.victoria.ecs.kpsmart.InjectOnContruct;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityDeleteEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.log.EntityUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.state.entities.state.StorageEntity;
-import nz.ac.victoria.ecs.kpsmart.state.manipulation.LogManipulator;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.EntityDeleteEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.EntityUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.state.StorageEntity;
+import nz.ac.victoria.ecs.kpsmart.logging.Log;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -12,7 +12,7 @@ import com.google.inject.Inject;
 @InjectOnContruct
 public class LoggingEntityManager extends EntityManager {
 	@Inject
-	private LogManipulator log;
+	private Log log;
 	
 	@Override
 	public void performEvent(EntityUpdateEvent<? extends StorageEntity> event) {
