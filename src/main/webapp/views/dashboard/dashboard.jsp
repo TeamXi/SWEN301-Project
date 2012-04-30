@@ -8,23 +8,11 @@
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dashboard.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dateformat.js"></script>
 		<script type="text/javascript">
-			var events = <%@include file="eventListJSON.jsp"%>;
-			$(document).ready(function() {
-				var eventList = document.getElementById("eventlist");
-				
-				for(var n=0;n<events.length;n++) {
-					var eventEl = document.createElement('a');
-					eventEl.innerHTML = events[n].id;
-					(function(event) {
-						$(eventEl).tooltip({title: new Date(event.timestamp).format("h:Mtt ddd dS mmm 'yy")}).click(function() {
-							window.location = KPS.siteRoot + "/dashboard?atevent="+event.id;
-						});
-					}(events[n]));
-					var td = document.createElement('td');
-					td.appendChild(eventEl);
-					eventList.appendChild(td);
-				}
-			});
+			var KPS = KPS || {};
+			KPS.dashboard = KPS.dashboard || {};
+			
+			KPS.dashboard.events = <%@include file="eventListJSON.jsp"%>;
+			KPS.dashboard.currentEvent = ${actionBean.atevent};
 		</script>
 	</stripes:layout-component>
 	<stripes:layout-component name="styles">
@@ -39,19 +27,17 @@
 		
 		<div class="row-fluid">
 			<div class="span12" id="eventscrubber">
-					<table id="eventpager">
-						<tr>
-							<td><a href="#">&larr;</a></td>
-							<td>
-								<div>
-									<table class="nested">
-										<tr id="eventlist"></tr>
-									</table>
-								</div>
-							</td>
-							<td><a href="#">&rarr;</a></td>
-						</tr>
-					</table>
+				<table id="eventpager">
+					<tr>
+						<td id="larrId"><a href="#" onclick="KPS.dashboard.goLeft(this)">&larr;</a></td>
+						<td id="eventListContainer">
+							<div style="width: 10000px;" id="eventList">
+								
+							</div>
+						</td>
+						<td id="rarrId"><a href="#" onclick="KPS.dashboard.goRight(this)">&rarr;</a></td>
+					</tr>
+				</table>
 			</div>
 		</div>
 		<div class="row-fluid">
