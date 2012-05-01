@@ -2,6 +2,8 @@ package nz.ac.victoria.ecs.kpsmart.routeduration;
 
 import static org.junit.Assert.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -83,5 +85,29 @@ public class RouteDurationTest {
 		routes.add(r2);
 		
 		assertEquals(10*msinhour+3*msinhour+1*msinhour-1, RouteDurationCalculator.calculate(routes, now));
+	}
+	
+	@Test
+	public void testRomeWellington() throws ParseException {
+		Date startTime = new SimpleDateFormat("y-m-d h:m:s").parse("2012-03-27 11:18:18");
+		Date now = new Date();
+		
+		Route r1 = Route.newInstance();
+		r1.setDuration(10);
+		r1.setFrequency(10);
+		r1.setStartingTime(startTime);
+		
+		List<Route> routes = new ArrayList<Route>();
+		routes.add(r1);
+		
+		long previousDepartureNumber = (now.getTime() - startTime.getTime())/(10*msinhour);
+		long nextDepartureNumber = previousDepartureNumber+1;
+		long departureTime = nextDepartureNumber * (10*msinhour);
+		long departureDelay = departureTime + startTime.getTime() - now.getTime();
+		long duration = departureDelay + 10*msinhour;
+		
+		System.out.println(duration/msinhour+":"+(duration-(duration/msinhour)*msinhour)/(60*1000));
+		
+		assertEquals(duration, RouteDurationCalculator.calculate(routes, now));
 	}
 }

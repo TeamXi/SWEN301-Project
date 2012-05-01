@@ -101,7 +101,7 @@ public class DefaultReport implements Report {
 							continue;
 						
 						revinue += price.getCost(m);
-						totalDeliveryTime += m.getShippingDuration()/msinhour;
+						totalDeliveryTime += m.getShippingDuration()/(double)msinhour;
 						mailCount++;
 						
 						for (Route r : m.getRoute())
