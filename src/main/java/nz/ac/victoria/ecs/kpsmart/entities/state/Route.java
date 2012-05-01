@@ -279,7 +279,7 @@ public final class Route extends StorageEntity implements Serializable {
 	}
 
 	/**
-	 * get the duration of the delivery in ms
+	 * get the duration of the delivery in hours
 	 * @return
 	 */
 	public int getDuration() {
@@ -287,7 +287,7 @@ public final class Route extends StorageEntity implements Serializable {
 	}
 
 	/**
-	 * set the duration of the delivery in ms
+	 * set the duration of the delivery in hours
 	 * @param duration
 	 */
 	public void setDuration(int duration) {
