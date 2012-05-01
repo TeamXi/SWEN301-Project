@@ -64,7 +64,6 @@
 										</ul>
 									</li>
 									<li><a href="${pageContext.request.contextPath}/event/location?map">Locations map</a></li>
-									<li><a href="#" class="stats-dropdown-link">Statistics</a></li>
 								</c:if>
 							</ul>
 							

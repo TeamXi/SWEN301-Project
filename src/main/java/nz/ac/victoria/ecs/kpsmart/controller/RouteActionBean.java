@@ -65,6 +65,7 @@ public class RouteActionBean extends FormActionBean {
 		return new ForwardResolution("/views/event/routeListJSON.jsp");
 	}
 	
+	
 	@HandlesEvent("update")
 	public Resolution updateRouteInfo(){
 		Route updatedRoute = fillUpdateRoute(getState().getRouteByID(routeId));

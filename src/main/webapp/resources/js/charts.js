@@ -19,32 +19,41 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
 	var eventsTimeChart 	= $("<div id=\""+eventsTimeId+"\"    class='graph'></div>");
 	var financesTimeChart 	= $("<div id=\""+financesTimeId+"\"  class='graph'></div>");
 	
+	var chartRevenue;
+	var chartExpenses;
+	var chartEventsTime;
+	var chartFinances;
 	
 	cls.refreshExpensesChart = function(){
 		var chartOpts = getDonutOpts(expensesChartId,"Expenses","Locations","");
 		resetCounters();
 		chartOpts.series[0].data = parseFinancesGlobal('expenditure');
 		chartOpts.series[1].data = parseFinancesByRoute('expenditure');
-		new Highcharts.Chart(chartOpts);
+		chartExpenses = new Highcharts.Chart(chartOpts);
 	};
 	cls.refreshRevenueChart = function(){
-		var chartOpts = getDonutOpts(profitsChartId,"Profits","Locations",""); 
+		var chartOpts = getDonutOpts(profitsChartId,"Revenue","Locations",""); 
 		resetCounters();
 		chartOpts.series[0].data = parseFinancesGlobal('revenue');
 		chartOpts.series[1].data = parseFinancesByRoute('revenue');
-		new Highcharts.Chart(chartOpts);
+		chartRevenue = new Highcharts.Chart(chartOpts);
 	};
 	cls.refreshFinancesOverTime = function(){
 		var financeData = getDummyFinanceData();
 		var chartOpts = getFinancesOverTimeOpts(financesTimeId,financeData);
-		new Highcharts.Chart(chartOpts);
+		chartFinances = new Highcharts.Chart(chartOpts);
 	};
 	cls.refreshEventsTimeChart = function(){
 		var eventTimeData = getTimeCategories();
 		var chartOpts = getEventsOverTimeOpts(eventsTimeId,eventTimeData.cats,eventTimeData.values);
-		new Highcharts.Chart(chartOpts);
+		chartEventsTime = new Highcharts.Chart(chartOpts);
 	};
-
+	cls.dirtyRefresh = function(){
+		if(chartFinances && chartFinances.refresh) chartFinances.refresh();
+		if(chartEventsTime && chartEventsTime.refresh) chartEventsTime.refresh();
+		if(chartExpenses && chartExpenses.refresh) chartExpenses.refresh();
+		if(chartRevenue && chartRevenue.refresh) chartRevenue.refresh();
+	}
 	cls.refreshCharts = function(){
 		$.get(KPS.siteRoot+"/charts",{},function(data){
 			$data = $(data);
@@ -52,8 +61,10 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
 			$data.load(function(){
 				$data.remove();
 			});
+			$(revenueChart).css('height',$(revenueChart).width()+"px");
+			$(expensesChart).css('height',$(expensesChart).width()+"px");
 			//Comment out line below to use real data
-			cls.setFinancesDummyData();
+			//cls.setFinancesDummyData();
 			cls.refreshExpensesChart();
 			cls.refreshRevenueChart();
 			cls.refreshEventsTimeChart();
@@ -348,27 +359,23 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
         };
 		return chartOpts;
 	}
-	cls.show = function(){
-		cls.refreshCharts();
-		cls.modal.modal('show');
-	};
+
 	
 	
 	$(document).ready(function(){
-		$chartModal = $('<div id="chart-modal" class="modal fade in"><div class="modal-header"><a class="close" data-dismiss="modal">×</a><h3>Statistics</h3></div><div class="modal-body"></div><div class="modal-footer"><a class="btn btn-success">Ok</a></div>');
-		$body 		= $(".modal-body",$chartModal);
-		$ok 		= $(".btn",$chartModal);
-		cls.modal 	= $chartModal;
+		$revExpSection = $("#dashboard-tab-revenue-expenditure");
+
+		$noEventsSection = $("#dashboard-tab-no-of-events");
+
+		$revExpSection.append(financesTimeChart);
+		$revExpSection.append(expensesChart);
+		$revExpSection.append(revenueChart);
+		$noEventsSection.append(eventsTimeChart);
+
 		
-		$('body').append($chartModal);
 		
-		$body.append(expensesChart);
-		$body.append(revenueChart);
-		$body.append(eventsTimeChart);
-		$body.append(financesTimeChart);
+		$(".activate-graph").click(function(){cls.refreshCharts();});
 		
-		$(".stats-dropdown-link").click(function(){cls.show();				});
-		$ok.click(						function(){cls.modal.modal('hide');	});
 		
 	});
 	
