@@ -14,6 +14,40 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 			}
 	};
 	
+	var doneModalConfiguration = {
+			title: "Delivery summary",
+			okButton: {
+				title: "Close",
+				action: function() {
+					KPS.modal.hide();
+				}
+			}
+	};
+	
+	var summaryMap = undefined;
+	
+	function applyRoutesOverlay(routes){
+		for(var routeIdx in routes){
+			var route = routes[routeIdx];
+			var startPos = new google.maps.LatLng(route.from.lat, route.from.lng);
+			var endPos = new google.maps.LatLng(route.to.lat, route.to.lng);
+			if(startPos && endPos) {
+				new google.maps.Polyline({
+					path: [startPos,endPos],
+					strokeColor: "#228B22",
+					strokeWeight: 2,
+					map: summaryMap,
+					geodesic: true,
+					strokeOpacity: 0.5
+				});
+			}
+		}
+	}
+	
+	function setUpMap() {
+		summaryMap = KPS.util.map.newInstance(document.getElementById('mail-success-info-route-map'), 1, 0, 0);
+	}
+	
 	cls.submitForm = function(id) {
 		var form = document.getElementById(id);
 		if(!validateForm(form)) return;
@@ -25,13 +59,21 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 			if(!status){
 				KPS.validation.validationErrors(form, returnObj.validation);
 			}else{
-				$("#addMailSuccessMessage").fadeIn(500,function(){
-					setTimeout(function () {
-						$("#addMailSuccessMessage").fadeOut(500);
-					}, 1000);
-				});
+				KPS.modal.configure(doneModalConfiguration);
+				KPS.modal.carrousel.show(1);
+				
+				if(!summaryMap) {
+					setUpMap();
+				}
+				else {
+					
+				}
+				applyRoutesOverlay(returnObj.data.summary.route);
+				
+				document.getElementById('mail-success-info-revenue').innerHTML = returnObj.data.summary.revenue;
+				document.getElementById('mail-success-info-expenditure').innerHTML = returnObj.data.summary.expenditure;
+				document.getElementById('mail-success-info-delivery-duration').innerHTML = (returnObj.data.summary.duration/1000/60/60) + " hours";
 			}
-			
 		});
 	};
 	
@@ -96,6 +138,7 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 				KPS.modal.load(KPS.siteRoot+"/event/mail", function(){
 					KPS.util.disableInputAutocomplete();
 					
+					KPS.modal.carrousel.show(0);
 					KPS.modal.configure(modalConfiguration);
 					KPS.modal.show();
 				});

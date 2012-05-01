@@ -7,7 +7,6 @@
 	<stripes:layout-component name="scripts">
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/route.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/formvalidation.js"></script>
-		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 	</stripes:layout-component>
 	<stripes:layout-component name="content">
 		<div class="row-fluid">
@@ -28,7 +27,7 @@
 				<select id="newLocationMapLocationResults">
 				</select>
 				Is international: <input type="checkbox" checked="checked" id="newLocationMapLocationIsInternational" />
-				<div id="newLocationMap"></div>
+				<div id="newLocationMap" class="modal-map"></div>
 			</div>
 		</div>
 	</stripes:layout-component>

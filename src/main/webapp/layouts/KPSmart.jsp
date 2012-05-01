@@ -17,6 +17,7 @@
 					siteRoot: "${pageContext.request.contextPath}",
 				};
 			</script>
+			<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jQuery-1.7.0.min.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/highcharts.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/exporting.js"></script>

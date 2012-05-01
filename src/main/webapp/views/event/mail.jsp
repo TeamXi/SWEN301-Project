@@ -6,13 +6,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/mail.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/formvalidation.js"></script>
 
-
 <div>
-	<div class="alertSpacer" style="margin-top: 0px;">
-		<div style="display: none;" id="addMailSuccessMessage"
-			class="alert alert-success">Mail added successfully!
-		</div>
-	</div>
 	<stripes:form id="newMailForm" class="form-horizontal" action="javascript:KPS.event.maildelivery.submitForm('newMailForm')">
 		<fieldset>
 			<div class="control-group">
@@ -61,4 +55,13 @@
 			<stripes:submit name="submitbutton" style="visibility:hidden"></stripes:submit>
 		</fieldset>
 	</stripes:form>
+</div>
+
+<div>
+	<dl class="dl-horizontal">
+		<dt>Revenue</dt><dd id="mail-success-info-revenue"></dd>
+		<dt>Expenditure</dt><dd id="mail-success-info-expenditure"></dd>
+		<dt>Delivery time</dt><dd id="mail-success-info-delivery-duration"></dd>
+	</dl>
+	<div id="mail-success-info-route-map" class="modal-map"></div>
 </div>

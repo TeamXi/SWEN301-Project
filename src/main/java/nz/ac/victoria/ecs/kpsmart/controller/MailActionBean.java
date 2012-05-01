@@ -1,7 +1,10 @@
 package nz.ac.victoria.ecs.kpsmart.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,13 +51,38 @@ public class MailActionBean extends AbstractActionBean {
 			MailDeliveryUpdateEvent event = new MailDeliveryUpdateEvent();
 			event.setEntity(delivery);
 			getEntityManager().performEvent(event);
-			return new FormValidationResolution(true, null, null);
+			
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("summary", makeSummary(delivery));
+			return new FormValidationResolution(true, null, null, data);
 		}
 		else {
 			return new FormValidationResolution(false,new String[]{"destination"},new String[]{"KPS does not deliver mail from "+source+" to "+destination});
 		}
 	}
 	
+	private Map<String, Object> makeSummary(MailDelivery delivery) {
+		Map<String, Object> summary = new HashMap<String, Object>();
+		summary.put("duration", delivery.getShippingDuration());
+		summary.put("expenditure", delivery.getCost());
+		summary.put("revenue", delivery.getPrice());
+		List<Object> positions = new ArrayList<Object>();
+		for(Route r : delivery.getRoute()) {
+			Map<String, Double> from = new HashMap<String, Double>();
+			from.put("lat", r.getStartPoint().getLatitude());
+			from.put("lng", r.getStartPoint().getLongitude());
+			Map<String, Double> to = new HashMap<String, Double>();
+			to.put("lat", r.getEndPoint().getLatitude());
+			to.put("lng", r.getEndPoint().getLongitude());
+			Map<String, Object> obj = new HashMap<String, Object>();
+			obj.put("from", from);
+			obj.put("to", to);
+			positions.add(obj);
+		}
+		summary.put("route", positions);
+		return summary;
+	}
+
 	private MailDelivery processDelivery() {
 		Location from = getState().getLocationForName(source);
 		Location to = getState().getLocationForName(destination);

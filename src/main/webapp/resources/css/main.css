@@ -1,5 +1,9 @@
 @CHARSET "US-ASCII";
 
+.clearfix {
+	clear: both;
+}
+
 .content {
 	padding-top: 90px;
 }
@@ -43,8 +47,8 @@ tr:hover .row-hover-controls {
 	margin: -15px 0px 10px 0px;
 }
 
-#newLocationMap {
-	height: 350px;
+.modal-map {
+	height: 310px;
 	width: 100%;
 }
 #globalMap{

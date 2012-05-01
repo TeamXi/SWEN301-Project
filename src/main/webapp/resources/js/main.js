@@ -59,7 +59,7 @@ var waitForFinalEvent = (function () {
 			map.markers = [];
 		}
 	};
-	
+		
 	cls.style = function(map) {
 		var mapStyles = [ {
 			stylers : [ {
@@ -98,6 +98,24 @@ var waitForFinalEvent = (function () {
 
 		map.mapTypes.set('kpsmartstyle', mapType);
 		map.setMapTypeId('kpsmartstyle');
+	};
+	
+	cls.options = function(_zoom, _lat, _lng) {
+		return {
+			zoom : _zoom,
+			center : new google.maps.LatLng(_lat, _lng),
+			disableDefaultUI: true,
+			mapTypeControlOptions: {
+				mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'kpsmartstyle']
+			}
+		};
+	};
+	
+	cls.newInstance = function(el, zoom, lat, lng) {
+		var ret = new google.maps.Map(el, KPS.util.map.options(zoom, lat, lng));
+		KPS.util.map.style(ret);
+		
+		return ret;
 	};
 }(KPS.util.map, jQuery));
 
@@ -228,7 +246,7 @@ function show(obj){
 	// Carrousel setup
 	
 	cls.carrousel = new KPS.carrousel();
-	cls.carrousel.width = 550;
+	cls.carrousel.width = 530;
 	cls.carrousel.spacing = 30;
 	cls.carrousel.setClips(false);
 	cls.carrousel.layout();

@@ -10,14 +10,18 @@ import net.sourceforge.stripes.ajax.JavaScriptResolution;
 public class FormValidationResolution extends JavaScriptResolution {
 
 	public FormValidationResolution(boolean status, String[] fieldNames, String[] fieldMessages) {
-		super(generateObjects(status, fieldNames, fieldMessages));
+		super(generateObjects(status, fieldNames, fieldMessages, null));
 	}
 	
 	public FormValidationResolution(boolean status, Map<String, String> map) {
-		super(generateObjects(status, map.keySet().toArray(new String[]{}), map.values().toArray(new String[]{})));
+		super(generateObjects(status, map.keySet().toArray(new String[]{}), map.values().toArray(new String[]{}), null));
+	}
+	
+	public FormValidationResolution(boolean status, String[] fieldNames, String[] fieldMessages, Object otherInfo) {
+		super(generateObjects(status, fieldNames, fieldMessages, otherInfo));
 	}
 		
-	private static Object generateObjects(boolean status, String[] fieldNames, String[] fieldMessages) {
+	private static Object generateObjects(boolean status, String[] fieldNames, String[] fieldMessages, Object otherInfo) {
 		Map<String, Object> rootObject = new HashMap<String, Object>();
 		rootObject.put("status", status);
 		List<Map<String, String>> fields = new ArrayList<Map<String, String>>();
@@ -30,7 +34,7 @@ public class FormValidationResolution extends JavaScriptResolution {
 			}
 			rootObject.put("validation", fields);
 		}
-		
+		rootObject.put("data", otherInfo);
 		return rootObject;
 	}
 
