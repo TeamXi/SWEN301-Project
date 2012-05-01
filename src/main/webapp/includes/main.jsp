@@ -28,6 +28,10 @@ public String getRoleText() {
 	return "Log in";
 }
 
+public boolean isLoggedIn() {
+	return isClerk() || isManager();
+}
+
 public boolean isClerk() {
 	return userRoleValue != null && userRoleValue.equals("clerk");
 }

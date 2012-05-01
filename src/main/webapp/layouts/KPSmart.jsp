@@ -37,33 +37,35 @@
 			            	<span class="icon-bar"></span>
 			            	<span class="icon-bar"></span>
 						</a>
-						<a href="${pageContext.request.contextPath}/" class="brand">KPSmart</a>
+						<a <c:if test="<%= isLoggedIn() %>">href="${pageContext.request.contextPath}/"</c:if> class="brand">KPSmart</a>
 						<div class="nav-collapse">
 							<ul class="nav">
-								<li><a href="${pageContext.request.contextPath}/dashboard">Dashboard</a></li>
-								<c:if test="<%= isClerk() %>">
-									<li><a href="#" class="new-mail-delivery-link">Mail delivery</a></li>
-									<li class="dropdown">
-										<a href="#" class="dropdown-toggle" data-toggle="dropdown">Routes<b class="caret"></b></a>
-										<ul class="dropdown-menu">
-											<li><a href="${pageContext.request.contextPath}/event/route">List</a></li>
-											<li><a id="menu-newRouteDropdown" href="${pageContext.request.contextPath}/event/route#new">New</a></li>
-										</ul>
-									</li>
-									<li class="dropdown">
-										<a href="#" class="dropdown-toggle" data-toggle="dropdown">Carriers<b class="caret"></b></a>
-										<ul class="dropdown-menu">
-											<li><a href="${pageContext.request.contextPath}/event/carrier">List</a></li>
-											<li><a id="menu-newCarrierDropdown" href="${pageContext.request.contextPath}/event/carrier#new">New</a></li>
-										</ul>
-									</li>
-									<li class="dropdown">
-										<a href="#" class="dropdown-toggle" data-toggle="dropdown">Customer prices<b class="caret"></b></a>
-										<ul class="dropdown-menu">
-											<li><a href="${pageContext.request.contextPath}/event/customerprice">List</a></li>
-											<li><a id="menu-newCustomerPriceDropdown" href="${pageContext.request.contextPath}/event/customerprice#new">New</a></li>
-										</ul>
-									</li>
+								<c:if test="<%= isLoggedIn() %>">
+									<li><a href="${pageContext.request.contextPath}/dashboard">Dashboard</a></li>
+									<c:if test="<%= isClerk() %>">
+										<li><a href="#" class="new-mail-delivery-link">Mail delivery</a></li>
+										<li class="dropdown">
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown">Routes<b class="caret"></b></a>
+											<ul class="dropdown-menu">
+												<li><a href="${pageContext.request.contextPath}/event/route">List</a></li>
+												<li><a id="menu-newRouteDropdown" href="${pageContext.request.contextPath}/event/route#new">New</a></li>
+											</ul>
+										</li>
+										<li class="dropdown">
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown">Carriers<b class="caret"></b></a>
+											<ul class="dropdown-menu">
+												<li><a href="${pageContext.request.contextPath}/event/carrier">List</a></li>
+												<li><a id="menu-newCarrierDropdown" href="${pageContext.request.contextPath}/event/carrier#new">New</a></li>
+											</ul>
+										</li>
+										<li class="dropdown">
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown">Customer prices<b class="caret"></b></a>
+											<ul class="dropdown-menu">
+												<li><a href="${pageContext.request.contextPath}/event/customerprice">List</a></li>
+												<li><a id="menu-newCustomerPriceDropdown" href="${pageContext.request.contextPath}/event/customerprice#new">New</a></li>
+											</ul>
+										</li>
+									</c:if>
 									<li><a href="${pageContext.request.contextPath}/event/location?map">Locations map</a></li>
 								</c:if>
 							</ul>
