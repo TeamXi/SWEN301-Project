@@ -49,10 +49,18 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
 		chartEventsTime = new Highcharts.Chart(chartOpts);
 	};
 	cls.dirtyRefresh = function(){
-		if(chartFinances && chartFinances.refresh) chartFinances.refresh();
-		if(chartEventsTime && chartEventsTime.refresh) chartEventsTime.refresh();
-		if(chartExpenses && chartExpenses.refresh) chartExpenses.refresh();
-		if(chartRevenue && chartRevenue.refresh) chartRevenue.refresh();
+		if(! refreshIfExists(chartFinances)   ) cls.refreshFinancesOverTime();
+		if(! refreshIfExists(chartEventsTime) ) cls.refreshEventsTimeChart();
+		if(! refreshIfExists(chartExpenses)   ) cls.refreshExpensesChart();
+		if(! refreshIfExists(chartRevenue)    ) cls.refreshRevenueChart();
+	}
+	
+	function refreshIfExists(chart){
+		if(chart && chart){
+			chart.redraw();
+			return true;
+		}
+		return false;
 	}
 	cls.refreshCharts = function(){
 		$.get(KPS.siteRoot+"/charts",{},function(data){
@@ -61,20 +69,23 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
 			$data.load(function(){
 				$data.remove();
 			});
+			
 			$(revenueChart).css('height',$(revenueChart).width()+"px");
 			$(expensesChart).css('height',$(expensesChart).width()+"px");
 			//Comment out line below to use real data
 			//cls.setFinancesDummyData();
-			cls.refreshExpensesChart();
-			cls.refreshRevenueChart();
-			cls.refreshEventsTimeChart();
-			cls.refreshFinancesOverTime();
+			
+			cls.dirtyRefresh();
 			$("rect[rx=\"3\"]").hide();
+			$("text[style=\"font-family:\"Lucida Grande\", \"Lucida Sans Unicode\", Verdana, Arial, Helvetica, sans-serif;font-size:10px;cursor:pointer;color:#909090;fill:#909090;\"]").hide();
 			$("path[d=\"M 5.5 16.5 L 17.5 16.5 17.5 14.5 5.5 14.5 Z M 11.5 14.5 L 15.5 9.5 10.5 9.5 10.5 4.5 12.5 4.5 12.5 9.5 7.5 9.5 Z\"]").hide();
 			$("path[d=\"M 5.5 12.5 L 17.5 12.5 17.5 9.5 5.5 9.5 Z M 7.5 9.5 L 7.5 4.5 15.5 4.5 15.5 9.5 Z M 7.5 12.5 L 5.5 16.5 17.5 16.5 15.5 12.5 Z\"]").hide();
 		});
 	};
 	
+	$(window).resize(function(){
+		$(".tab-pane").css({width:$(".tabbable").first().width()});
+	});
 	cls.setFinancesDummyData = function(){
 		/**
 		 * This is just dummy data, so graphs arent boring and empty when service is restarted, comment out line above to use real data.
@@ -207,6 +218,7 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
             title: {
                 text: title
             },
+            reflow: true,
             yAxis: {
                 title: {
                     text: 'Total percent market share'
@@ -364,19 +376,14 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
 	
 	$(document).ready(function(){
 		$revExpSection = $("#dashboard-tab-revenue-expenditure");
-
 		$noEventsSection = $("#dashboard-tab-no-of-events");
 
 		$revExpSection.append(financesTimeChart);
 		$revExpSection.append(expensesChart);
 		$revExpSection.append(revenueChart);
 		$noEventsSection.append(eventsTimeChart);
-
 		
-		
-		$(".activate-graph").click(function(){cls.refreshCharts();});
-		
-		
+		$(".activate-graph").click(function(){cls.refreshCharts();});	
 	});
 	
 	})
