@@ -32,6 +32,7 @@ input.validate-error, textarea.validate-error, select.validate-error {
 tr .row-hover-controls {
 	float: right;
 	opacity: 0;
+	cursor: pointer;
 }
 
 tr:hover .row-hover-controls {
