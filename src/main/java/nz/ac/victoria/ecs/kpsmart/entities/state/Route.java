@@ -7,6 +7,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -23,6 +24,9 @@ public final class Route extends StorageEntity implements Serializable {
 	private EntityID uid;
 	
 	@Id
+	@GeneratedValue
+	private long u;
+	
 	private RoutePK primaryKey = new RoutePK();
 	
 	private float carrierWeightUnitCost;
@@ -36,8 +40,23 @@ public final class Route extends StorageEntity implements Serializable {
 	
 	private int duration;
 	
+	@Override
+	public boolean isNonUnique(StorageEntity entity) {
+		if (!(entity instanceof Route))
+			return false;
+		Route route = (Route) entity;
+		
+		return 
+				this.primaryKey.transportMeans.equals(route.primaryKey.transportMeans) &&
+				this.primaryKey.startPoint.equals(route.primaryKey.startPoint) &&
+				this.primaryKey.endPoint.equals(route.primaryKey.endPoint) &&
+				this.primaryKey.carrier.equals(route.primaryKey.carrier); 
+	}
+	
 	@Embeddable
 	public static final class RoutePK implements Serializable {
+		private static final long serialVersionUID = 1L;
+
 		@Enumerated(EnumType.STRING)
 		private TransportMeans transportMeans;
 		
@@ -96,19 +115,13 @@ public final class Route extends StorageEntity implements Serializable {
 		}
 	}
 	
-	private Route() {}
+	Route() {}
 	public Route(final TransportMeans trans, final Location start, final Location end, final Carrier carrier) {
 		this.primaryKey.transportMeans = trans;
 		this.primaryKey.startPoint = start;
 		this.primaryKey.endPoint = end;
 		this.primaryKey.carrier = carrier;
 		this.uid = new EntityID();
-	}
-	
-	public static Route newInstance() {
-		Route r = new Route();
-		r.uid = new EntityID();
-		return r;
 	}
 	
 	public boolean isInternational() {
@@ -304,5 +317,11 @@ public final class Route extends StorageEntity implements Serializable {
 	
 	public float getCost(MailDelivery mail) {
 		return Math.max(mail.getVolume() * this.getCarrierVolumeUnitCost(), mail.getWeight() * this.getCarrierWeightUnitCost());
+	}
+	public long getU() {
+		return u;
+	}
+	public void setU(long u) {
+		this.u = u;
 	}
 }

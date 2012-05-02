@@ -15,6 +15,7 @@ import nz.ac.victoria.ecs.kpsmart.logging.Log;
 import nz.ac.victoria.ecs.kpsmart.reporting.Report;
 import nz.ac.victoria.ecs.kpsmart.state.State;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 

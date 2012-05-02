@@ -6,7 +6,11 @@ import nz.ac.victoria.ecs.kpsmart.entities.state.CustomerPrice;
 
 @Entity
 public final class CustomerPriceUpdateEvent extends EntityUpdateEvent<CustomerPrice> {
-	public CustomerPriceUpdateEvent() {super(null);}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	CustomerPriceUpdateEvent() {super(null);}
 	public CustomerPriceUpdateEvent(CustomerPrice entity) {
 		super(entity);
 	}}

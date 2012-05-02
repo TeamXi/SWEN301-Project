@@ -6,7 +6,11 @@ import nz.ac.victoria.ecs.kpsmart.entities.state.Route;
 
 @Entity
 public final class RouteDeleteEvent extends EntityDeleteEvent<Route> {
-	public RouteDeleteEvent() { super(null); }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	RouteDeleteEvent() { super(null); }
 	public RouteDeleteEvent(Route entity) {
 		super(entity);
 	}}

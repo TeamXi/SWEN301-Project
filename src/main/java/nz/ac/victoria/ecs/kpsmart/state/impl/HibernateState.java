@@ -25,6 +25,8 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -35,6 +37,7 @@ public final class HibernateState implements State, ReadOnlyState {
 	private Session session;
 	
 	private Long maxEventID = null;
+	private Logger logger = LoggerFactory.getLogger(HibernateState.class);
 	
 	public HibernateState() {}
 	public HibernateState(final long maxEventID) {
@@ -101,8 +104,36 @@ public final class HibernateState implements State, ReadOnlyState {
 		if (entity instanceof Route)
 			this.session.save(((Route) entity).getUid());
 		
+		this.checkUniqueness(entity);
+		
 		this.session.save(entity);
 		this.session.flush();
+	}
+	
+	private void checkUniqueness(StorageEntity entity) {
+		if (entity instanceof Route) {
+			for (Route r : this.getAllRoute())
+				if (r.isNonUnique(entity))
+					throw new IllegalArgumentException("The entity is non-unique");
+		} else if (entity instanceof Location) {
+			for (Location l : this.getAllLocations())
+				if (l.isNonUnique(entity))
+					throw new IllegalArgumentException("The entity is non-unique");
+		} else if (entity instanceof Carrier)  {
+			for (Carrier c : this.getAllCarriers())
+				if (c.isNonUnique(entity))
+					throw new IllegalArgumentException("The entity is non-unique");
+		} else if (entity instanceof CustomerPrice) {
+			for (CustomerPrice c : this.getAllCustomerPrices())
+				if (c.isNonUnique(entity))
+					throw new IllegalArgumentException("The entity is non-unique");
+		} else if (entity instanceof MailDelivery) {
+			for (MailDelivery m : this.getAllMailDeliveries())
+				if (m.isNonUnique(entity))
+					throw new IllegalArgumentException("The entity is non-unique");
+		// Check domestic customer price
+		} else
+			logger.warn("Unknown entity type {}", entity.getClass());
 	}
 
 	@Override
@@ -127,12 +158,12 @@ public final class HibernateState implements State, ReadOnlyState {
 			return;
 		
 		if (entity instanceof Carrier)
-			for (Route r : (List<Route>) this.session.createCriteria(Route.class)
+			for (Route r : (List<Route>) this.getEntityCriteria(Route.class)
 					.add(Restrictions.eq("primaryKey.carrier", entity))
 					.list())
 				this.deleteRelatedEntities(r);
 		if (entity instanceof Location)
-			for (Route r : (List<Route>) this.session.createCriteria(Route.class)
+			for (Route r : (List<Route>) this.getEntityCriteria(Route.class)
 					.add(Restrictions.or(
 							Restrictions.eq("primaryKey.startPoint", entity), 
 							Restrictions.eq("primaryKey.endPoint", entity)))

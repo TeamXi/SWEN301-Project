@@ -6,7 +6,7 @@ import nz.ac.victoria.ecs.kpsmart.entities.state.Location;
 
 @Entity
 public final class LocationUpdateEvent extends EntityUpdateEvent<Location> {
-	public LocationUpdateEvent() {super(null);}
+	LocationUpdateEvent() {super(null);}
 	public LocationUpdateEvent(Location entity) {
 		super(entity);
 	}}

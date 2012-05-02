@@ -34,11 +34,9 @@ public class CarrierInfoActionBean extends FormActionBean {
 	
 	@HandlesEvent("new")
 	public Resolution newCarrierInfo() {
-		Carrier newCarrier = new Carrier();
-		configureCarrier(newCarrier);
-		CarrierUpdateEvent event = new CarrierUpdateEvent();
-		event.setEntity(newCarrier);
-		getEntityManager().performEvent(event);
+		getEntityManager().performEvent(
+				new CarrierUpdateEvent(
+						new Carrier(this.name)));
 		
 		return new FormValidationResolution(true,null,null);
 
@@ -58,25 +56,18 @@ public class CarrierInfoActionBean extends FormActionBean {
 	@HandlesEvent("update")
 	public Resolution submitupdate() {
 		Carrier carrier = getState().getCarrier(carrierId);
-		configureCarrier(carrier);
-		CarrierUpdateEvent event = new CarrierUpdateEvent();
-		event.setEntity(carrier);
-		getEntityManager().performEvent(event);
+		carrier.setName(this.name);
+		getEntityManager().performEvent(
+				new CarrierUpdateEvent(carrier));
 		return new FormValidationResolution(true, null, null);
 	}
 	
 	@HandlesEvent("delete")
 	public Resolution deleteCarrier() {
-		CarrierDeleteEvent event = new CarrierDeleteEvent();
-		event.setEntity(getState().getCarrier(carrierId));
-		getEntityManager().performEvent(event);
+		getEntityManager().performEvent(
+				new CarrierDeleteEvent(
+						getState().getCarrier(carrierId)));
 		return new FormValidationResolution(true, null, null);
-	}
-	
-	protected Carrier configureCarrier(Carrier carrier) {
-		carrier.setName(name);
-		
-		return carrier;
 	}
 
 	/**

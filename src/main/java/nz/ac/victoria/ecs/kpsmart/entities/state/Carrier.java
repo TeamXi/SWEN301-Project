@@ -18,7 +18,16 @@ public final class Carrier extends StorageEntity implements Serializable {
 	
 	private String name;
 	
-	public Carrier() {}
+	@Override
+	public boolean isNonUnique(StorageEntity entity) {
+		if (!(entity instanceof Carrier))
+			return false;
+		
+		Carrier c = (Carrier) entity;
+		return  this.name.equals(c.name);
+	}
+	
+	Carrier() {}
 	public Carrier(String name) {
 		this.name = name;
 	}

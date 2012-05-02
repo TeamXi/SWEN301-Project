@@ -17,6 +17,8 @@ import nz.ac.victoria.ecs.kpsmart.entities.state.StorageEntity;
 
 @MappedSuperclass
 public abstract class EntityOperationEvent<E extends StorageEntity> implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@OneToOne
 	protected E entity;
 	
@@ -54,6 +56,7 @@ public abstract class EntityOperationEvent<E extends StorageEntity> implements S
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -62,7 +65,7 @@ public abstract class EntityOperationEvent<E extends StorageEntity> implements S
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EntityOperationEvent other = (EntityOperationEvent) obj;
+		EntityOperationEvent<? extends StorageEntity> other = (EntityOperationEvent<? extends StorageEntity>) obj;
 		if (entity == null) {
 			if (other.entity != null)
 				return false;

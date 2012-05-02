@@ -2,14 +2,12 @@ package nz.ac.victoria.ecs.kpsmart.entities.state;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
-import org.slf4j.LoggerFactory;
-
-import nz.ac.victoria.ecs.kpsmart.entities.logging.EntityOperationEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.logging.EventID;
+
+import org.slf4j.LoggerFactory;
 
 /**
  * An abstract class representing any entity.
@@ -50,4 +48,13 @@ public abstract class StorageEntity {
 		
 		this.relateEventID = relateEventID;
 	}
+	
+	/**
+	 * Check if the given entity clashes with the unique constraint columns. Two entities may be non-equal but return
+	 * true from this method
+	 * 
+	 * @param entity	The entity to check
+	 * @return	True if adding this entity would violate the uniqueness constraints of the database.
+	 */
+	public abstract boolean isNonUnique(StorageEntity entity);
 }

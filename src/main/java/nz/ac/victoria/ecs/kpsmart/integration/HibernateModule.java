@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
@@ -44,11 +45,16 @@ public class HibernateModule extends LifecycleModule {
 		this.propertiesFileName = fileName;
 	}
 	
+	private SessionFactory factory = null;
 	private Session session = null;
 	
 	@Override
 	public void unload() {
+		this.session.cancelQuery();
+		this.session.flush();
 		this.session.close();
+		this.factory.close();
+		this.factory = null;
 		this.session = null;
 	}
 
@@ -92,7 +98,7 @@ public class HibernateModule extends LifecycleModule {
 				EventID.class,
 				
 				
-				
+				EntityID.class,
 				Carrier.class,
 				Location.class,
 				MailDelivery.class,
@@ -105,7 +111,7 @@ public class HibernateModule extends LifecycleModule {
 		
 		try {
 			Properties p = new Properties();
-			p.load(this.getClass().getClassLoader().getResourceAsStream(configurationFileName));
+			p.load(this.getClass().getClassLoader().getResourceAsStream(configurationFileName));			
 			final Configuration configuration = new Configuration();
 			configuration.addProperties(p);
 			
@@ -113,7 +119,8 @@ public class HibernateModule extends LifecycleModule {
 				configuration.addAnnotatedClass(c);
 			
 			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
-			return configuration.buildSessionFactory(serviceRegistry).getCurrentSession();
+			this.factory = configuration.buildSessionFactory(serviceRegistry);
+			return factory.getCurrentSession();
 		} catch (IOException e) {
 			throw new RuntimeException("Could not load the hibernate properties file", e);
 		}

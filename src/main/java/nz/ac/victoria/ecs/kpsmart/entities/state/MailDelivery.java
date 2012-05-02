@@ -11,13 +11,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.Transient;
-
-import com.google.inject.Inject;
 
 import nz.ac.victoria.ecs.kpsmart.InjectOnContruct;
 import nz.ac.victoria.ecs.kpsmart.state.State;
 import nz.ac.victoria.ecs.kpsmart.util.RouteDurationCalculator;
+
+import com.google.inject.Inject;
 
 @Entity 
 public final class MailDelivery extends StorageEntity implements Serializable {
@@ -43,7 +42,7 @@ public final class MailDelivery extends StorageEntity implements Serializable {
 	
 	private float cost;
 	
-	public MailDelivery() {}
+	MailDelivery() {}
 	public MailDelivery(
 			List<Route> route,
 			Priority priority,
@@ -59,6 +58,15 @@ public final class MailDelivery extends StorageEntity implements Serializable {
 		this.shippingDuration = RouteDurationCalculator.calculate(route, submissionDate);
 		
 		this.fillCalculatedFields();
+	}
+	
+	@Override
+	public boolean isNonUnique(StorageEntity entity) {
+		if (!(entity instanceof MailDelivery))
+			return false;
+		MailDelivery m = (MailDelivery) entity;
+		
+		return  this.id == m.id;
 	}
 	
 	public void fillCalculatedFields() {

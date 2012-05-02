@@ -6,7 +6,11 @@ import nz.ac.victoria.ecs.kpsmart.entities.state.Route;
 
 @Entity
 public final class RouteUpdateEvent extends EntityUpdateEvent<Route> {
-	public RouteUpdateEvent() {super(null);}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	RouteUpdateEvent() {super(null);}
 	public RouteUpdateEvent(Route entity) {
 		super(entity);
 	}}

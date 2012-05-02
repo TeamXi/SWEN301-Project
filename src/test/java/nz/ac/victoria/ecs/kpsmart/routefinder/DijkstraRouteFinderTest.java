@@ -4,49 +4,26 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import net.sourceforge.stripes.action.After;
-import nz.ac.victoria.ecs.kpsmart.GuiceServletContextListner;
 import nz.ac.victoria.ecs.kpsmart.InjectOnCall;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Carrier;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.entities.state.TransportMeans;
-import nz.ac.victoria.ecs.kpsmart.integration.HibernateModule;
-import nz.ac.victoria.ecs.kpsmart.state.State;
-import nz.ac.victoria.ecs.kpsmart.state.impl.HibernateState;
+import nz.ac.victoria.ecs.kpsmart.util.HibernateDataTest;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.google.inject.Inject;
 
-public class DijkstraRouteFinderTest {
-	@BeforeClass
-	public static void setUpBeforeClass() {
-		GuiceServletContextListner.initNoData();
-	}
+public class DijkstraRouteFinderTest extends HibernateDataTest {
+	private DijkstraRouteFinder route;
 	
 	@Before
-	public void setUp() throws Exception {
-		GuiceServletContextListner.createNewInjector(
-				new HibernateState.Module(), 
-				new HibernateModule("hibernate.memory.properties"));
-		
+	public void setUpRouteFinder() {
 		this.route = new DijkstraRouteFinder();
 	}
 	
-	@After
-	public void tearDown() {
-		GuiceServletContextListner.restorePreviousInjector();
-	}
-	
-	private DijkstraRouteFinder route;
-	
-	@Inject
-	private State state;
-
 	@Test @InjectOnCall
 	public void testSingleEdge() {
 		this.state.save(new Carrier("Foo"));

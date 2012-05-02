@@ -6,7 +6,11 @@ import nz.ac.victoria.ecs.kpsmart.entities.state.DomesticCustomerPrice;
 
 @Entity
 public final class DomesticCustomerPriceDeleteEvent extends EntityDeleteEvent<DomesticCustomerPrice> {
-	public DomesticCustomerPriceDeleteEvent() { super(null); }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	DomesticCustomerPriceDeleteEvent() { super(null); }
 	public DomesticCustomerPriceDeleteEvent(DomesticCustomerPrice price) {
 		super(price);
 	}

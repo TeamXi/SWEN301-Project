@@ -6,6 +6,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -16,14 +17,27 @@ public final class Location extends StorageEntity implements Serializable {
 //	@Cascade(CascadeType.ALL)
 //	@OneToOne
 //	private EntityID id;
+	@Id
+	@GeneratedValue
+	private long id;
 	
 	private String name;
 	
-	@Id
+	
 	private LocationPK primaryKey = new LocationPK();
 	
 	@Enumerated(EnumType.STRING)
 	private Bool international = Bool.True;
+	
+	@Override
+	public boolean isNonUnique(StorageEntity entity) {
+		if (!(entity instanceof Location))
+			return false;
+		Location l = (Location) entity;
+		
+		return  this.primaryKey.latitude == l.primaryKey.latitude &&
+				this.primaryKey.longitude == l.primaryKey.longitude;
+	}
 	
 	@Embeddable
 	public static final class LocationPK implements Serializable {
@@ -68,8 +82,12 @@ public final class Location extends StorageEntity implements Serializable {
 		}
 	}
 	
-	public Location() {}
+	Location() {}
 	public Location(final String name, final double latitude, final double longitude, final boolean international) {
+		assert (latitude <= -180) || (latitude >= 180);
+		assert (longitude <= -180) || (longitude >= 180);
+		assert (name == null) || (name.equals(""));
+		
 		this.name = name;
 		this.primaryKey.latitude = latitude;
 		this.primaryKey.longitude = longitude;
@@ -161,5 +179,11 @@ public final class Location extends StorageEntity implements Serializable {
 
 	public void setPrimaryKey(LocationPK primaryKey) {
 		this.primaryKey = primaryKey;
+	}
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
 	}
 }

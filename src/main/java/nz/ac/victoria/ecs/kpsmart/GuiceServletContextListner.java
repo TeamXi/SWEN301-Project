@@ -12,6 +12,7 @@ import nz.ac.victoria.ecs.kpsmart.reporting.impl.DefaultReport;
 import nz.ac.victoria.ecs.kpsmart.routefinder.DijkstraRouteFinder;
 import nz.ac.victoria.ecs.kpsmart.state.impl.HibernateState;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -19,6 +20,11 @@ import com.google.inject.util.Modules;
 
 public final class GuiceServletContextListner implements ServletContextListener {
 	private static Stack<History> injectors = new Stack<GuiceServletContextListner.History>();
+	private static Module EmptyModule = new AbstractModule() {
+		@Override
+		protected void configure() {
+		}
+	};
 	private static boolean initilized = false;
 	
 	public static Injector getInjector() {
@@ -29,32 +35,10 @@ public final class GuiceServletContextListner implements ServletContextListener 
 		if (initilized)
 			return;
 		
-		initNoData();
-		new Data().createData();
-	}
-	
-	public static synchronized void initNoData() {
-		if (initilized)
-			return;
-		
-		Module[] modules = {
-//				new HibernateStateManipulationModule(),
-//				new InMemoryStateManipulationModule(),
-				new HibernateModule(),
-				new HibernateState.Module(),
-				new HibernateLogger.Module(),
-				new DefaultReport.Module(),
-				new LoggingEntityManager.Module(),
-				new DijkstraRouteFinder.Module()
-		};
-		
-		for (Module m : modules)
-			if (m instanceof LifecycleModule)
-				((LifecycleModule) m).load();
-		
-		injectors.push(new History(Guice.createInjector(modules), modules));
+		injectors.push(new History(Guice.createInjector(EmptyModule), EmptyModule));
 		
 		initilized = true;
+		
 	}
 	
 	/**
@@ -113,6 +97,16 @@ public final class GuiceServletContextListner implements ServletContextListener 
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		init();
+		
+		createNewInjector(
+			new HibernateModule(),
+			new HibernateState.Module(),
+			new HibernateLogger.Module(),
+			new DefaultReport.Module(),
+			new LoggingEntityManager.Module(),
+			new DijkstraRouteFinder.Module());
+		
+		new Data().createData();
 	}
 	
 	private static final class History {

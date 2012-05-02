@@ -15,7 +15,9 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 @Entity
-public class CustomerPrice extends StorageEntity implements Serializable, Price {
+public final class CustomerPrice extends StorageEntity implements Serializable, Price {
+	private static final long serialVersionUID = 1L;
+
 	@Cascade(CascadeType.ALL)
 	@OneToOne
 	private CustomerPriceID uid;
@@ -27,8 +29,21 @@ public class CustomerPrice extends StorageEntity implements Serializable, Price 
 	
 	private float pricePerUnitVolume;
 	
+	@Override
+	public boolean isNonUnique(StorageEntity entity) {
+		if (!(entity instanceof CustomerPrice))
+			return false;
+		CustomerPrice p = (CustomerPrice) entity;
+		
+		return  this.primaryKey.location.equals(p.primaryKey.location) &&
+				this.primaryKey.direction == p.primaryKey.direction &&
+				this.primaryKey.priority == p.primaryKey.priority;
+	}
+	
 	@Embeddable
 	public static final class CustomerPricePK implements Serializable {
+		private static final long serialVersionUID = 1L;
+
 		@ManyToOne
 		private Location location;
 		
@@ -79,13 +94,16 @@ public class CustomerPrice extends StorageEntity implements Serializable, Price 
 		}
 	}
 	
-	public static CustomerPrice newInstance() {
-		CustomerPrice p = new CustomerPrice();
-		p.uid = new CustomerPriceID();
-		return p;
+	public CustomerPrice(Location location, Direction direction, Priority priority) {
+		assert location != null;
+		
+		this.uid = new CustomerPriceID();
+		this.primaryKey.location = location;
+		this.primaryKey.direction = direction;
+		this.primaryKey.priority = priority;
 	}
 	
-	private CustomerPrice() {
+	CustomerPrice() {
 	}
 	
 	public long getId() {

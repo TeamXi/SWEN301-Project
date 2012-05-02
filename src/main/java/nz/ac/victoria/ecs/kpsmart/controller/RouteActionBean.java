@@ -68,10 +68,9 @@ public class RouteActionBean extends FormActionBean {
 	
 	@HandlesEvent("update")
 	public Resolution updateRouteInfo(){
-		Route updatedRoute = fillUpdateRoute(getState().getRouteByID(routeId));
-		RouteUpdateEvent event = new RouteUpdateEvent();
-		event.setEntity(updatedRoute);
-		getEntityManager().performEvent(event);
+		getEntityManager().performEvent(
+				new RouteUpdateEvent(fillUpdateRoute(
+						getState().getRouteByID(routeId))));
 		
 		return new FormValidationResolution(true, null, null);
 	}
@@ -79,7 +78,11 @@ public class RouteActionBean extends FormActionBean {
 	@HandlesEvent("new")
 	public Resolution newRouteInfo() {
 		Map<String,String> errors = new HashMap<String,String>();
-		Route newRoute = fillNewRoute(Route.newInstance());
+		Route newRoute = fillNewRoute(new Route(
+				transportType, 
+				getState().getLocationForName(source), 
+				getState().getLocationForName(destination), 
+				getState().getCarrier(carrier)));
 
 		newRoute.setStartingTime(Calendar.getInstance().getTime());
 
@@ -94,26 +97,20 @@ public class RouteActionBean extends FormActionBean {
 			return new FormValidationResolution(false,errors);
 		}
 		else {
-			RouteUpdateEvent event = new RouteUpdateEvent();
-			event.setEntity(newRoute);
-			getEntityManager().performEvent(event);
+			getEntityManager().performEvent(new RouteUpdateEvent(newRoute));
 			return new FormValidationResolution(true,null,null);
 		}
 	}
 	
 	@HandlesEvent("delete")
 	public Resolution deleteRoute() {
-		RouteDeleteEvent event = new RouteDeleteEvent();
-		event.setEntity(getState().getRouteByID(routeId));
-		getEntityManager().performEvent(event);
+		getEntityManager().performEvent(
+				new RouteDeleteEvent(
+						getState().getRouteByID(routeId)));
 		return new FormValidationResolution(true, null, null);
 	}
 
 	private Route fillNewRoute(Route newRoute) {
-		newRoute.setStartPoint(getState().getLocationForName(source));
-		newRoute.setEndPoint(getState().getLocationForName(destination));
-		newRoute.setTransportMeans(transportType);
-		newRoute.setCarrier(getState().getCarrier(carrier));
 		newRoute.setCarrierVolumeUnitCost(volumeCost);
 		newRoute.setCarrierWeightUnitCost(weightCost);
 		newRoute.setFrequency(frequency);

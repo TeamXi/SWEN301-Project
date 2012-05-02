@@ -48,9 +48,7 @@ public class MailActionBean extends AbstractActionBean {
 	public Resolution newMailDelivery() {
 		MailDelivery delivery = processDelivery();
 		if(delivery != null) {
-			MailDeliveryUpdateEvent event = new MailDeliveryUpdateEvent();
-			event.setEntity(delivery);
-			getEntityManager().performEvent(event);
+			getEntityManager().performEvent(new MailDeliveryUpdateEvent(delivery));
 			
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("summary", makeSummary(delivery));
@@ -97,19 +95,12 @@ public class MailActionBean extends AbstractActionBean {
 					volume);
 			
 			if(route != null) {
-				MailDelivery delivery = new MailDelivery();
-				
 				Date now = new Date();
 				long shippingDuration = RouteDurationCalculator.calculate(route, now);
+				MailDelivery delivery = new MailDelivery(route, priority, weight, volume, now);
 				
-				delivery.setVolume(volume);
-				delivery.setWeight(weight);
-				delivery.setPriority(priority);
-				delivery.setRoute(route);
-				delivery.setSubmissionDate(now);
 				delivery.setShippingDuration(shippingDuration);
-				delivery.fillCalculatedFields();
-			
+				
 				return delivery;
 			}
 			else {

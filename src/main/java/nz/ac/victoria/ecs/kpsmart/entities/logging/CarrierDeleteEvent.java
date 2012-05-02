@@ -6,7 +6,9 @@ import nz.ac.victoria.ecs.kpsmart.entities.state.Carrier;
 
 @Entity
 public final class CarrierDeleteEvent extends EntityDeleteEvent<Carrier> {
-	public CarrierDeleteEvent() { super(null); }
+	private static final long serialVersionUID = 1L;
+	
+	CarrierDeleteEvent() { super(null); }
 	public CarrierDeleteEvent(Carrier entity) {
 		super(entity);
 	}}

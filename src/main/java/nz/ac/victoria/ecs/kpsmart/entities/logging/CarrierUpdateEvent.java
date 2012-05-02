@@ -6,7 +6,11 @@ import nz.ac.victoria.ecs.kpsmart.entities.state.Carrier;
 
 @Entity
 public final class CarrierUpdateEvent extends EntityUpdateEvent<Carrier> {
-	public CarrierUpdateEvent() {super(null);}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	CarrierUpdateEvent() {super(null);}
 	public CarrierUpdateEvent(Carrier entity) {
 		super(entity);
 	}}

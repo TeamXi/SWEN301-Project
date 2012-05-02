@@ -26,7 +26,7 @@ import static org.mockito.Mockito.verify;
 public class EntityManagerTest {
 	@BeforeClass
 	public static void init() {
-		GuiceServletContextListner.initNoData();
+		GuiceServletContextListner.init();
 	}
 	
 	protected State mockState;

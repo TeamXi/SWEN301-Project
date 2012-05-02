@@ -49,17 +49,19 @@ public class CustomerPriceActionBean extends FormActionBean {
 	
 	@HandlesEvent("new")
 	public Resolution newCustomerPrice() {
-		CustomerPrice price = CustomerPrice.newInstance();
-		fillPrice(price);
+		CustomerPrice price = new CustomerPrice(
+				getState().getLocationForName(location), 
+				direction.flip(), 
+				priority);
+		price.setPricePerUnitVolume(volumePrice);
+		price.setPricePerUnitWeight(weightPrice);
 		
 		Resolution validation = validatePrice(price);
 		if(validation != null) {
 			return validation;
 		}
 		
-		CustomerPriceUpdateEvent event = new CustomerPriceUpdateEvent();
-		event.setEntity(price);
-		getEntityManager().performEvent(event);
+		getEntityManager().performEvent(new CustomerPriceUpdateEvent(price));
 		
 		return new FormValidationResolution(true, null, null);
 	}
@@ -86,42 +88,28 @@ public class CustomerPriceActionBean extends FormActionBean {
 			return null;
 		}
 	}
-
-	private void fillPrice(CustomerPrice price) {
-		price.setLocation(getState().getLocationForName(location));
-		price.setDirection(direction.flip());
-		price.setPricePerUnitVolume(volumePrice);
-		price.setPricePerUnitWeight(weightPrice);
-		price.setPriority(priority);
-	}
 	
 	@HandlesEvent("update")
 	public Resolution updateCustomerPrice() {
 		CustomerPrice price = getState().getCustomerPriceById(priceId);
-		updatePrice(price);
+		price.setPricePerUnitVolume(volumePrice);
+		price.setPricePerUnitWeight(weightPrice);
 		
 		Resolution validation = validatePrice(price);
 		if(validation != null) {
 			return validation;
 		}
 		
-		CustomerPriceUpdateEvent event = new CustomerPriceUpdateEvent();
-		event.setEntity(price);
-		getEntityManager().performEvent(event);
+		getEntityManager().performEvent(new CustomerPriceUpdateEvent(price));
 		
 		return new FormValidationResolution(true, null, null);
 	}
 	
-	private void updatePrice(CustomerPrice price) {
-		price.setPricePerUnitVolume(volumePrice);
-		price.setPricePerUnitWeight(weightPrice);
-	}
-
 	@HandlesEvent("delete")
 	public Resolution deletePrice() {
-		CustomerPriceDeleteEvent event = new CustomerPriceDeleteEvent();
-		event.setEntity(getState().getCustomerPriceById(priceId));
-		getEntityManager().performEvent(event);
+		getEntityManager().performEvent(
+				new CustomerPriceDeleteEvent(
+						getState().getCustomerPriceById(priceId)));
 		return new FormValidationResolution(true, null, null);
 	}
 	
