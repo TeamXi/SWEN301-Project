@@ -8,7 +8,7 @@ KPS.event.location = KPS.event.location || {};
 	function createWorldMap() {
 		globalMap = KPS.util.map.newInstance(document.getElementById('allLocationsMap'), 4, -34.397, 150.644);
 		
-		infoWindow = new google.maps.InfoWindow();
+		infoWindow = new InfoBubble(globalMap);
 	};
 	
 	function loadLocations(allLocations) {

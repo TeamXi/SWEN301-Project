@@ -5,6 +5,7 @@
 
 	<stripes:layout-component name="title">Location map</stripes:layout-component>
 	<stripes:layout-component name="scripts">
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/InfoBubble.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/locationmap.js"></script>
 	</stripes:layout-component>
 	<stripes:layout-component name="styles">
