@@ -3,6 +3,7 @@ package nz.ac.victoria.ecs.kpsmart.integration;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -62,6 +63,7 @@ public class HibernateModule extends LifecycleModule {
 	public void load() {
 		this.session = getSession(this.propertiesFileName);
 		this.session.beginTransaction();
+		this.session.setFlushMode(FlushMode.MANUAL);
 	}
 
 	@Override
