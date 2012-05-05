@@ -29,7 +29,7 @@ final class Data {
 		 * Carriers
 		 * 
 		 */
-		sm.performEvent(new CarrierUpdateEvent(new Carrier("a")));
+		sm.performEvent(new CarrierUpdateEvent(new Carrier("Air New Zealand")));
 		
 		/*
 		 * 
@@ -53,8 +53,8 @@ final class Data {
 				sm.getData().getLocationForName("Rome"),
 				sm.getData().getCarrier(1));
 		try {
-			r1.setCarrierVolumeUnitCost((float) 10.9);
-			r1.setCarrierWeightUnitCost((float)10.9);
+			r1.setCarrierVolumeUnitCost((float)0.5);
+			r1.setCarrierWeightUnitCost((float)0.6);
 			r1.setDisabled(false);
 			r1.setDuration(10);
 			r1.setFrequency(10);
@@ -70,8 +70,8 @@ final class Data {
 				sm.getData().getLocationForName("Wellington"), 
 				sm.getData().getCarrier(1));
 		try {
-			r2.setCarrierVolumeUnitCost((float) 8.0);
-			r2.setCarrierWeightUnitCost((float)8.9);
+			r2.setCarrierVolumeUnitCost((float)0.02);
+			r2.setCarrierWeightUnitCost((float)0.01);
 			r2.setDisabled(false);
 			r2.setDuration(1);
 			r2.setFrequency(6);
@@ -87,8 +87,8 @@ final class Data {
 				sm.getData().getLocationForName("Christchurch"),
 				sm.getData().getCarrier(1));
 		try {
-			r3.setCarrierVolumeUnitCost((float) 8.0);
-			r3.setCarrierWeightUnitCost((float)8.9);
+			r3.setCarrierVolumeUnitCost((float)0.01);
+			r3.setCarrierWeightUnitCost((float)0.04);
 			r3.setDisabled(false);
 			r3.setDuration(1);
 			r3.setFrequency(6);
@@ -104,8 +104,8 @@ final class Data {
 				sm.getData().getLocationForName("Rome"),
 				sm.getData().getCarrier(1));
 		try {
-			r4.setCarrierVolumeUnitCost((float) 8.0);
-			r4.setCarrierWeightUnitCost((float)8.9);
+			r4.setCarrierVolumeUnitCost((float)0.2);
+			r4.setCarrierWeightUnitCost((float)0.3);
 			r4.setDisabled(false);
 			r4.setDuration(1);
 			r4.setFrequency(6);
@@ -119,8 +119,8 @@ final class Data {
 				sm.getData().getLocationForName("Rome"), 
 				Direction.To, 
 				Priority.International_Air);
-		price.setPricePerUnitVolume(1);
-		price.setPricePerUnitWeight(1);
+		price.setPricePerUnitVolume((float)0.3);
+		price.setPricePerUnitWeight((float)0.6);
 		sm.performEvent(new CustomerPriceUpdateEvent(price));
 	}
 }
