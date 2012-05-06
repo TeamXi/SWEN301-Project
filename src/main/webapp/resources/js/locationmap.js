@@ -13,20 +13,20 @@ KPS.event.location = KPS.event.location || {};
 	
 	function loadLocations(allLocations) {
 		for(locIdx in allLocations){
-			var location = allLocations[locIdx];
-			var marker = new google.maps.Marker({
-				map: globalMap, 
-				position: new google.maps.LatLng(location.latitude, location.longitude),
-				title:location.name
-			});
-			google.maps.event.addListener(marker, "mouseover", function(event) {
-				infoWindow.setContent(this.title);
-				infoWindow.setPosition(event.latLng);
-				infoWindow.open(globalMap);
-			});
-			google.maps.event.addListener(marker, "mouseout", function(event) {
-				infoWindow.close();
-			});
+			(function(location) {
+				var marker = new google.maps.Marker({
+					map: globalMap, 
+					position: new google.maps.LatLng(location.latitude, location.longitude)
+				});
+				google.maps.event.addListener(marker, "mouseover", function(event) {
+					infoWindow.setContent(location.name);
+					infoWindow.setPosition(event.latLng);
+					infoWindow.open(globalMap);
+				});
+				google.maps.event.addListener(marker, "mouseout", function(event) {
+					infoWindow.close();
+				});
+			}(allLocations[locIdx]));
 		}
 
 	};

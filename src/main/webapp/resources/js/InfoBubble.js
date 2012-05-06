@@ -61,10 +61,10 @@ InfoBubble.prototype.buildDom_ = function() {
 	this.bubble_ = $('<div class="popover fade right in" style="display: none;">'+
 						'<div class="arrow"></div>'+
 						'<div class="popover-inner">'+
-							'<h3 class="popover-title">This is a title</h3>'+
-							'<div class="popover-content">Hello world!</div>'+
+							'<h3 class="kps-popover-content"></h3>'+
 						'</div>'+
 					'</div>')[0];
+	this.$contentEl_ = $(this.bubble_).find(".kps-popover-content");
 };
 
 /**
@@ -250,6 +250,7 @@ InfoBubble.prototype.panToView = function() {
  */
 InfoBubble.prototype.setContent = function(content) {
 	this.content_ = content;
+	this.$contentEl_.html(content);
 	this.updateContent_();
 };
 

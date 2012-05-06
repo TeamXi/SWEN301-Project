@@ -65,6 +65,20 @@ tr:hover .row-hover-controls {
 	color: #468847;
 }
 
+.popover-inner {
+	width: auto;
+}
+
+.kps-popover-content {
+	padding: 9px 15px;
+	line-height: 1;
+	background-color: #f5f5f5;
+	border-bottom: 1px solid #eee;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
 /*
  *Carrousel
  */
