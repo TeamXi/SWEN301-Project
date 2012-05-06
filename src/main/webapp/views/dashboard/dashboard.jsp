@@ -5,6 +5,9 @@
 
 	<stripes:layout-component name="title">Dashboard</stripes:layout-component>
 	<stripes:layout-component name="scripts">
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/highcharts.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/exporting.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/charts.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dashboard.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dateformat.js"></script>
 		<script type="text/javascript">
