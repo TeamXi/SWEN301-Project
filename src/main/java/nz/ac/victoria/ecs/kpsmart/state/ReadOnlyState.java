@@ -108,11 +108,12 @@ public interface ReadOnlyState extends TimeCapable<ReadOnlyState> {
 	public Collection<Carrier> getAllCarriers();
 	
 	/**
-	 * Get the domestic customer price
+	 * Get the domestic customer price for the given priority
 	 * 
+	 * @param priority	The priority to get the price for
 	 * @return	The domestic customer price
 	 */
-	public DomesticCustomerPrice getDomesticCustomerPrice();
+	public DomesticCustomerPrice getDomesticCustomerPrice(Priority priority);
 	
 	/**
 	 * Get all the customer price information in the datasource.

@@ -23,6 +23,8 @@ public abstract class StorageEntity {
 	@ManyToOne
 	protected EventID relateEventID;
 
+	private boolean fromDatasource;
+
 	public Bool getDisabled() {
 		return disabled;
 	}
@@ -47,6 +49,16 @@ public abstract class StorageEntity {
 		LoggerFactory.getLogger(getClass()).trace("Setting related ID to {}", relateEventID);
 		
 		this.relateEventID = relateEventID;
+	}
+	
+	public StorageEntity setFromDatasource(boolean flag) {
+		this.fromDatasource = true;
+		
+		return this;
+	}
+	
+	public boolean isFromDatasource() {
+		return this.fromDatasource;
 	}
 	
 	/**

@@ -3,12 +3,16 @@ package nz.ac.victoria.ecs.kpsmart.entities.state;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
 @Entity
 public final class DomesticCustomerPrice extends StorageEntity implements Price {
 	@Id
+	@GeneratedValue
+	private long id;
+	
 	@Enumerated(EnumType.STRING)
 	private Priority priority;
 	
@@ -16,6 +20,13 @@ public final class DomesticCustomerPrice extends StorageEntity implements Price 
 	
 	private float pricePerUnitVolume;
 	
+	DomesticCustomerPrice() {}
+	public DomesticCustomerPrice(float weightPrice, float volumePrice, Priority priority) {
+		this.pricePerUnitWeight = weightPrice;
+		this.pricePerUnitVolume = volumePrice;
+		this.priority = priority;
+	}
+
 	@Override
 	public boolean isNonUnique(StorageEntity entity) {
 		if (!(entity instanceof DomesticCustomerPrice))
@@ -102,5 +113,11 @@ public final class DomesticCustomerPrice extends StorageEntity implements Price 
 		return "DomesticCustomerPrice [priority=" + priority
 				+ ", pricePerUnitWeight=" + pricePerUnitWeight
 				+ ", pricePerUnitVolume=" + pricePerUnitVolume + "]";
+	}
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
 	}
 }

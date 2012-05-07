@@ -2,11 +2,12 @@ package nz.ac.victoria.ecs.kpsmart.state.impl;
 
 import static org.junit.Assert.assertEquals;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Location;
+import nz.ac.victoria.ecs.kpsmart.state.DuplicateEntityException;
 import nz.ac.victoria.ecs.kpsmart.util.HibernateDataTest;
 
 import org.junit.Test;
 
-public class HibernateImplEntitySaveTests extends HibernateDataTest {
+public class HibernateImplEntitySaveLocationTests extends HibernateDataTest {
 	@Test
 	public void testSaveLocation() {
 		Location l = new Location("a", 0, 0, true);
@@ -34,7 +35,7 @@ public class HibernateImplEntitySaveTests extends HibernateDataTest {
 		assertEquals(1, this.state.getAllLocations().size());
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=DuplicateEntityException.class)
 	public void testSaveTwoLocationsFails() {
 		Location l = new Location("a", 0, 0, true);
 		

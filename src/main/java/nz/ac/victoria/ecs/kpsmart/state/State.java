@@ -1,6 +1,5 @@
 package nz.ac.victoria.ecs.kpsmart.state;
 
-import nz.ac.victoria.ecs.kpsmart.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.entities.state.StorageEntity;
 
 /**
@@ -16,13 +15,6 @@ public interface State extends ReadOnlyState {
 	 * @param entity	The entity to save.
 	 */
 	public void save(StorageEntity entity);
-	
-	/**
-	 * Save the given domestic price object over the existing domestic price.
-	 * 
-	 * @param domesticPrice	The new domestic price
-	 */
-	public void save(DomesticCustomerPrice domesticPrice);
 
 	/**
 	 * Delete an entity from the datasource
