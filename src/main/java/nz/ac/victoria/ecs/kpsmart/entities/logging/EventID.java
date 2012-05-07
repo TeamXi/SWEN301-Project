@@ -18,6 +18,11 @@ public final class EventID implements Serializable {
 	@GeneratedValue(strategy=GenerationType.TABLE)
 	private long Id;
 
+	public EventID() {}
+	public EventID(long id) {
+		this.Id = id;
+	}
+
 	public long getId() {
 		return Id;
 	}

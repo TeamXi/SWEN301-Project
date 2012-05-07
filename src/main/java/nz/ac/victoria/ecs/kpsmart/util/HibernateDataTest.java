@@ -22,7 +22,7 @@ public class HibernateDataTest {
 				new HibernateState.Module(), 
 				new HibernateModule("hibernate.memory.properties"));
 		
-		this.state = GuiceServletContextListner.getInjector().getInstance(State.class);
+		this.state = (HibernateState) GuiceServletContextListner.getInjector().getInstance(State.class);
 	}
 
 	@After
@@ -30,6 +30,6 @@ public class HibernateDataTest {
 		GuiceServletContextListner.restorePreviousInjector();
 	}
 
-	protected State state;
+	protected HibernateState state;
 
 }

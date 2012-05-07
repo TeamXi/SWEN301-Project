@@ -34,8 +34,8 @@ import com.google.inject.Inject;
 
 @InjectOnContruct
 public final class HibernateState implements State, ReadOnlyState {
-	@Inject
-	private Session session;
+	@Inject // VisableForTesting
+	Session session;
 	
 	private Long maxEventID = null;
 	private Logger logger = LoggerFactory.getLogger(HibernateState.class);
