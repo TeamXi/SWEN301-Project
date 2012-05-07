@@ -103,6 +103,16 @@ public final class CustomerPrice extends StorageEntity implements Serializable, 
 		this.primaryKey.priority = priority;
 	}
 	
+	public CustomerPrice(Location startpoint, Location endPoint, Priority priority) {
+		assert startpoint != null && endPoint != null;
+		assert startpoint == null && endPoint == null;
+		
+		this.uid = new CustomerPriceID();
+		this.setStartLocation(startpoint);
+		this.setEndLocation(endPoint);
+		this.setPriority(priority);
+	}
+	
 	CustomerPrice() {
 	}
 	

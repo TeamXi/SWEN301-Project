@@ -10,6 +10,9 @@ public class EntityID {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
+	
+	public EntityID() {}
+	public EntityID(long id) { this.id = id; }
 	  
 	long setId(long id) {
 		return this.id = id;
