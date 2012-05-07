@@ -1,6 +1,8 @@
 package nz.ac.victoria.ecs.kpsmart.reporting;
 
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 import nz.ac.victoria.ecs.kpsmart.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Priority;
@@ -28,7 +30,7 @@ public interface Report extends TimeCapable<Report> {
 	 * 
 	 * @return	All the information about revenue and expenditure.
 	 */
-	public Collection<RevenueExpediture> getAllRevenueExpenditure();
+	public Collection<DeliveryRevenueExpediture> getAllRevenueExpenditure();
 	
 	/**
 	 * Get the number of events since the initialization of the system.
@@ -50,6 +52,13 @@ public interface Report extends TimeCapable<Report> {
 	 * @return	The total revenue
 	 */
 	public double getTotalRevenue();
+	
+	/**
+	 * Get the revenue/expenditure over time
+	 * 
+	 * @return a list of RevenueExpendature
+	 */
+	public List<RevenueExpenditure> getRevenueExpenditureOverTime();
 	
 	/**
 	 * Represents the amount of mail for a given source-destination pair.
@@ -172,7 +181,7 @@ public interface Report extends TimeCapable<Report> {
 	 * @author hodderdani
 	 *
 	 */
-	public static final class RevenueExpediture {
+	public static final class DeliveryRevenueExpediture {
 		/**
 		 * The start point
 		 */
@@ -203,7 +212,7 @@ public interface Report extends TimeCapable<Report> {
 		 */
 		private final double averageDeliveryTime;
 		
-		public RevenueExpediture(Location start, Location end, Priority priority, double revenue, double expenditure, double averageDeliveryTime) {
+		public DeliveryRevenueExpediture(Location start, Location end, Priority priority, double revenue, double expenditure, double averageDeliveryTime) {
 			this.startPoint = start;
 			this.endPoint = end;
 			this.priority = priority;
@@ -214,7 +223,7 @@ public interface Report extends TimeCapable<Report> {
 
 		@Override
 		public String toString() {
-			return "RevenueExpediture [StartPoint=" + startPoint
+			return "DeliveryRevenueExpediture [StartPoint=" + startPoint
 					+ ", EndPoint=" + endPoint + ", Priority=" + priority
 					+ ", Revenue=" + revenue + ", Expenditure=" + expenditure
 					+ "]";
@@ -246,7 +255,7 @@ public interface Report extends TimeCapable<Report> {
 				return false;
 			if (getClass() != obj.getClass())
 				return false;
-			RevenueExpediture other = (RevenueExpediture) obj;
+			DeliveryRevenueExpediture other = (DeliveryRevenueExpediture) obj;
 			if (endPoint == null) {
 				if (other.endPoint != null)
 					return false;
@@ -291,5 +300,39 @@ public interface Report extends TimeCapable<Report> {
 		public double getAverageDeliveryTime() {
 			return averageDeliveryTime;
 		}
+	}
+	
+	/**
+	 * A revenue/expenditure pair
+	 * 
+	 * @author ruarusmelb
+	 */
+	public static final class RevenueExpenditure {
+		private final double revenue;
+		private final double expenditure;
+		private final Date date;
+		private final long eventId;
+		
+		public RevenueExpenditure(double revenue, double expenditure, Date date, long eventId) {
+			this.revenue = revenue;
+			this.expenditure = expenditure;
+			this.date = date;
+			this.eventId = eventId;
+		}
+		
+		public double getRevenue() {
+			return revenue;
+		}
+		public double getExpenditure() {
+			return expenditure;
+		}
+		public Date getDate() {
+			return date;
+		}
+
+		public long getEventId() {
+			return eventId;
+		}
+		
 	}
 }

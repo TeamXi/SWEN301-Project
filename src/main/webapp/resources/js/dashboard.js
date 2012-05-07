@@ -25,7 +25,7 @@ KPS.dashboard = KPS.dashboard || {};
 			var eventEl = document.createElement('a');
 			eventEl.innerHTML = cls.events[n].id;
 			(function(event) {
-				$(eventEl).tooltip({title: new Date(event.timestamp).format("h:Mtt ddd dS mmm 'yy")}).click(function() {
+				$(eventEl).tooltip({title: KPS.data.format.date(new Date(event.timestamp))}).click(function() {
 					var id = event.id;
 					if(event.id == cls.events.length) {
 						id = 0;

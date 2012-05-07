@@ -4,6 +4,7 @@ KPS.modal = KPS.modal || {};
 KPS.data = KPS.data || {};
 KPS.data.locations = KPS.data.locations || {};
 KPS.data.carriers = KPS.data.carriers || {};
+KPS.data.format = KPS.data.format || {};
 
 function performLogin(siteRoot,role){
 	$.post(siteRoot+"/login", {role: role}, function(data) {
@@ -436,3 +437,9 @@ function show(obj){
 		return false;
 	};
 }(KPS.data.carriers, jQuery));
+
+(function(cls, $, undefined) {
+	cls.date = function(date) {
+		return date.format("h:Mtt ddd dS mmm 'yy");
+	};
+}(KPS.data.format, jQuery));

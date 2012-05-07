@@ -39,8 +39,8 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
 		chartRevenue = new Highcharts.Chart(chartOpts);
 	};
 	cls.refreshFinancesOverTime = function(){
-		var financeData = getDummyFinanceData();
-		var chartOpts = getFinancesOverTimeOpts(financesTimeId,financeData);
+		var financeData = getFinanceData();
+		var chartOpts = getFinancesOverTimeOpts(financesTimeId,financeData.vals,financeData.cats);
 		chartFinances = new Highcharts.Chart(chartOpts);
 	};
 	cls.refreshEventsTimeChart = function(){
@@ -63,90 +63,58 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
 		return false;
 	}
 	cls.refreshCharts = function(){
-		$.get(KPS.siteRoot+"/charts",{},function(data){
-			$data = $(data);
-			$("body").append($(data));
-			$data.load(function(){
-				$data.remove();
-			});
-			
-			$(revenueChart).css('height',$(revenueChart).width()+"px");
-			$(expensesChart).css('height',$(expensesChart).width()+"px");
-			//Comment out line below to use real data
-			//cls.setFinancesDummyData();
-			
-			cls.dirtyRefresh();
-			$("rect[rx=\"3\"]").hide();
-			$("text[style=\"font-family:\"Lucida Grande\", \"Lucida Sans Unicode\", Verdana, Arial, Helvetica, sans-serif;font-size:10px;cursor:pointer;color:#909090;fill:#909090;\"]").hide();
-			$("path[d=\"M 5.5 16.5 L 17.5 16.5 17.5 14.5 5.5 14.5 Z M 11.5 14.5 L 15.5 9.5 10.5 9.5 10.5 4.5 12.5 4.5 12.5 9.5 7.5 9.5 Z\"]").hide();
-			$("path[d=\"M 5.5 12.5 L 17.5 12.5 17.5 9.5 5.5 9.5 Z M 7.5 9.5 L 7.5 4.5 15.5 4.5 15.5 9.5 Z M 7.5 12.5 L 5.5 16.5 17.5 16.5 15.5 12.5 Z\"]").hide();
-		});
+		$(revenueChart).css('height',$(revenueChart).width()+"px");
+		$(expensesChart).css('height',$(expensesChart).width()+"px");
+		
+		cls.dirtyRefresh();
+		$("rect[rx=\"3\"]").hide();
+		$("text[style=\"font-family:\"Lucida Grande\", \"Lucida Sans Unicode\", Verdana, Arial, Helvetica, sans-serif;font-size:10px;cursor:pointer;color:#909090;fill:#909090;\"]").hide();
+		$("path[d=\"M 5.5 16.5 L 17.5 16.5 17.5 14.5 5.5 14.5 Z M 11.5 14.5 L 15.5 9.5 10.5 9.5 10.5 4.5 12.5 4.5 12.5 9.5 7.5 9.5 Z\"]").hide();
+		$("path[d=\"M 5.5 12.5 L 17.5 12.5 17.5 9.5 5.5 9.5 Z M 7.5 9.5 L 7.5 4.5 15.5 4.5 15.5 9.5 Z M 7.5 12.5 L 5.5 16.5 17.5 16.5 15.5 12.5 Z\"]").hide();
 	};
 	
 	$(window).resize(function(){
 		$(".tab-pane").css({width:$(".tabbable").first().width()});
 	});
-	cls.setFinancesDummyData = function(){
-		/**
-		 * This is just dummy data, so graphs arent boring and empty when service is restarted, comment out line above to use real data.
-		 */
-		KPS.graphs.finances = {
-				expenditure:{
-					international:[
-						{startPoint:"Dunedin", 		endPoint: "China", amount:"52.30", priority: "Air" },
-						{startPoint:"Wellington", 	endPoint: "Russia", amount:"122.30", priority: "Air" },
-						{startPoint:"Dunedin", 		endPoint: "China", amount:"42.30", priority: "Land" },
-						{startPoint:"Dunedin", 		endPoint: "Rome" , amount:"17", priority: "Air" },
-						{startPoint:"Auckland", 	endPoint: "Tai Pang", amount:"89", priority: "Air" },
-					],
-						domestic:[
-						{startPoint:"Dunedin", 		endPoint: "Wellington", amount:"15.30", priority: "Land" },
-						{startPoint:"Wellington", 	endPoint: "Auckland", amount:"12.30", priority: "Air" },
-						{startPoint:"Invercargil", 	endPoint: "Rotorua", amount:"37.5", priority: "Land" },
-						{startPoint:"Rotorua", 		endPoint: "Wellington" , amount:"17", priority: "Land" },
-						{startPoint:"Auckland", 	endPoint: "Wellington", amount:"25", priority: "Air" },
-	
-						]
-				},
-				revenue:{
-						international:[
-									{startPoint:"Dunedin", 		endPoint: "China", amount:"22.30", priority: "Air" },
-									{startPoint:"Wellington", 	endPoint: "Russia", amount:"82.30", priority: "Air" },
-									{startPoint:"Dunedin", 		endPoint: "China", amount:"32.30", priority: "Land" },
-									{startPoint:"Dunedin", 		endPoint: "Rome" , amount:"67", priority: "Air" },
-									{startPoint:"Auckland", 	endPoint: "Tai Pang", amount:"189", priority: "Air" },
-								],
-									domestic:[
-									{startPoint:"Dunedin", 		endPoint: "Wellington", amount:"5.30", priority: "Land" },
-									{startPoint:"Wellington", 	endPoint: "Auckland", amount:"12.30", priority: "Air" },
-									{startPoint:"Invercargil", 	endPoint: "Rotorua", amount:"37.5", priority: "Land" },
-									{startPoint:"Rotorua", 		endPoint: "Wellington" , amount:"17", priority: "Land" },
-									{startPoint:"Auckland", 	endPoint: "Wellington", amount:"25", priority: "Air" },
-				
-									]
-				}
-				
-		};
-	};
-	
-	function getDummyFinanceData(){
-		return {
-			revenue:[0,100,145,416,922,1046,1138,2001,2002,2333,3123,3600],
-			expenditure:[0,5,11,244,516,2098,2145,2345,2444,2445,2446,3000]
-		};
+	function getFinanceData(){
+		var revenue = [];
+		var expenditure = [];
+		var categories = [];
+		
+		var lastRevenue = 0;
+		var lastExenditure = 0;
+		
+		var mailCount = 0;
+		for(var n=0;n<KPS.graphs.currentEvent;n++) {
+			var event = KPS.graphs.events[n];
+			
+			var currentMail = KPS.graphs.revenueexpenditure[mailCount] ? KPS.graphs.revenueexpenditure[mailCount] : {eventId: -1};
+			
+			if(currentMail.eventId == event.id) {
+				lastRevenue = currentMail.revenue;
+				lastExenditure = currentMail.expenditure;
+				mailCount++;
+			}
+			
+			revenue.push(lastRevenue);
+			expenditure.push(lastExenditure);
+			categories.push(event.id);
+			
+		}
+		return {vals:{'revenue': revenue, 'expenditure': expenditure},cats:categories};
 	}
 	function getTimeCategories(){
 	
-		var last = events[events.length-1].timestamp;
-		var first = events[0].timestamp;
+		var last = KPS.graphs.events[KPS.graphs.currentEvent-1].timestamp;
+		var first = KPS.graphs.events[0].timestamp;
 		var diff = (last - first)/numberOfEventCategories;
 		var eventIdx = 0;
 		var cats = [];
 		var eventCounts = [];
 		for(var i = 0;i< numberOfEventCategories; i++){
-			for(;eventIdx < events.length; eventIdx++){
-				if(events[eventIdx].timestamp >= first){
-					cats.push(events[eventIdx].timestamp);
+			for(;eventIdx < KPS.graphs.currentEvent; eventIdx++){
+				if(KPS.graphs.events[eventIdx].timestamp >= first){
+					cats.push(KPS.graphs.events[eventIdx].timestamp);
 					eventCounts.push(eventIdx);
 					break;
 				}
@@ -154,7 +122,7 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
 			}
 			first += diff;
 		}
-		eventCounts[eventCounts.length - 1] = events.length;
+		eventCounts[eventCounts.length - 1] = KPS.graphs.currentEvent;
 		return {cats:cats,values:eventCounts};
 	}
 	function resetCounters(){
@@ -262,7 +230,7 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
 	function getEventsOverTimeOpts(container,categories,values){
 		for(var catIdx in categories){
 			var timestamp = categories[catIdx];
-			categories[catIdx] =  new Date(timestamp).toGMTString();
+			categories[catIdx] =  KPS.data.format.date(new Date(timestamp));
 		};
 		var chartOpts = {
             chart: {
@@ -305,8 +273,7 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
         };
 		return chartOpts;
 	}
-	function getFinancesOverTimeOpts(container,financeData){
-		
+	function getFinancesOverTimeOpts(container,financeData,categories){
 		var chartOpts = {
             chart: {
                 renderTo: container,
@@ -319,6 +286,7 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
                 text: 'KPSmart'
             },
             xAxis: {
+            	categories: categories,
             	title: {
                     text: 'Event Number'
                 },

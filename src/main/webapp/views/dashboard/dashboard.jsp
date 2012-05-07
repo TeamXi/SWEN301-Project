@@ -9,13 +9,19 @@
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/exporting.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/charts.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dashboard.js"></script>
-		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dateformat.js"></script>
 		<script type="text/javascript">
 			var KPS = KPS || {};
 			KPS.dashboard = KPS.dashboard || {};
 			
 			KPS.dashboard.events = <%@include file="eventListJSON.jsp"%>;
 			KPS.dashboard.currentEvent = ${actionBean.atevent};
+			
+			<%@include file="charts.jsp"%>
+			KPS.graphs.currentEvent = KPS.dashboard.currentEvent;
+			if(KPS.graphs.currentEvent <= 0) {
+				KPS.graphs.currentEvent = KPS.dashboard.events.length;
+			}
+			KPS.graphs.events = KPS.dashboard.events;
 		</script>
 	</stripes:layout-component>
 	<stripes:layout-component name="styles">

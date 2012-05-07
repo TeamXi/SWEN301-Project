@@ -1,7 +1,9 @@
 package nz.ac.victoria.ecs.kpsmart.reporting.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import nz.ac.victoria.ecs.kpsmart.InjectOnCall;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Location;
@@ -71,10 +73,10 @@ public class DefaultReport implements Report {
 	}
 
 	@Override
-	public Collection<RevenueExpediture> getAllRevenueExpenditure() {
+	public Collection<DeliveryRevenueExpediture> getAllRevenueExpenditure() {
 		Collection<Location> allLocations = this.state.getAllLocations();
 		Collection<MailDelivery> mailDeliveries = this.state.getAllMailDeliveries();
-		Collection<RevenueExpediture> result = new HashSet<RevenueExpediture>();
+		Collection<DeliveryRevenueExpediture> result = new HashSet<DeliveryRevenueExpediture>();
 		
 		for (Location start : allLocations) {
 			for (Location end : allLocations) {
@@ -108,7 +110,7 @@ public class DefaultReport implements Report {
 							expenditure += r.getCost(m);
 					}
 					
-					result.add(new RevenueExpediture(start, end, p, revinue, expenditure, totalDeliveryTime/(double)mailCount));
+					result.add(new DeliveryRevenueExpediture(start, end, p, revinue, expenditure, totalDeliveryTime/(double)mailCount));
 				}
 			}
 		}
@@ -137,6 +139,24 @@ public class DefaultReport implements Report {
 			sum += m.getPrice();
 		
 		return sum;
+	}
+	
+	@Override
+	public List<RevenueExpenditure> getRevenueExpenditureOverTime() {
+		ArrayList<RevenueExpenditure> list = new ArrayList<RevenueExpenditure>();
+		
+		Collection<MailDelivery> mailDeliveries = this.state.getAllMailDeliveries();
+		
+		double revenue = 0;
+		double expenditure = 0;
+		
+		for(MailDelivery m : mailDeliveries) {
+			revenue += m.getPrice();
+			expenditure += m.getCost();
+			list.add(new RevenueExpenditure(revenue, expenditure, m.getSubmissionDate(), this.log.getEvent(m.getRelateEventID().getId()).getUid().getId()));
+		}
+		
+		return list;
 	}
 	
 	private static final long msinhour = 60*60*1000;
