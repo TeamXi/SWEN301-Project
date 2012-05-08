@@ -274,6 +274,33 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
 		return chartOpts;
 	}
 	function getFinancesOverTimeOpts(container,financeData,categories){
+		var colors = Highcharts.getOptions().colors; //gets the colours so rev and exp can be same colour as the reported values
+		
+		var series;
+		
+		if(financeData.revenue[financeData.revenue.length-1] > financeData.expenditure[financeData.expenditure.length-1]) {
+			series = [{
+            	name:"Revenue",
+            	data:financeData.revenue,
+            	color:'#468847'
+            }, {
+            	name:"Expenditure",
+            	data:financeData.expenditure,
+            	color: colors[1]
+            }];
+		}
+		else {
+			series = [{
+            	name:"Expenditure",
+            	data:financeData.expenditure,
+            	color: colors[1]
+            }, {
+            	name:"Revenue",
+            	data:financeData.revenue,
+            	color:'#468847'
+            }];
+		}
+		
 		var chartOpts = {
             chart: {
                 renderTo: container,
@@ -327,15 +354,7 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
                     }
                 }
             },
-            series: [	{
-            	name:"Revenue",
-            	data:financeData.revenue
-            },
-            {
-            	name:"Expeniture",
-            	data:financeData.expenditure
-            }
-                     ]
+            series: series
         };
 		return chartOpts;
 	}
