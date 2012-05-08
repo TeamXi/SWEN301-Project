@@ -9,6 +9,7 @@
 	<stripes:layout-component name="scripts">
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/highcharts.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/exporting.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.cookie.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/charts.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dashboard.js"></script>
 		<script type="text/javascript">
@@ -74,11 +75,11 @@
 		<div class="row-fluid">
 			<div class="span12">
 				<div class="tabbable">
-					<ul id="nav-tabs" class="nav nav-tabs">
-						<li ><a href="#dashboard-tab-critical-routes" data-toggle="tab">Critical Routes</a></li>
-						<li class="active activate-graph"><a href="#dashboard-tab-revenue-expenditure" data-toggle="tab">Revenue & Expenditure</a></li>
+					<ul id="main-tabs" class="nav nav-tabs">
+						<li><a href="#dashboard-tab-critical-routes" data-toggle="tab">Critical Routes</a></li>
+						<li class="activate-graph"><a href="#dashboard-tab-revenue-expenditure" data-toggle="tab">Revenue &amp; Expenditure</a></li>
 						<li class="activate-graph"><a href="#dashboard-tab-no-of-events" data-toggle="tab">Number of Events</a></li>
-						<li ><a href="#dashboard-tab-rawdata" data-toggle="tab">Raw data</a></li>
+						<li><a href="#dashboard-tab-rawdata" data-toggle="tab">Raw data</a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane" id="dashboard-tab-critical-routes">
@@ -118,7 +119,7 @@
 								</tbody>
 							</table>
 						</div>
-						<div class="tab-pane active" id="dashboard-tab-revenue-expenditure">
+						<div class="tab-pane" id="dashboard-tab-revenue-expenditure">
 						</div>
 						<div class="tab-pane" id="dashboard-tab-no-of-events">
 						</div>

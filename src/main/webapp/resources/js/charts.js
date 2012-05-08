@@ -363,6 +363,7 @@ KPS.graphs = KPS.graphs || {};
 	
 	
 	$(document).ready(function(){
+		$('#main-tabs a[href="'+($.cookie('dashboard-main-tab') || '#dashboard-tab-revenue-expenditure')+'"]').tab('show');
 		$revExpSection = $("#dashboard-tab-revenue-expenditure");
 		$noEventsSection = $("#dashboard-tab-no-of-events");
 
@@ -384,7 +385,11 @@ KPS.graphs = KPS.graphs || {};
 				    window.fireEvent('onresize');
 				}
 			}, 1);
-		});	
+		});
+		
+		$("#main-tabs > li > a").click(function(el) {
+			$.cookie('dashboard-main-tab', $(el.currentTarget).attr('href'));
+		});
 	});
 	
 	})
