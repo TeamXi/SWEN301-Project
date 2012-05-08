@@ -10,8 +10,10 @@ import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 import nz.ac.victoria.ecs.kpsmart.entities.logging.CustomerPriceDeleteEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.logging.CustomerPriceUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.DomesticCustomerPriceUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.state.CustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Direction;
+import nz.ac.victoria.ecs.kpsmart.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.resolutions.FormValidationResolution;
 
@@ -23,6 +25,7 @@ public class CustomerPriceActionBean extends FormActionBean {
 	private Priority priority;
 	private float weightPrice;
 	private float volumePrice;
+	private Priority domesticPriority;
 	
 	@DefaultHandler
 	public Resolution customerPricePage() {
@@ -45,6 +48,17 @@ public class CustomerPriceActionBean extends FormActionBean {
 		weightPrice = price.getPricePerUnitWeight();
 		volumePrice = price.getPricePerUnitVolume();
 		return new ForwardResolution("/views/event/customerPriceForm.jsp");
+	}
+	
+	@HandlesEvent("updatedomesticform")
+	public Resolution updateDomesticCustomerPriceScreen() {
+		disableFormField(new String[] {"direction", "location", "priority"});
+		
+		DomesticCustomerPrice price = getState().getDomesticCustomerPrice(domesticPriority);
+		priority = price.getPriority();
+		weightPrice = price.getPricePerUnitWeight();
+		volumePrice = price.getPricePerUnitVolume();
+		return new ForwardResolution("/views/event/customerPriceDomesticForm.jsp");
 	}
 	
 	@HandlesEvent("new")
@@ -89,6 +103,23 @@ public class CustomerPriceActionBean extends FormActionBean {
 		}
 	}
 	
+	private Resolution validateDomesticPrice(DomesticCustomerPrice price) {
+		Map<String, String> errors = new HashMap<String, String>();
+		if(price.getPricePerUnitVolume() <= 0) {
+			errors.put("volumePrice", "The price per cm&sup3; must be greater than zero");
+		}
+		if(price.getPricePerUnitWeight() <= 0) {
+			errors.put("weightPrice", "The price per gram must be greater than zero");
+		}
+		
+		if(errors.size() > 0) {
+			return new FormValidationResolution(false, errors);
+		}
+		else {
+			return null;
+		}
+	}
+	
 	@HandlesEvent("update")
 	public Resolution updateCustomerPrice() {
 		CustomerPrice price = getState().getCustomerPriceById(priceId);
@@ -105,6 +136,22 @@ public class CustomerPriceActionBean extends FormActionBean {
 		return new FormValidationResolution(true, null, null);
 	}
 	
+	@HandlesEvent("updatedomestic")
+	public Resolution updateDomesticCustomerPrice() {
+		DomesticCustomerPrice price = getState().getDomesticCustomerPrice(domesticPriority);
+		price.setPricePerUnitVolume(volumePrice);
+		price.setPricePerUnitWeight(weightPrice);
+		
+		Resolution validation = validateDomesticPrice(price);
+		if(validation != null) {
+			return validation;
+		}
+		
+		getEntityManager().performEvent(new DomesticCustomerPriceUpdateEvent(price));
+		
+		return new FormValidationResolution(true, null, null);
+	}
+	
 	@HandlesEvent("delete")
 	public Resolution deletePrice() {
 		getEntityManager().performEvent(
@@ -116,6 +163,22 @@ public class CustomerPriceActionBean extends FormActionBean {
 	@HandlesEvent("listfragment")
 	public Resolution listFragment() {
 		return new ForwardResolution("/views/event/customerPriceList.jsp");
+	}
+	
+	/**
+	 * Get the domestic customer price for Priority.Domestic_Standard
+	 * @return
+	 */
+	public DomesticCustomerPrice getDomesticStandardCustomerPrice() {
+		return this.getState().getDomesticCustomerPrice(Priority.Domestic_Standard);
+	}
+	
+	/**
+	 * Get the domestic customer price for Priority.Domestic_Air
+	 * @return
+	 */
+	public DomesticCustomerPrice getDomesticAirCustomerPrice() {
+		return this.getState().getDomesticCustomerPrice(Priority.Domestic_Air);
 	}
 
 	/**
@@ -200,5 +263,19 @@ public class CustomerPriceActionBean extends FormActionBean {
 	 */
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	/**
+	 * @return the domesticPriority
+	 */
+	public Priority getDomesticPriority() {
+		return domesticPriority;
+	}
+
+	/**
+	 * @param domesticPriority the domesticPriority to set
+	 */
+	public void setDomesticPriority(Priority domesticPriority) {
+		this.domesticPriority = domesticPriority;
 	}
 }

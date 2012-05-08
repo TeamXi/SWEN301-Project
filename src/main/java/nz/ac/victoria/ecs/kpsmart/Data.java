@@ -5,11 +5,13 @@ import java.text.SimpleDateFormat;
 
 import nz.ac.victoria.ecs.kpsmart.entities.logging.CarrierUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.logging.CustomerPriceUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.DomesticCustomerPriceUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.logging.LocationUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.logging.RouteUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Carrier;
 import nz.ac.victoria.ecs.kpsmart.entities.state.CustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Direction;
+import nz.ac.victoria.ecs.kpsmart.entities.state.DomesticCustomerPrice;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Route;
@@ -24,6 +26,14 @@ final class Data {
 
 	@InjectOnCall
 	public void createData() {
+		/*
+		 * 
+		 * Domestic customer prices
+		 * 
+		 */
+		sm.performEvent(new DomesticCustomerPriceUpdateEvent(new DomesticCustomerPrice(0.01f, 0.02f, Priority.Domestic_Standard)));
+		sm.performEvent(new DomesticCustomerPriceUpdateEvent(new DomesticCustomerPrice(0.02f, 0.04f, Priority.Domestic_Air)));
+		
 		/*
 		 * 
 		 * Carriers

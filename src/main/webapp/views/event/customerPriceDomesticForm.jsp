@@ -5,25 +5,14 @@
 <div id="${actionBean.divId}">
 	<stripes:form id="${actionBean.formId}" class="form-horizontal" action="javascript:${actionBean.submitCallback}">
 		<div class="control-group">
-			<stripes:label for="location" class="control-label">Destination</stripes:label>
-			<div class="controls">
-				<stripes:text class="portEntry" name="location" value="${actionBean.location}" disabled="${actionBean.disabledFormFields['location']}" style="width: 140px"/>
-				<stripes:select name="direction" style="width:65px" value="${actionBean.direction}" disabled="${actionBean.disabledFormFields['direction']}">
-					<stripes:options-enumeration enum="nz.ac.victoria.ecs.kpsmart.entities.state.Direction" />
-				</stripes:select>
-				<span class="help-inline">New Zealand</span>
-			</div>
-		</div>
-		
-		<div class="control-group">
 			<stripes:label class="control-label" for="priority">Priority</stripes:label>
 			<div class="controls">
 				<stripes:select name="priority" value="${actionBean.priority}" disabled="${actionBean.disabledFormFields['priority']}">
 					<c:if test="${actionBean.priority==null}">
 						<option value="placeholder">Select a Priority</option>
 					</c:if>
-					<stripes:option value="International_Air">International Air</stripes:option>
-					<stripes:option value="International_Standard">International Standard</stripes:option>
+					<stripes:option value="Domestic_Air">Domestic Air</stripes:option>
+					<stripes:option value="Domestic_Standard">Domestic Standard</stripes:option>
 				</stripes:select>
 			</div>
 		</div>

@@ -229,7 +229,7 @@ public final class MailDelivery extends StorageEntity implements Serializable {
 		private State man;
 		
 		float calculatePrice(MailDelivery m) {
-			return man.getCustomerPrice(
+			return man.getPrice(
 					m.getRoute().get(0).getStartPoint(), 
 					m.getRoute().get(m.getRoute().size()-1).getEndPoint(), 
 					m.getPriority())

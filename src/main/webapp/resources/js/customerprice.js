@@ -12,6 +12,7 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 	var updateFormId = 'updateCustomerPriceForm';
 	var updateFormSubmitCallback = 'KPS.event.customerprice.submitUpdateForm';
 	var updateFormPartialURL = "&divId="+updateDivId+"&formId="+updateFormId;
+	var updateDomesticFormSubmitCallback = 'KPS.event.customerprice.submitDomesticUpdateForm';
 	
 	var newForm = undefined;
 	var updateForm = undefined;
@@ -57,7 +58,9 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 		var ok = true;
 		KPS.validation.resetValidation(form);
 		
-		ok &= validateLocationField(form.elements['location']);
+		if(form.elements['location']) {
+			ok &= validateLocationField(form.elements['location']);
+		}
 		
 		if(form.elements['priority'].value == "placeholder") {
 			ok = false;
@@ -98,6 +101,12 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 		});
 	};
 	
+	cls.submitDomesticUpdateForm = function(priority) {
+		submitForm(updateForm, "customerprice?updatedomestic&domesticPriority="+priority, function() {
+			KPS.modal.hide();
+		});
+	};
+	
 	cls.addCustomerPrice = function() {
 		KPS.modal.load("customerprice?addform"+newFormURL,function(){
 			KPS.util.disableInputAutocomplete();
@@ -117,9 +126,16 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 			
 			updateForm = document.getElementById(updateFormId);
 			KPS.modal.configure(updateModalConfiguration);
-			KPS.data.locations.load(function () { // TODO: needed?
-				KPS.data.locations.setupPortEntryTypeahead();
-			});
+			KPS.modal.show();
+		});
+	};
+	
+	cls.updateDomesticCustomerPrice = function(priority) {
+		KPS.modal.load("customerprice?updatedomesticform&domesticPriority="+priority+updateFormPartialURL+"&submitCallback="+updateDomesticFormSubmitCallback+"('"+priority+"')", function (data) {
+			KPS.util.disableInputAutocomplete();
+			
+			updateForm = document.getElementById(updateFormId);
+			KPS.modal.configure(updateModalConfiguration);
 			KPS.modal.show();
 		});
 	};

@@ -13,6 +13,32 @@
 		</tr>
 	</thead>
 	<tbody>
+		<tr>
+			<c:set value="${actionBean.domesticStandardCustomerPrice}" var="price"/>
+			<td>New Zealand</td>
+			<td>New Zealand</td>
+			<td>Domestic Standard</td>
+			<td>
+				<fmt:formatNumber type="currency" value="${price.pricePerUnitWeight}"/>
+			</td>
+			<td>
+				<fmt:formatNumber type="currency" value="${price.pricePerUnitVolume}"/>
+				<span class="row-hover-controls"><a onclick="KPS.event.customerprice.updateDomesticCustomerPrice('${price.priority}')">update</a></span>
+			</td>
+		</tr>
+		<tr>
+			<c:set value="${actionBean.domesticAirCustomerPrice}" var="price"/>
+			<td>New Zealand</td>
+			<td>New Zealand</td>
+			<td>Domestic Air</td>
+			<td>
+				<fmt:formatNumber type="currency" value="${price.pricePerUnitWeight}"/>
+			</td>
+			<td>
+				<fmt:formatNumber type="currency" value="${price.pricePerUnitVolume}"/>
+				<span class="row-hover-controls"><a onclick="KPS.event.customerprice.updateDomesticCustomerPrice('${price.priority}')">update</a></span>
+			</td>
+		</tr>
 		<c:forEach var="price" items="${actionBean.state.allCustomerPrices}">
 			<c:set value="${price.startLocation!=null?price.startLocation.name:'New Zealand'}" var="from"></c:set>
 			<c:set value="${price.endLocation!=null?price.endLocation.name:'New Zealand'}" var="to"></c:set>
