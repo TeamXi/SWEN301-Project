@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=US-ASCII" pageEncoding="US-ASCII"%>
 <%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <table class="table table-bordered table-striped responsive-utilities">
 	<thead>
 		<tr>
@@ -23,13 +24,13 @@
 					<c:out value="${to}"/>
 				</td>
 				<td>
-					<c:out value="${price.priority}"/>
+					<fmt:message key="Priority.${price.priority}"/>
 				</td>
 				<td>
-					<c:out value="${price.pricePerUnitWeight}"/>
+					<fmt:formatNumber type="currency" value="${price.pricePerUnitWeight}"/>
 				</td>
 				<td>
-					<c:out value="${price.pricePerUnitVolume}"/>
+					<fmt:formatNumber type="currency" value="${price.pricePerUnitVolume}"/>
 					<span class="row-hover-controls"><a onclick="KPS.event.customerprice.updateCustomerPrice(${price.id})">update</a> <a onclick="KPS.event.customerprice.deleteCustomerPrice('from ${from} to ${to}', ${price.id})">delete</a></span>
 				</td>
 			</tr>

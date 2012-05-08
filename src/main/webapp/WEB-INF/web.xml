@@ -54,4 +54,10 @@
  <listener>
  	<listener-class>nz.ac.victoria.ecs.kpsmart.GuiceServletContextListner</listener-class>
  </listener>
+ <context-param>
+  <param-name>
+    javax.servlet.jsp.jstl.fmt.localizationContext
+  </param-name>
+  <param-value>StripesResources</param-value>
+ </context-param>
 </web-app>

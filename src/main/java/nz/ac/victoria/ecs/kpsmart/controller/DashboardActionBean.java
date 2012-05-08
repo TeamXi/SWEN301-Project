@@ -28,10 +28,6 @@ public class DashboardActionBean extends AbstractActionBean {
 	public EntityManager getEntityManager() {
 		return manager;
 	}
-	@HandlesEvent("criticalRouteListJSON")
-	public Resolution criticalRouteListJSON() {
-		return new ForwardResolution("/views/event/criticalRouteListJSON.jsp");
-	}
 	
 	@Override
 	public ReadOnlyLog getLog() {

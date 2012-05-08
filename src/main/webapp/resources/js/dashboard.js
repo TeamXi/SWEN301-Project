@@ -76,37 +76,10 @@ KPS.dashboard = KPS.dashboard || {};
 		$(eventListContainer).css(eventListContainerWidth(currentList));
 		
 		checkArrows();
-
-		$.ajax({url: KPS.siteRoot+"/dashboard/criticalRouteListJSON",dataType: 'json',data: {},
-			success: function(data){
-				KPS.dashboard.criticalRoutes = [];
-				for(var idx in data){
-					if(data[idx] != undefined && data[idx] != ""){
-						KPS.dashboard.criticalRoutes.push(data[idx]);
-						fillCriticalRoutesTable();
-					}
-				}
-			}
-		});
 		
 		KPS.graphs.refreshCharts();
 	});
 	
-	function fillCriticalRoutesTable(){
-		$criticalRoutesBody = $("#critical-routes-table tbody");
-		var route;
-		for(var routeIdx in KPS.dashboard.criticalRoutes){
-			route = KPS.dashboard.criticalRoutes[routeIdx];
-			$row = $($("<tr class='color-red'></tr>"));
-			$row.append($("<td>"+route.startPoint+"</td>"));
-			$row.append($("<td>"+route.endPoint+"</td>"));
-			$row.append($("<td>"+route.priority+"</td>"));
-			$row.append($("<td>"+route.revenue+"</td>"));
-			$row.append($("<td>"+route.expenditure+"</td>"));
-			$row.append($("<td>"+route.deliveryTime+"</td>"));
-		}
-		$criticalRoutesBody.append($row);
-	}
 	function checkArrows() {
 		var max = cls.events.length-numberToShow;
 		if(currentBase >= max) {

@@ -1,5 +1,5 @@
 KPS.graphs = KPS.graphs || {};
-KPS.graphs.finances = KPS.graphs.finanaces || {};
+
 (function (cls, $) {
 	var expensesChartId = "expensesChart";
 	var profitsChartId  = "profitsChart";
@@ -131,7 +131,6 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
 		total = 0;
 	}
 	function parseFinancesGlobal(type){
-		
 		var finances = KPS.graphs.finances[type];
 		
 		var parsedValues = [];
@@ -199,7 +198,7 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
             },
             tooltip: {
                 formatter: function() {
-                    return this.point.name+'<br/><b>NZD $ </b>' +this.point.value;
+                    return this.point.name+'<br/><b>NZD $ </b>' +this.point.value.toFixed(2);
                 }
             },
             series: [{
@@ -220,7 +219,7 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
                 dataLabels: {
                     formatter: function() {
                         // display only if larger than 1
-                        return (this.point.y > 0.04)? '<b>NZD $ </b>' +(this.point.value +"").substring(0,9):null;
+                        return (this.point.y > 0.04)? '<b>NZD $ </b>' +(this.point.value.toFixed(2) +"").substring(0,9):null;
                     }
                 }
             }]
@@ -336,7 +335,7 @@ KPS.graphs.finances = KPS.graphs.finanaces || {};
             tooltip: {
                 enabled: true,
                 formatter: function() {
-                    return "<b>NZD $"+this.y+" </b><br/>"+this.series.name+"  at event #"+this.x;
+                    return "<b>NZD $"+this.y.toFixed(2)+" </b><br/>"+this.series.name+"  at event #"+this.x;
                 }
             },
             plotOptions: {
