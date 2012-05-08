@@ -106,7 +106,7 @@ tr:hover .row-hover-controls {
 }
 #profitsChart{
 	width: 45%;
-	float: left;
+	float: right;
 	min-width: 250px;
 }
 #expensesChart{
