@@ -7,6 +7,8 @@ package nz.ac.victoria.ecs.kpsmart.state;
  *
  */
 public class DuplicateEntityException extends IllegalArgumentException {
+	private static final long serialVersionUID = 1L;
+
 	public DuplicateEntityException() {
 		super();
 	}

@@ -41,6 +41,8 @@ public final class Location extends StorageEntity implements Serializable {
 	
 	@Embeddable
 	public static final class LocationPK implements Serializable {
+		private static final long serialVersionUID = 1L;
+
 		private double latitude;
 		
 		private double longitude;
