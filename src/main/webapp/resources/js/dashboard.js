@@ -56,26 +56,28 @@ KPS.dashboard = KPS.dashboard || {};
 	
 	$(document).ready(function() {
 		eventList = document.getElementById("eventList");
-		eventListContainer = document.getElementById("eventListContainer");
-		larrEl = document.getElementById("larrId");
-		rarrEl = document.getElementById("rarrId");
-		
-		if(cls.currentEvent == 0) {
-			cls.currentEvent = cls.events.length;
+		if(eventList) {
+			eventListContainer = document.getElementById("eventListContainer");
+			larrEl = document.getElementById("larrId");
+			rarrEl = document.getElementById("rarrId");
+			
+			if(cls.currentEvent == 0) {
+				cls.currentEvent = cls.events.length;
+			}
+			currentBase = cls.currentEvent - Math.floor(numberToShow/2)-1;
+			if(currentBase < 0) {
+				currentBase = 0;
+			}
+			else if(currentBase + numberToShow > cls.events.length){
+				currentBase = cls.events.length - numberToShow;
+			}
+			
+			currentList = createSection(currentBase, numberToShow);
+			eventList.appendChild(currentList);
+			$(eventListContainer).css(eventListContainerWidth(currentList));
+			
+			checkArrows();
 		}
-		currentBase = cls.currentEvent - Math.floor(numberToShow/2)-1;
-		if(currentBase < 0) {
-			currentBase = 0;
-		}
-		else if(currentBase + numberToShow > cls.events.length){
-			currentBase = cls.events.length - numberToShow;
-		}
-		
-		currentList = createSection(currentBase, numberToShow);
-		eventList.appendChild(currentList);
-		$(eventListContainer).css(eventListContainerWidth(currentList));
-		
-		checkArrows();
 		
 		KPS.graphs.refreshCharts();
 	});

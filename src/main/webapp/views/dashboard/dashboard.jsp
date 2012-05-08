@@ -2,6 +2,7 @@
 <%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ include file="/includes/main.jsp" %>
 
 <stripes:layout-render name="/layouts/KPSmart.jsp">
 
@@ -37,21 +38,23 @@
 			</div>
 		</div>
 		
-		<div class="row-fluid">
-			<div class="span12" id="eventscrubber">
-				<table id="eventpager">
-					<tr>
-						<td id="larrId"><a href="#" onclick="KPS.dashboard.goLeft(this)">&larr;</a></td>
-						<td id="eventListContainer">
-							<div style="width: 10000px;" id="eventList">
-								
-							</div>
-						</td>
-						<td id="rarrId"><a href="#" onclick="KPS.dashboard.goRight(this)">&rarr;</a></td>
-					</tr>
-				</table>
+		<c:if test="<%= true /*isManager()*/ %>">
+			<div class="row-fluid">
+				<div class="span12" id="eventscrubber">
+					<table id="eventpager">
+						<tr>
+							<td id="larrId"><a href="#" onclick="KPS.dashboard.goLeft(this)">&larr;</a></td>
+							<td id="eventListContainer">
+								<div style="width: 10000px;" id="eventList">
+									
+								</div>
+							</td>
+							<td id="rarrId"><a href="#" onclick="KPS.dashboard.goRight(this)">&rarr;</a></td>
+						</tr>
+					</table>
+				</div>
 			</div>
-		</div>
+		</c:if>
 		<div class="row-fluid">
 			<div class="span4">
 				<div class="well">
