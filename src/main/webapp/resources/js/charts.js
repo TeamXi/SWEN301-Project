@@ -14,7 +14,7 @@ KPS.graphs = KPS.graphs || {};
 	
 	var numberOfEventCategories = 5;
 	
-	var expensesChart 		= $("<div id=\""+expensesChartId+"\" class='graph' ></div>");
+	var expensesChart 		= $("<div id=\""+expensesChartId+"\" class='graph'></div>");
 	var revenueChart 		= $("<div id=\""+profitsChartId+"\"  class='graph'></div>");
 	var eventsTimeChart 	= $("<div id=\""+eventsTimeId+"\"    class='graph'></div>");
 	var financesTimeChart 	= $("<div id=\""+financesTimeId+"\"  class='graph'></div>");
@@ -373,6 +373,8 @@ KPS.graphs = KPS.graphs || {};
 		
 		$(".activate-graph").click(function(){
 			setTimeout(function() {
+				cls.refreshCharts();
+				
 				if (document.createEvent) {
 					var evt = document.createEvent('UIEvents');
 					evt.initUIEvent('resize', true, false,window,0);
@@ -382,8 +384,6 @@ KPS.graphs = KPS.graphs || {};
 				    window.fireEvent('onresize');
 				}
 			}, 1);
-			
-			cls.refreshCharts();
 		});	
 	});
 	
