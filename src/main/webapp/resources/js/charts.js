@@ -239,6 +239,7 @@ KPS.graphs = KPS.graphs || {};
             title: {
                 text: 'Total Events over Time'
             },
+            reflow: true,
             subtitle: {
                 text: 'KPSmart'
             },
@@ -308,6 +309,7 @@ KPS.graphs = KPS.graphs || {};
             title: {
                 text: 'Expenditure and Revenue over Time'
             },
+            reflow: true,
             subtitle: {
                 text: 'KPSmart'
             },
@@ -369,7 +371,20 @@ KPS.graphs = KPS.graphs || {};
 		$revExpSection.append(revenueChart);
 		$noEventsSection.append(eventsTimeChart);
 		
-		$(".activate-graph").click(function(){cls.refreshCharts();});	
+		$(".activate-graph").click(function(){
+			setTimeout(function() {
+				if (document.createEvent) {
+					var evt = document.createEvent('UIEvents');
+					evt.initUIEvent('resize', true, false,window,0);
+					window.dispatchEvent(evt);
+	
+				} else if (document.createEventObject) {
+				    window.fireEvent('onresize');
+				}
+			}, 1);
+			
+			cls.refreshCharts();
+		});	
 	});
 	
 	})
