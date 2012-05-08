@@ -8,13 +8,13 @@ KPS.graphs.finances = {revenue:{international:[],domestic:[]},expenditure:{inter
 		KPS.graphs.finances.revenue.<c:out value="${revenueExpenditure.endPoint.international? 'international': 'domestic'}"/>.push(
 				{startPoint:'<c:out value="${revenueExpenditure.startPoint.name}"/>',
 				endPoint:'<c:out value="${revenueExpenditure.endPoint.name}"/>',
-				priority:'<c:out value="${revenueExpenditure.priority}"/>',
+				priority:'<fmt:message key="Priority.${revenueExpenditure.priority}"/>',
 				amount:'<c:out value="${revenueExpenditure.revenue}"/>'}
 		);
 		KPS.graphs.finances.expenditure.<c:out value="${revenueExpenditure.endPoint.international? 'international': 'domestic'}"/>.push(
 				{startPoint:'<c:out value="${revenueExpenditure.startPoint.name}"/>',
 				endPoint:'<c:out value="${revenueExpenditure.endPoint.name}"/>',
-				priority:'<c:out value="${revenueExpenditure.priority}"/>',
+				priority:'<fmt:message key="Priority.${revenueExpenditure.priority}"/>',
 				amount:'<c:out value="${revenueExpenditure.expenditure}"/>'}
 		);
 	</c:forEach>

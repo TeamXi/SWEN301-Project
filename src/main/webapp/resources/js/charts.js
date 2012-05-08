@@ -157,7 +157,7 @@ KPS.graphs = KPS.graphs || {};
 		for(var fiIdx in finances.international){
 			finance = finances.international[fiIdx];
 			parsedValues.push({
-				name: finance.startPoint+" -> "+finance.endPoint+" ( "+finance.priority.replace(/_/g,"")+" )",
+				name: finance.startPoint+" -> "+finance.endPoint+" ("+finance.priority+")",
 				color: colors[(colorIdx++%colors.length)],
 				y:parseFloat(finance.amount)/total,
 				value: parseFloat(finance.amount)
@@ -166,7 +166,7 @@ KPS.graphs = KPS.graphs || {};
 		for(var fiIdx in finances.domestic){
 			finance = finances.domestic[fiIdx];
 			parsedValues.push({
-				name: finance.startPoint+" -> "+finance.endPoint+" ( "+finance.priority.replace(/_/g,"")+" )",
+				name: finance.startPoint+" -> "+finance.endPoint+" ("+finance.priority+")",
 				color: colors[(colorIdx++%colors.length)],
 				y:parseFloat(finance.amount)/total,
 				value: parseFloat(finance.amount)
@@ -219,7 +219,7 @@ KPS.graphs = KPS.graphs || {};
                 dataLabels: {
                     formatter: function() {
                         // display only if larger than 1
-                        return (this.point.y > 0.04)? '<b>NZD $ </b>' +(this.point.value.toFixed(2) +"").substring(0,9):null;
+                        return (this.point.y > 0.04)? '<b>NZD $ </b>' +this.point.value.toFixed(2):null;
                     }
                 }
             }]
