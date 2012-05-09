@@ -79,6 +79,11 @@ tr:hover .row-hover-controls {
 	border-radius: 3px;
 }
 
+.location-name-hover-map-image {
+	width: 250px;
+	height: 250px;
+}
+
 /*
  *Carrousel
  */

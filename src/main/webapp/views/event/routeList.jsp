@@ -14,8 +14,8 @@
 	<tbody>
 		<c:forEach var="route" items="${actionBean.state.allRoute}">
 			<tr>
-				<td><c:out value="${route.startPoint.name}" /></td>
-				<td><c:out value="${route.endPoint.name}" /></td>
+				<td><span class="location-name-hover"><c:out value="${route.startPoint.name}" /></span></td>
+				<td><span class="location-name-hover"><c:out value="${route.endPoint.name}" /></span></td>
 				<td><c:out value="${route.carrier.name}" /></td>
 				<td><c:out value="${route.transportMeans}" /></td>
 				<td>

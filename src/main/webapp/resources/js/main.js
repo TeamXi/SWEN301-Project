@@ -45,6 +45,41 @@ var waitForFinalEvent = (function () {
 } (KPS.util, jQuery));
 
 (function(cls, $, undefined) {
+	$(document).ready(function() {
+		var popover = $('<div class="popover fade right in" style="display: none;">'+
+				'<div class="arrow"></div>'+
+				'<div class="popover-inner">'+
+					'<img class="location-name-hover-map-image"/>'+
+				'</div>'+
+			'</div>');
+		var img = popover.find(".location-name-hover-map-image");
+		$(document.body).append(popover);
+		
+		$(".location-name-hover").hover(function(e) {
+			var pos = $(e.currentTarget).position();
+			var width = $(e.currentTarget).width();
+			var diff = $(e.currentTarget).height()/2-popover.height()/2-4;
+			var location = KPS.data.locations.get(e.currentTarget.innerHTML);
+			img.attr('src', KPS.util.map.staticUrl(location.latitude, location.longitude));
+			popover.css({left: pos.left+width, top: pos.top+diff, display: 'block'});
+		}, function(e) {
+			if(popover.has(e.relatedTarget).length > 0) {
+				e.stopPropagation();
+				e.preventDefault();
+			}
+			else {
+				popover.css({display: 'none'});
+			}
+		});
+	});
+	
+	cls.staticUrl = function(lat, lng) {
+		//http://maps.googleapis.com/maps/api/staticmap?center=-4.434044,136.40625&zoom=4&format=png&sensor=false&size=640x480&maptype=roadmap&style=visibility:off&style=feature:administrative.country|visibility:on&style=feature:administrative.locality|visibility:on&style=feature:water|element:geometry|visibility:on&style=feature:water|invert_lightness:true|hue:0x0066ff
+		//http://maps.googleapis.com/maps/api/staticmap?zoom=6&format=png&sensor=false&size=250x250&maptype=roadmap&style=visibility:off&style=feature:administrative.country|visibility:on&style=feature:administrative.locality|visibility:on&style=feature:water|element:geometry|visibility:on&style=feature:water|invert_lightness:true|hue:0x0066ff&markers=color:red|-41,173
+		
+		return "http://maps.googleapis.com/maps/api/staticmap?zoom=6&format=png&sensor=false&size=250x250&maptype=roadmap&style=visibility:off&style=feature:administrative.country|visibility:on&style=feature:administrative.locality|visibility:on&style=feature:water|element:geometry|visibility:on&style=feature:water|invert_lightness:true|hue:0x0066ff&markers=color:red|"+lat+","+lng;
+	};
+	
 	cls.addMarker = function(map, marker) {
 		if(!map.markers) {
 			map.markers = [];
@@ -384,6 +419,15 @@ function show(obj){
 			}
 		}
 		return false;
+	};
+	
+	cls.get = function(name) {
+		for(var n=0;n<locationList.length;n++) {
+			if(locationList[n].name.toLowerCase() == name.toLowerCase()) {
+				return locationList[n];
+			}
+		}
+		return null;
 	};
 
 	cls.isInternational = function(name) {
