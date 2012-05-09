@@ -44,10 +44,24 @@
 			<c:set value="${price.endLocation!=null?price.endLocation.name:'New Zealand'}" var="to"></c:set>
 			<tr>
 				<td>
-					<c:out value="${from}"/>
+					<c:choose>
+						<c:when test="${price.startLocation!=null}">
+							<span class="location-name-hover"><c:out value="${from}"/></span>
+						</c:when>
+						<c:otherwise>
+							<c:out value="${from}"/>
+						</c:otherwise>
+					</c:choose>
 				</td>
 				<td>
-					<c:out value="${to}"/>
+					<c:choose>
+						<c:when test="${price.endLocation!=null}">
+							<span class="location-name-hover"><c:out value="${to}"/></span>
+						</c:when>
+						<c:otherwise>
+							<c:out value="${to}"/>
+						</c:otherwise>
+					</c:choose>
 				</td>
 				<td>
 					<fmt:message key="Priority.${price.priority}"/>
