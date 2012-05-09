@@ -194,6 +194,9 @@ function show(obj){
 	
 	pack.carrousel.prototype.show = function(num, animated) {
 		if(this.currentPage != num) {
+			this.$body.children().css({height: 'auto'});
+			this.$body.children().animate({height: $(this.$body.children()[num]).height()+'px'});
+			
 			var margin = (num*-(this.width+this.spacing))+"px";
 			if(animated === undefined || animated === true) {
 				this.$body.animate({marginLeft:margin},400);

@@ -178,6 +178,7 @@ KPS.event.location = KPS.event.location || {};
 				}
 			},
 			cancelButton: {
+				title: "Back",
 				action: function() {
 					dismiss();
 //					$("#emptyModalSuccessMessage").html("Location added!"); // TODO: look at all of these
