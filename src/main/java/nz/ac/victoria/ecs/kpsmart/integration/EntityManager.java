@@ -46,7 +46,6 @@ public class EntityManager {
 	public void performEvent(EntityUpdateEvent<? extends StorageEntity> event) {
 		logger.info("Performing entity update event: {}", event);
 		
-		event.getEntity().setRelateEventID(event.getUid());
 		getState().save(event.getEntity());
 	}
 	

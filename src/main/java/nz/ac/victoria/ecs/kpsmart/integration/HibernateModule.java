@@ -52,6 +52,7 @@ public class HibernateModule extends LifecycleModule {
 	@Override
 	public void unload() {
 		this.session.cancelQuery();
+		this.session.clear();
 		this.session.flush();
 		this.session.close();
 		this.factory.close();

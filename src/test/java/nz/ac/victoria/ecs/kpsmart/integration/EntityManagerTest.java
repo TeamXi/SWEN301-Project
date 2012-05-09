@@ -59,7 +59,7 @@ public class EntityManagerTest {
 		
 		new EntityManager().performEvent(cue);
 		
-		assertEquals(0, c.getRelateEventID().getId());
+		assertEquals(null, c.getRelateEventID());
 		verify(this.mockState).save(c);
 	}
 	
@@ -69,7 +69,7 @@ public class EntityManagerTest {
 		CarrierUpdateEvent cue = new CarrierUpdateEvent(c);
 		
 		new EntityManager().performEvent((EntityOperationEvent) cue);
-		assertEquals(0, c.getRelateEventID().getId());
+		assertEquals(null, c.getRelateEventID());
 		verify(this.mockState).save(c);
 	}
 	

@@ -1,6 +1,7 @@
 package nz.ac.victoria.ecs.kpsmart.state.impl;
 
 import static nz.ac.victoria.ecs.kpsmart.util.ListUtils.filter;
+import static nz.ac.victoria.ecs.kpsmart.util.ArrayUtils.contains;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,7 +36,7 @@ import com.google.inject.Inject;
 @InjectOnContruct
 public final class HibernateState implements State, ReadOnlyState {
 	@Inject // VisableForTesting
-	Session session;
+	public Session session;
 	
 	private Long maxEventID = null;
 	private Logger logger = LoggerFactory.getLogger(HibernateState.class);
@@ -187,11 +188,15 @@ public final class HibernateState implements State, ReadOnlyState {
 	@Override
 	public Collection<Route> getAllRoutesForPriority(final Priority priority) {
 		return this.setFromDatasourceToTrue(filter((List<Route>) this.getEntityCriteria(Route.class)
-					.add(Restrictions.in("primaryKey.transportMeans", priority.ValidTransportMeans))
 					.list(),
 				new Filter<Route>() {
 					@Override
 					public boolean filter(Route object) {
+						if (priority.International && !object.isInternational())
+							return true;
+						else if (!contains(priority.ValidTransportMeans, object.getTransportMeans()))
+							return false;
+						
 						if (priority.International)
 							return true;
 						
@@ -202,12 +207,20 @@ public final class HibernateState implements State, ReadOnlyState {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<Route> getRoutesBetween(Location start, Location end, Priority priority) {
-		return this.setFromDatasourceToTrue((List<Route>) this.getEntityCriteria(Route.class)
+	public Collection<Route> getRoutesBetween(Location start, Location end, final Priority priority) {
+		return this.setFromDatasourceToTrue(filter((List<Route>) this.getEntityCriteria(Route.class)
 					.add(Restrictions.eq("primaryKey.startPoint", start))
 					.add(Restrictions.eq("primaryKey.endPoint", end))
-					.add(Restrictions.in("primaryKey.transportMeans", priority.ValidTransportMeans))
-					.list());
+					.list(),
+					new Filter<Route>() {
+						@Override
+						public boolean filter(Route object) {
+							if (priority.International && !object.isInternational())
+								return true;
+							else 
+								return contains(priority.ValidTransportMeans, object.getTransportMeans());
+						}
+					}));
 	}
 
 	@Override

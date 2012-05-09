@@ -17,6 +17,7 @@ public class LoggingEntityManager extends EntityManager {
 	@Override
 	public void performEvent(EntityUpdateEvent<? extends StorageEntity> event) {
 		log.save(event);
+		event.getEntity().setRelateEventID(event.getUid());
 		
 		super.performEvent(event);
 	}
@@ -24,6 +25,7 @@ public class LoggingEntityManager extends EntityManager {
 	@Override
 	public void performEvent(EntityDeleteEvent<? extends StorageEntity> event) {
 		log.save(event);
+		event.getEntity().setRelateEventID(event.getUid());
 		
 		super.performEvent(event);
 	}

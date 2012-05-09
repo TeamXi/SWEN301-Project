@@ -20,7 +20,7 @@ import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
 
 import com.google.inject.Inject;
 
-final class Data {
+public final class Data {
 	@Inject 
 	private EntityManager sm;
 

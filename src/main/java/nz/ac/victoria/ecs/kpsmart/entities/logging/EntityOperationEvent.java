@@ -32,9 +32,9 @@ public abstract class EntityOperationEvent<E extends StorageEntity> implements S
 	
 	protected EntityOperationEvent(E entity) {
 		this.entity = entity;
-		
-		if (entity != null)
-			this.entity.setRelateEventID(uid);
+//		
+//		if (entity != null)
+//			this.entity.setRelateEventID(uid);
 	}
 
 	public E getEntity() {
