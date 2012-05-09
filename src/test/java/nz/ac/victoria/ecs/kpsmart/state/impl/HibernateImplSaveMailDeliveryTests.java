@@ -58,7 +58,11 @@ public class HibernateImplSaveMailDeliveryTests extends HibernateDataTest{
 	
 	@Test
 	public void testSaveTwoMailDeliveries() {
-		MailDelivery m = new MailDelivery(new ArrayList<Route>(Arrays.asList(route)),Priority.International_Air,1,1,Calendar.getInstance().getTime());
+		MailDelivery m = new MailDelivery(
+								new ArrayList<Route>(Arrays.asList(route)),
+								Priority.International_Air,
+								1,1,
+								Calendar.getInstance().getTime());
 		
 		this.state.save(m);
 		MailDelivery newM = this.state.getAllMailDeliveries().iterator().next();
@@ -66,7 +70,11 @@ public class HibernateImplSaveMailDeliveryTests extends HibernateDataTest{
 		
 		this.state.delete(newM);
 		
-		MailDelivery m2 = new MailDelivery(new ArrayList<Route>(Arrays.asList(route)),Priority.International_Air,1,1,Calendar.getInstance().getTime());
+		MailDelivery m2 = new MailDelivery(
+								new ArrayList<Route>(Arrays.asList(route)),
+								Priority.International_Air,
+								1,1,
+								Calendar.getInstance().getTime());
 		
 		this.state.save(m2);
 		MailDelivery newM2 = this.state.getAllMailDeliveries().iterator().next();
