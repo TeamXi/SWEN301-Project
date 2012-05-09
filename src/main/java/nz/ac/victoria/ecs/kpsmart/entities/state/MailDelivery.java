@@ -70,8 +70,8 @@ public final class MailDelivery extends StorageEntity implements Serializable {
 	}
 	
 	public void fillCalculatedFields() {
-		this.cost = Util.instance.calculateCost(this);
-		this.price = Util.instance.calculatePrice(this);
+		this.cost = Util.getInstance().calculateCost(this);
+		this.price = Util.getInstance().calculatePrice(this);
 	}
 	
 	public boolean isInternational() {
@@ -223,8 +223,8 @@ public final class MailDelivery extends StorageEntity implements Serializable {
 		this.cost = cost;
 	}
 	
-	@InjectOnContruct
-	private static final class Util {
+	@InjectOnContruct // Visable for testing
+	public static final class Util {
 		@Inject
 		private State man;
 		
@@ -245,6 +245,18 @@ public final class MailDelivery extends StorageEntity implements Serializable {
 			return sum;
 		}
 		
-		static final Util instance = new Util();
+		static Util getInstance() {
+			if (instance == null)
+				instance = new Util();
+			
+			return instance;
+		}
+		
+		// Visable for testing
+		public static void unload() {
+			instance = null;
+		}
+
+		private static Util instance;
 	}
 }

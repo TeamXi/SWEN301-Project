@@ -1,12 +1,11 @@
 package nz.ac.victoria.ecs.kpsmart.util;
 
 import nz.ac.victoria.ecs.kpsmart.GuiceServletContextListner;
+import nz.ac.victoria.ecs.kpsmart.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
 import nz.ac.victoria.ecs.kpsmart.integration.HibernateModule;
-import nz.ac.victoria.ecs.kpsmart.integration.LoggingEntityManager;
 import nz.ac.victoria.ecs.kpsmart.logging.Log;
 import nz.ac.victoria.ecs.kpsmart.logging.impl.HibernateLogger;
-import nz.ac.victoria.ecs.kpsmart.reporting.impl.DefaultReport;
 import nz.ac.victoria.ecs.kpsmart.state.State;
 import nz.ac.victoria.ecs.kpsmart.state.impl.HibernateState;
 
@@ -34,6 +33,7 @@ public class HibernateDataTest {
 
 	@After
 	public void tearDown() {
+		MailDelivery.Util.unload();
 		GuiceServletContextListner.restorePreviousInjector();
 	}
 
