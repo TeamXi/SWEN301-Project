@@ -3,9 +3,6 @@
 <%@ taglib prefix="stripes"
 	uri="http://stripes.sourceforge.net/stripes.tld"%>
 
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/mail.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/formvalidation.js"></script>
-
 <div>
 	<stripes:form id="newMailForm" class="form-horizontal" action="javascript:KPS.event.maildelivery.submitForm('newMailForm')">
 		<fieldset>

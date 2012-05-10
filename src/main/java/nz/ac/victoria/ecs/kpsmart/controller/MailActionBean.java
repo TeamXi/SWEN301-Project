@@ -16,6 +16,7 @@ import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.HandlesEvent;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
+import net.sourceforge.stripes.ajax.JavaScriptResolution;
 import nz.ac.victoria.ecs.kpsmart.entities.logging.MailDeliveryUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.entities.state.MailDelivery;
@@ -46,7 +47,7 @@ public class MailActionBean extends AbstractActionBean {
 	
 	@HandlesEvent("new")
 	public Resolution newMailDelivery() {
-		MailDelivery delivery = processDelivery();
+		MailDelivery delivery = processDelivery(source, destination, priority, weight, volume);
 		if(delivery != null) {
 			getEntityManager().performEvent(new MailDeliveryUpdateEvent(delivery));
 			
@@ -57,6 +58,35 @@ public class MailActionBean extends AbstractActionBean {
 		else {
 			return new FormValidationResolution(false,new String[]{"destination"},new String[]{"KPS does not deliver mail from "+source+" to "+destination});
 		}
+	}
+	
+	@HandlesEvent("availablepriorities")
+	public Resolution availablePriorities(){
+		Location from = getState().getLocationForName(source);
+		Location to = getState().getLocationForName(destination);
+		if(from == null || to == null){
+			return new JavaScriptResolution(new Object[0]);
+		}
+		Priority[] priorities;
+		
+		if(!from.isInternational()&& !to.isInternational()){
+			priorities=new Priority[]{Priority.Domestic_Air, Priority.Domestic_Standard};
+		}
+		else if(from.isInternational()!=to.isInternational()){
+			priorities=new Priority[]{Priority.International_Air, Priority.International_Standard};
+		}
+		else{
+			priorities = new Priority[0];
+		}
+		
+		ArrayList<String> pri = new ArrayList<String>();
+		for(Priority p : priorities){
+			if(processDelivery(source,destination, p,weight, volume)!=null){
+				pri.add(p.toString());
+			}
+		}
+				
+		return new JavaScriptResolution(pri);
 	}
 	
 	private Map<String, Object> makeSummary(MailDelivery delivery) {
@@ -81,7 +111,7 @@ public class MailActionBean extends AbstractActionBean {
 		return summary;
 	}
 
-	private MailDelivery processDelivery() {
+	private MailDelivery processDelivery(String source, String destination, Priority priority, float weight, float volume) {
 		Location from = getState().getLocationForName(source);
 		Location to = getState().getLocationForName(destination);
 		

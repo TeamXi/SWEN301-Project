@@ -101,41 +101,63 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 	}
 	
 	function updatePriorityDropdown() {
+		$("#newMailForm select[name='priority'] option[value!='placeholder']").each(function(index, child) {
+			child.disabled= true;
+		});
+		
 		var form = document.getElementById('newMailForm');
-		var isInternational = KPS.data.locations.isInternational(form.elements['source'].value) || KPS.data.locations.isInternational(form.elements['destination'].value);
+		var source = form.elements['source'].value;
+		var destination = form.elements['destination'].value;
 		var priorityElm = form.elements['priority'];
-		$("option.international-priority", priorityElm).each(function(index, child) {
-			child.disabled = !isInternational;
-		});
-		$("option.domestic-priority", priorityElm).each(function(index, child) {
-			child.disabled = isInternational;
-		});
-		if($("option:selected", priorityElm).is(":disabled")) {
+		
+		function dontDeliverMessage() {
+			KPS.validation.validationError(form.elements['destination'], "KPS does not deliver mail from "+source+" to "+destination);
+		}
+		
+		if(KPS.data.locations.exists(source) && KPS.data.locations.exists(destination)) {
+			if(KPS.data.locations.isInternational(source) && KPS.data.locations.isInternational(destination)) {
+				dontDeliverMessage();
+			}
+			else {
+				$.get(KPS.siteRoot+"/event/mail?availablepriorities",{source:source, destination:destination},function(data){
+					var priorities = eval(data);
+					if (priorities.length == 0){
+						dontDeliverMessage();
+					}
+					else{
+						$("option[value!='placeholder']", priorityElm).each(function(index, child) {
+							child.disabled= priorities.indexOf(child.value)<0;
+						});
+					}
+				});
+			}
+		}
+		else if(source && destination){
+			validateLocationField(form.elements['source']);
+			validateLocationField(form.elements['destination']);
+		}
+		
+		if($("option:selected", priorityElm).is(":disabled")) { // If selected option is disabled select the placeholder
 			priorityElm.value = "placeholder";
 		}
 	}
 	
 	$(document).ready(function() {
-		KPS.data.locations.load(function () {
-			KPS.data.locations.setupPortEntryTypeahead(function (child) {
-				$(child).blur(function () { // TODO: only if child of form
-					setTimeout(updatePriorityDropdown, 200);
-				});
-			});
-		});
-		
 		$("#newMailForm select[name='priority'] option[value!='placeholder']").each(function(index, child) {
-			if(child.value.match('^International')) {
-				$(child).addClass('international-priority');
-			}
-			else {
-				$(child).addClass('domestic-priority');
-			}
+			child.disabled= true;
 		});
 		
 		$(".new-mail-delivery-link").each(function (index, child) {
 			$(child).click(function () {
 				KPS.modal.load(KPS.siteRoot+"/event/mail", function(){
+					KPS.data.locations.load(function () {
+						KPS.data.locations.setupPortEntryTypeahead(function (child) {
+							$(child).blur(function () { // TODO: only if child of form
+								setTimeout(updatePriorityDropdown, 200);
+							});
+						});
+					});
+					
 					KPS.util.disableInputAutocomplete();
 					
 					KPS.modal.carrousel.show(0);

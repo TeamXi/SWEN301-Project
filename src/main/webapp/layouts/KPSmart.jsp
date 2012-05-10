@@ -26,6 +26,7 @@
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dateformat.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/main.js"></script>
+			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/formvalidation.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/mail.js"></script>
 			<stripes:layout-component name="scripts" />
 		</head>
