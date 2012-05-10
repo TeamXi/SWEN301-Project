@@ -6,6 +6,10 @@ KPS.data.locations = KPS.data.locations || {};
 KPS.data.carriers = KPS.data.carriers || {};
 KPS.data.format = KPS.data.format || {};
 
+$(document).ajaxError(function(){
+	alert("There was an error communicating with the server");
+});
+
 function performLogin(siteRoot,role){
 	$.post(siteRoot+"/login", {role: role}, function(data) {
 		KPS.util.redirect(siteRoot+"/dashboard");
