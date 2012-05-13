@@ -69,6 +69,18 @@ public class CarrierInfoActionBeanTest extends StripesActionBeanTest {
 	}
 	
 	@Test
+	public void testRejectNewEmptyNameCarrier() throws Exception {
+		MockRoundtrip trip = new MockRoundtrip(this.context, CarrierInfoActionBean.class);
+		
+		trip.setParameter("name", "");
+		
+		trip.execute("new");
+		
+		assertTrue(trip.getResponse().getOutputString().contains("\"status\":false"));
+		verify(this.manager, never()).performEvent(new CarrierUpdateEvent(new Carrier("a")));
+	}
+	
+	@Test
 	public void testRejectCreatingIdenticalCarriers() throws Exception {
 		MockRoundtrip trip = new MockRoundtrip(this.context, CarrierInfoActionBean.class);
 		trip.setParameter("name", "a");
@@ -99,6 +111,24 @@ public class CarrierInfoActionBeanTest extends StripesActionBeanTest {
 		newCarrier.setId(1);
 		verify(this.state).getCarrier(1);
 		verify(this.manager).performEvent(new CarrierUpdateEvent(newCarrier));
+	}
+	
+	@Test
+	public void testUpdateCarrierWithEmptyNameIsRejected() throws Exception {
+		Carrier c = new Carrier("a");
+		c.setId(1);
+		when(this.state.getCarrier(1)).thenReturn(c);
+		
+		MockRoundtrip trip = new MockRoundtrip(this.context, CarrierInfoActionBean.class);
+		trip.setParameter("carrierId", "1");
+		trip.setParameter("name", "");
+		trip.execute("update");
+		assertTrue(trip.getResponse().getOutputString().contains("\"status\":false"));
+		
+		Carrier newCarrier = new Carrier("b");
+		newCarrier.setId(1);
+		verify(this.state).getCarrier(1);
+		verify(this.manager, never()).performEvent(new CarrierUpdateEvent(newCarrier));
 	}
 	
 	@Test
