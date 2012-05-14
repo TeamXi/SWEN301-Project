@@ -39,9 +39,7 @@ public class CarrierInfoActionBean extends FormActionBean {
 			return res;
 		}
 		
-		System.err.println(name);
 		Carrier c = getState().getCarrier(name);
-		System.err.println(c);
 		if(c == null) {
 			getEntityManager().performEvent(
 					new CarrierUpdateEvent(
