@@ -99,4 +99,9 @@ public final class HibernateLogger implements Log, ReadOnlyLog {
 			bind(ReadOnlyLog.class).to(HibernateLogger.class);
 		}
 	}
+
+	@Override
+	public int getNumberOfEvents() {
+		return getAllEvents().size();
+	}
 }

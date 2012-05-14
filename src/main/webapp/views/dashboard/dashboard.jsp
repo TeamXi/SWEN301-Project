@@ -19,12 +19,12 @@
 			
 			KPS.dashboard.events = <%@include file="eventListJSON.jsp"%>;
 			KPS.dashboard.currentEvent = ${actionBean.atevent};
+			if(KPS.dashboard.currentEvent <= 0) {
+				KPS.dashboard.currentEvent = KPS.dashboard.events.length;
+			}
 			
 			<%@include file="charts.jsp"%>
 			KPS.graphs.currentEvent = KPS.dashboard.currentEvent;
-			if(KPS.graphs.currentEvent <= 0) {
-				KPS.graphs.currentEvent = KPS.dashboard.events.length;
-			}
 			KPS.graphs.events = KPS.dashboard.events;
 		</script>
 	</stripes:layout-component>
@@ -34,6 +34,10 @@
 	<stripes:layout-component name="content">
 		<div class="row-fluid">
 			<div class="span12">
+				<div class="alert alert-info">
+					<a class="close" href="#">&times;</a>
+					<b>Heads up!</b> <span id="eventbacklogcount"></span> occurred since you loaded the page, <a href="javascript:history.go(0)">refresh</a> to view the updates.
+				</div>
 				<h1>Dashboard</h1>
 			</div>
 		</div>

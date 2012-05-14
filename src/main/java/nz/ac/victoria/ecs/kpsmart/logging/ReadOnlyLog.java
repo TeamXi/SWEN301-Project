@@ -22,6 +22,13 @@ public interface ReadOnlyLog extends TimeCapable<ReadOnlyLog> {
 	public EntityOperationEvent<? extends StorageEntity> getEvent(long id);
 	
 	/**
+	 * Get the number of events that have transpired
+	 * 
+	 * @return the number of events
+	 */
+	public int getNumberOfEvents();
+	
+	/**
 	 * Get all events from the database in the order they happened.
 	 * 
 	 * @return	A list of all events that have ever occurred

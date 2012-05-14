@@ -120,7 +120,7 @@ public class DefaultReport implements Report {
 	
 	@Override
 	public int getNumberOfEvents() {
-		return this.log.getAllEvents().size();
+		return this.log.getNumberOfEvents();
 	}
 	
 	@Override

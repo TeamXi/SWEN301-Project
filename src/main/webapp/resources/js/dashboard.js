@@ -12,6 +12,10 @@ KPS.dashboard = KPS.dashboard || {};
 	var larrEl = null;
 	var rarrEl = null;
 	
+	var pollInterval = 1000*5; // 5 seconds
+	
+	var lastEvent = 0;
+	
 	function createSection(from, count) {
 		if(from < 0) {
 			count += from;
@@ -34,7 +38,7 @@ KPS.dashboard = KPS.dashboard || {};
 				});
 			}(cls.events[n]));
 			var td = document.createElement('td');
-			if(cls.currentEvent == cls.events[n].id || (cls.currentEvent == 0 && n == cls.events.length-1)) {
+			if(cls.currentEvent == cls.events[n].id) {
 				td.setAttribute("class", "disabled");
 			}
 			td.appendChild(eventEl);
@@ -54,6 +58,28 @@ KPS.dashboard = KPS.dashboard || {};
 		};
 	}
 	
+	function setupEventListener() {
+		lastEvent = cls.currentEvent;
+		setTimeout(checkForEventUpdates, pollInterval);
+	}
+	
+	function checkForEventUpdates() {
+		$.ajax("dashboard?eventcount", {
+			global: false,
+			success: function(data, textStatus, jqXHR) {
+				latestEvent = eval(data);
+				
+				if(latestEvent != lastEvent) {
+					lastEvent = latestEvent;
+					var back = latestEvent-cls.currentEvent;
+					document.getElementById('eventbacklogcount').innerHTML = back + (back>1?' events have':' event has');
+				}
+				
+				setTimeout(checkForEventUpdates, pollInterval);
+			}
+		});
+	}
+	
 	$(document).ready(function() {
 		eventList = document.getElementById("eventList");
 		if(eventList) {
@@ -61,9 +87,6 @@ KPS.dashboard = KPS.dashboard || {};
 			larrEl = document.getElementById("larrId");
 			rarrEl = document.getElementById("rarrId");
 			
-			if(cls.currentEvent == 0) {
-				cls.currentEvent = cls.events.length;
-			}
 			currentBase = cls.currentEvent - Math.floor(numberToShow/2)-1;
 			if(currentBase < 0) {
 				currentBase = 0;
@@ -77,6 +100,10 @@ KPS.dashboard = KPS.dashboard || {};
 			$(eventListContainer).css(eventListContainerWidth(currentList));
 			
 			checkArrows();
+		}
+		
+		if(cls.currentEvent == cls.events.length) {
+			setupEventListener();
 		}
 		
 		KPS.graphs.refreshCharts();

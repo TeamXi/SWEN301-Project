@@ -2,12 +2,6 @@ package nz.ac.victoria.ecs.kpsmart.reporting.impl;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Arrays;
-
-import nz.ac.victoria.ecs.kpsmart.entities.logging.CarrierUpdateEvent;
-import nz.ac.victoria.ecs.kpsmart.entities.logging.EntityOperationEvent;
-import nz.ac.victoria.ecs.kpsmart.entities.state.Carrier;
-import nz.ac.victoria.ecs.kpsmart.entities.state.StorageEntity;
 import nz.ac.victoria.ecs.kpsmart.logging.Log;
 import nz.ac.victoria.ecs.kpsmart.state.State;
 
@@ -30,13 +24,5 @@ public class DefaultReportTest {
 	@Test
 	public void testNumberOfEventsIsZero() {
 		assertEquals(0, this.report.getNumberOfEvents());
-	}
-	
-	@Test
-	public void testNumberOfEventsIsNonZero() {
-		when(this.log.getAllEvents()).thenReturn(
-				Arrays.<EntityOperationEvent<? extends StorageEntity>>asList(new CarrierUpdateEvent(new Carrier("a"))));
-		
-		assertEquals(1, this.report.getNumberOfEvents());
 	}
 }

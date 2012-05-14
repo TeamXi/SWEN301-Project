@@ -6,6 +6,7 @@ import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.HandlesEvent;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
+import net.sourceforge.stripes.ajax.JavaScriptResolution;
 import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
 import nz.ac.victoria.ecs.kpsmart.logging.ReadOnlyLog;
 import nz.ac.victoria.ecs.kpsmart.reporting.Report;
@@ -18,6 +19,11 @@ public class DashboardActionBean extends AbstractActionBean {
 	@DefaultHandler
 	public Resolution dashboard() {
 		return new ForwardResolution("/views/dashboard/dashboard.jsp");
+	}
+	
+	@HandlesEvent("eventcount")
+	public Resolution getEventCount() {
+		return new JavaScriptResolution(getLog().getNumberOfEvents());
 	}
 	
 	public Report getReportManager() {
