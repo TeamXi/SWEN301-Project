@@ -11,7 +11,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(uniqueConstraints=@UniqueConstraint(columnNames={"name"}))
-public final class Carrier extends StorageEntity implements Serializable {
+public class Carrier extends StorageEntity implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;

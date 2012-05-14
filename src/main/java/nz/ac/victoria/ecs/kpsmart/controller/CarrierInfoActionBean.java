@@ -34,14 +34,35 @@ public class CarrierInfoActionBean extends FormActionBean {
 	
 	@HandlesEvent("new")
 	public Resolution newCarrierInfo() {
-		getEntityManager().performEvent(
-				new CarrierUpdateEvent(
-						new Carrier(this.name)));
+		Resolution res = validateCarrierInfo();
+		if(res != null) {
+			return res;
+		}
 		
-		return new FormValidationResolution(true,null,null);
+		System.err.println(name);
+		Carrier c = getState().getCarrier(name);
+		System.err.println(c);
+		if(c == null) {
+			getEntityManager().performEvent(
+					new CarrierUpdateEvent(
+							new Carrier(this.name)));
+			
+			return new FormValidationResolution(true,null,null);
+		}
+		else {
+			return new FormValidationResolution(false, new String[]{"name"}, new String[]{"A carrier with this name already exists"});
+		}
 
 	}
 	
+	private Resolution validateCarrierInfo() {
+		if(name == null || name.length() == 0) {
+			return new FormValidationResolution(false, new String[]{"name"}, new String[]{"Please enter a name"});
+		}
+		
+		return null;
+	}
+
 	@HandlesEvent("updateform")
 	public Resolution updateForm() {
 		name = getState().getCarrier(carrierId).getName();
@@ -55,19 +76,39 @@ public class CarrierInfoActionBean extends FormActionBean {
 	
 	@HandlesEvent("update")
 	public Resolution submitupdate() {
+		Resolution res = validateCarrierInfo();
+		if(res != null) {
+			return res;
+		}
+		
 		Carrier carrier = getState().getCarrier(carrierId);
-		carrier.setName(this.name);
-		getEntityManager().performEvent(
-				new CarrierUpdateEvent(carrier));
-		return new FormValidationResolution(true, null, null);
+		if(carrier != null) {
+			if(getState().getCarrier(name) == null || getState().getCarrier(name).getId() == carrierId) {
+				carrier.setName(this.name);
+				getEntityManager().performEvent(
+						new CarrierUpdateEvent(carrier));
+				return new FormValidationResolution(true, null, null);
+			}
+			else {
+				return new FormValidationResolution(false, new String[]{"name"}, new String[]{"A carrier with this name already exists"});
+			}
+		}
+		else {
+			return new FormValidationResolution(false, new String[]{"name"}, new String[]{"This carrier does not exist, please refresh the page"});
+		}
 	}
 	
 	@HandlesEvent("delete")
 	public Resolution deleteCarrier() {
-		getEntityManager().performEvent(
-				new CarrierDeleteEvent(
-						getState().getCarrier(carrierId)));
-		return new FormValidationResolution(true, null, null);
+		Carrier carrier = getState().getCarrier(carrierId);
+		if(carrier != null) {
+			getEntityManager().performEvent(
+					new CarrierDeleteEvent(carrier));
+			return new FormValidationResolution(true, null, null);
+		}
+		else {
+			return new FormValidationResolution(false, null, null);
+		}
 	}
 
 	/**

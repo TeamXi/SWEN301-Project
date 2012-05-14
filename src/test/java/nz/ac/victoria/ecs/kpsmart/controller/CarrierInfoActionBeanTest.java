@@ -82,6 +82,8 @@ public class CarrierInfoActionBeanTest extends StripesActionBeanTest {
 	
 	@Test
 	public void testRejectCreatingIdenticalCarriers() throws Exception {
+		when(this.state.getCarrier("a")).thenReturn(null, new Carrier("a"));
+		
 		MockRoundtrip trip = new MockRoundtrip(this.context, CarrierInfoActionBean.class);
 		trip.setParameter("name", "a");
 		trip.execute("new");
@@ -90,7 +92,7 @@ public class CarrierInfoActionBeanTest extends StripesActionBeanTest {
 		MockRoundtrip trip2 = new MockRoundtrip(this.context, CarrierInfoActionBean.class);
 		trip2.setParameter("name", "a");
 		trip2.execute("new");
-		assertTrue(trip.getResponse().getOutputString().contains("\"status\":false"));
+		assertTrue(trip2.getResponse().getOutputString().contains("\"status\":false"));
 		
 		verify(this.manager, times(1)).performEvent(new CarrierUpdateEvent(new Carrier("a")));
 	}
@@ -127,7 +129,6 @@ public class CarrierInfoActionBeanTest extends StripesActionBeanTest {
 		
 		Carrier newCarrier = new Carrier("b");
 		newCarrier.setId(1);
-		verify(this.state).getCarrier(1);
 		verify(this.manager, never()).performEvent(new CarrierUpdateEvent(newCarrier));
 	}
 	
@@ -137,7 +138,7 @@ public class CarrierInfoActionBeanTest extends StripesActionBeanTest {
 		trip.setParameter("carrierId", "1");
 		trip.setParameter("name", "b");
 		trip.execute("update");
-		assertTrue(trip.getResponse().getOutputString().contains("\"status\":failed"));
+		assertTrue(trip.getResponse().getOutputString().contains("\"status\":false"));
 		
 		Carrier newCarrier = new Carrier("b");
 		verify(this.state).getCarrier(1);
@@ -169,5 +170,18 @@ public class CarrierInfoActionBeanTest extends StripesActionBeanTest {
 		
 		verify(this.state).getCarrier(1);
 		verify(this.manager, never()).performEvent(new CarrierDeleteEvent(new Carrier("a")));
+	}
+	
+	@Test
+	public void testUpdateCarrierWithNoNameChange() throws Exception {
+		Carrier c = new Carrier("a");
+		c.setId(1);
+		when(this.state.getCarrier(1)).thenReturn(c);
+		
+		MockRoundtrip trip = new MockRoundtrip(this.context, CarrierInfoActionBean.class);
+		trip.setParameter("carrierId", "1");
+		trip.setParameter("name", "a");
+		trip.execute("update");
+		assertTrue(trip.getResponse().getOutputString().contains("\"status\":true"));
 	}
 }

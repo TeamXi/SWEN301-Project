@@ -223,8 +223,10 @@ function show(obj){
 	pack.carrousel.prototype.load = function(url, callback) {
 		var self = this;
 		self.$body.load(url, {}, function (responseText, textStatus, XMLHttpRequest) {
-			self.layout();
-			callback(responseText, textStatus, XMLHttpRequest);
+			if(XMLHttpRequest.status == 200) {
+				self.layout();
+				callback(responseText, textStatus, XMLHttpRequest);
+			}
 		});
 	};
 	
