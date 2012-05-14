@@ -91,9 +91,9 @@ public class MailActionBean extends AbstractActionBean {
 	
 	private Map<String, Object> makeSummary(MailDelivery delivery) {
 		Map<String, Object> summary = new HashMap<String, Object>();
-		summary.put("duration", delivery.getShippingDuration());
-		summary.put("expenditure", delivery.getCost());
-		summary.put("revenue", delivery.getPrice());
+		summary.put("duration", String.format("%1.1f hours", delivery.getShippingDuration()/1000.0/60.0/60.0));
+		summary.put("expenditure", String.format("$%1.2f", delivery.getCost()));
+		summary.put("revenue", String.format("$%1.2f", delivery.getPrice()));
 		List<Object> positions = new ArrayList<Object>();
 		for(Route r : delivery.getRoute()) {
 			Map<String, Double> from = new HashMap<String, Double>();

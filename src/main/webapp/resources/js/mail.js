@@ -72,7 +72,7 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 				
 				document.getElementById('mail-success-info-revenue').innerHTML = returnObj.data.summary.revenue;
 				document.getElementById('mail-success-info-expenditure').innerHTML = returnObj.data.summary.expenditure;
-				document.getElementById('mail-success-info-delivery-duration').innerHTML = (returnObj.data.summary.duration/1000/60/60) + " hours";
+				document.getElementById('mail-success-info-delivery-duration').innerHTML = returnObj.data.summary.duration;
 			}
 		});
 	};
