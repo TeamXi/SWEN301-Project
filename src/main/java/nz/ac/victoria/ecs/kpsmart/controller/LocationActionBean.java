@@ -29,10 +29,15 @@ public class LocationActionBean extends AbstractActionBean {
 	
 	@HandlesEvent("new")
 	public Resolution addNewLocation() {
-		Location location = new Location(name, latitude, longitude, isInternational);
-		LocationUpdateEvent event = new LocationUpdateEvent(location);
-		getEntityManager().performEvent(event);
-		return new FormValidationResolution(true, null, null);
+		if(getState().getCarrier(name) == null) {
+			Location location = new Location(name, latitude, longitude, isInternational);
+			LocationUpdateEvent event = new LocationUpdateEvent(location);
+			getEntityManager().performEvent(event);
+			return new FormValidationResolution(true, null, null);
+		}
+		else {
+			return new FormValidationResolution(false, null, null);
+		}
 	}
 
 	/**

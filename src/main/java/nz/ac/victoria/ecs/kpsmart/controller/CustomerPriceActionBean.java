@@ -63,23 +63,48 @@ public class CustomerPriceActionBean extends FormActionBean {
 	
 	@HandlesEvent("new")
 	public Resolution newCustomerPrice() {
-		CustomerPrice price = new CustomerPrice(
-				getState().getLocationForName(location), 
-				direction.flip(), 
-				priority);
-		price.setPricePerUnitVolume(volumePrice);
-		price.setPricePerUnitWeight(weightPrice);
+		CustomerPrice exist = getExistingPrice();
 		
-		Resolution validation = validatePrice(price);
-		if(validation != null) {
-			return validation;
+		if(exist == null) {
+			CustomerPrice price = new CustomerPrice(
+					getState().getLocationForName(location), 
+					direction.flip(), 
+					priority);
+			price.setPricePerUnitVolume(volumePrice);
+			price.setPricePerUnitWeight(weightPrice);
+			
+			Resolution validation = validatePrice(price);
+			if(validation != null) {
+				return validation;
+			}
+			
+			getEntityManager().performEvent(new CustomerPriceUpdateEvent(price));
+			
+			return new FormValidationResolution(true, null, null);
 		}
-		
-		getEntityManager().performEvent(new CustomerPriceUpdateEvent(price));
-		
-		return new FormValidationResolution(true, null, null);
+		else {
+			return existsResolution();
+		}
 	}
 	
+	private Resolution existsResolution() {
+		return new FormValidationResolution(false, new String[]{"location"}, new String[]{"A customer price for this location, direction and priority already exists"});
+	}
+
+	private CustomerPrice getExistingPrice() {
+		CustomerPrice exist = null;
+		
+		switch(direction.flip()) {
+			case To:
+				exist = getState().getCustomerPrice(null, getState().getLocationForName(location), priority);
+				break;
+			case From:
+				exist = getState().getCustomerPrice(getState().getLocationForName(location), null, priority);
+		}
+		
+		return exist;
+	}
+
 	private Resolution validatePrice(CustomerPrice price) {
 		Map<String, String> errors = new HashMap<String, String>();
 		if(!price.getLocation().isInternational()) {
@@ -122,18 +147,25 @@ public class CustomerPriceActionBean extends FormActionBean {
 	
 	@HandlesEvent("update")
 	public Resolution updateCustomerPrice() {
-		CustomerPrice price = getState().getCustomerPriceById(priceId);
-		price.setPricePerUnitVolume(volumePrice);
-		price.setPricePerUnitWeight(weightPrice);
+		CustomerPrice exist = getExistingPrice();
 		
-		Resolution validation = validatePrice(price);
-		if(validation != null) {
-			return validation;
+		if(exist == null || exist.getId() == priceId) {
+			CustomerPrice price = getState().getCustomerPriceById(priceId);
+			price.setPricePerUnitVolume(volumePrice);
+			price.setPricePerUnitWeight(weightPrice);
+			
+			Resolution validation = validatePrice(price);
+			if(validation != null) {
+				return validation;
+			}
+			
+			getEntityManager().performEvent(new CustomerPriceUpdateEvent(price));
+			
+			return new FormValidationResolution(true, null, null);
 		}
-		
-		getEntityManager().performEvent(new CustomerPriceUpdateEvent(price));
-		
-		return new FormValidationResolution(true, null, null);
+		else {
+			return existsResolution();
+		}
 	}
 	
 	@HandlesEvent("updatedomestic")
@@ -154,10 +186,15 @@ public class CustomerPriceActionBean extends FormActionBean {
 	
 	@HandlesEvent("delete")
 	public Resolution deletePrice() {
-		getEntityManager().performEvent(
-				new CustomerPriceDeleteEvent(
-						getState().getCustomerPriceById(priceId)));
-		return new FormValidationResolution(true, null, null);
+		CustomerPrice price = getState().getCustomerPriceById(priceId);
+		if(price != null) {
+			getEntityManager().performEvent(
+					new CustomerPriceDeleteEvent(price));
+			return new FormValidationResolution(true, null, null);
+		}
+		else {
+			return new FormValidationResolution(false, null, null);
+		}
 	}
 	
 	@HandlesEvent("listfragment")
