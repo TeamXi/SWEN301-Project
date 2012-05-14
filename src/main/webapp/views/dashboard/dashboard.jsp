@@ -34,9 +34,9 @@
 	<stripes:layout-component name="content">
 		<div class="row-fluid">
 			<div class="span12">
-				<div class="alert alert-info">
-					<a class="close" href="#">&times;</a>
-					<b>Heads up!</b> <span id="eventbacklogcount"></span> occurred since you loaded the page, <a href="javascript:history.go(0)">refresh</a> to view the updates.
+				<div id="eventbacklogalert" class="alert alert-info" style="display:none">
+					<a class="close" href="javascript:KPS.dashboard.hideEventAlert()">&times;</a>
+					<b>Heads up!</b> <span id="eventbacklogcount"></span> occurred since you loaded the page, refresh to view the updates.
 				</div>
 				<h1>Dashboard</h1>
 			</div>

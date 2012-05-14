@@ -73,12 +73,17 @@ KPS.dashboard = KPS.dashboard || {};
 					lastEvent = latestEvent;
 					var back = latestEvent-cls.currentEvent;
 					document.getElementById('eventbacklogcount').innerHTML = back + (back>1?' events have':' event has');
+					$("#eventbacklogalert").fadeIn();
 				}
 				
 				setTimeout(checkForEventUpdates, pollInterval);
 			}
 		});
 	}
+	
+	cls.hideEventAlert=function(){
+		$("#eventbacklogalert").fadeOut();
+	};
 	
 	$(document).ready(function() {
 		eventList = document.getElementById("eventList");
