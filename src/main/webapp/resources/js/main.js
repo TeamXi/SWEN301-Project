@@ -244,7 +244,7 @@ function show(obj){
 		self.$body.load(url, {}, function (responseText, textStatus, XMLHttpRequest) {
 			if(XMLHttpRequest.status == 200) {
 				self.layout();
-				callback(responseText, textStatus, XMLHttpRequest);
+				callback(self.$body.children());
 			}
 		});
 	};
