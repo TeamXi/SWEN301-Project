@@ -177,7 +177,7 @@ function show(obj){
 		this.setClips(true);
 		this.width = 200;
 		this.spacing = 20;
-		this.currentPage = 0;
+		this.currentPage = -1;
 	};
 	
 	pack.carrousel.prototype.setClips = function(clips) {
@@ -197,17 +197,28 @@ function show(obj){
 	};
 	
 	pack.carrousel.prototype.show = function(num, animated) {
-		if(this.currentPage != num) {
-			this.$body.children().css({height: 'auto'});
-			this.$body.children().animate({height: $(this.$body.children()[num]).height()+'px'});
-			
-			var margin = (num*-(this.width+this.spacing))+"px";
-			if(animated === undefined || animated === true) {
-				this.$body.animate({marginLeft:margin},400);
-			}
-			else { // Animated is false
-				this.$body.css("margin-left", margin);
-			}
+		this.$body.children().css({height: 'auto'});
+		// Make sure modal is visible before getting height, parent might be invisible so .height() doesn't work all the time.
+		var child = $(this.$body.children()[num]);
+		// Add it to the body
+		$(document.body).append(child);
+		var height = child.height();
+		// Insert it back at the same location
+		var next = this.$body.children()[num];
+		if(next) {
+			child.insertBefore(next);
+		} else {
+			this.$body.append(child);
+		}
+		// Set height of all carrousel items so that the scrollbar displays correctly.
+		this.$body.children().animate({height: height+'px'});
+		
+		var margin = (num*-(this.width+this.spacing))+"px";
+		if(animated === undefined || animated === true) {
+			this.$body.animate({marginLeft:margin},400);
+		}
+		else { // Animated is false
+			this.$body.css("margin-left", margin);
 		}
 		this.currentPage = num;
 	};

@@ -56,9 +56,9 @@
 
 <div>
 	<dl class="dl-horizontal">
-		<dt>Revenue</dt><dd id="mail-success-info-revenue"></dd>
-		<dt>Expenditure</dt><dd id="mail-success-info-expenditure"></dd>
-		<dt>Delivery time</dt><dd id="mail-success-info-delivery-duration"></dd>
+		<dt>Revenue</dt><dd id="mail-success-info-revenue">$0.00</dd>
+		<dt>Expenditure</dt><dd id="mail-success-info-expenditure">$0.00</dd>
+		<dt>Delivery time</dt><dd id="mail-success-info-delivery-duration">0.0 hours</dd>
 	</dl>
 	<div id="mail-success-info-route-map" class="modal-map"></div>
 </div>

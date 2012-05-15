@@ -160,9 +160,9 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 					
 					KPS.util.disableInputAutocomplete();
 					
-					KPS.modal.carrousel.show(0);
 					KPS.modal.configure(modalConfiguration);
 					KPS.modal.show();
+					KPS.modal.carrousel.show(0);
 				});
 			});
 		});

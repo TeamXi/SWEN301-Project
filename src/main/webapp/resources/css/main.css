@@ -49,7 +49,7 @@ tr:hover .row-hover-controls {
 }
 
 .modal-map {
-	height: 310px;
+	height: 300px;
 	width: 100%;
 }
 #globalMap{
@@ -103,8 +103,10 @@ tr:hover .row-hover-controls {
 
 .kps-carrousel > .kps-carrousel-body > div {
 	float: left;
+	overflow-y: hidden;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
-
 
 #printButton, #exportButton{
 	display: none;
