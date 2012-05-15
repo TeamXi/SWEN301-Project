@@ -11,6 +11,7 @@ import nz.ac.victoria.ecs.kpsmart.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Price;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Route;
+import nz.ac.victoria.ecs.kpsmart.entities.state.TransportMeans;
 import nz.ac.victoria.ecs.kpsmart.integration.TimeCapable;
 
 /**
@@ -91,6 +92,17 @@ public interface ReadOnlyState extends TimeCapable<ReadOnlyState> {
 	 * @return	The route identified by this id, or null if no route was found.
 	 */
 	public Route getRouteByID(long id);
+	
+	/**
+	 * Get a route by it's unique key
+	 * 
+	 * @param startPoint	The start point of the route
+	 * @param endPoint	The end point of the route
+	 * @param transport	The transport means the route uses
+	 * @param carrier	The carrier who carries mail on this route
+	 * @return	The route or null if none was found.
+	 */
+	public Route getRouteByKey(Location startPoint, Location endPoint, TransportMeans transport, Carrier carrier);
 	
 	/**
 	 * Get a carrier by it's unique ID

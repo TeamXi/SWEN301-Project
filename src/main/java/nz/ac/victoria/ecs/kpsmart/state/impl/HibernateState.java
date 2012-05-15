@@ -18,6 +18,7 @@ import nz.ac.victoria.ecs.kpsmart.entities.state.Price;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.entities.state.StorageEntity;
+import nz.ac.victoria.ecs.kpsmart.entities.state.TransportMeans;
 import nz.ac.victoria.ecs.kpsmart.state.DuplicateEntityException;
 import nz.ac.victoria.ecs.kpsmart.state.ReadOnlyState;
 import nz.ac.victoria.ecs.kpsmart.state.State;
@@ -98,6 +99,17 @@ public final class HibernateState implements State, ReadOnlyState {
 	public Route getRouteByID(long id) {
 		return this.setFromDatasourceToTrue((Route) this.getEntityCriteria(Route.class)
 				.add(Restrictions.eq("uid.id", id))
+				.uniqueResult());
+	}
+	
+	@Override
+	public Route getRouteByKey(Location startPoint, Location endPoint,
+			TransportMeans transport, Carrier carrier) {
+		return this.setFromDatasourceToTrue((Route) this.getEntityCriteria(Route.class)
+				.add(Restrictions.eq("primaryKey.startPoint", startPoint))
+				.add(Restrictions.eq("primaryKey.endPoint", endPoint))
+				.add(Restrictions.eq("primaryKey.transportMeans", transport))
+				.add(Restrictions.eq("primaryKey.carrier", carrier))
 				.uniqueResult());
 	}
 
