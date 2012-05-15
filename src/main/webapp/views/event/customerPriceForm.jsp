@@ -7,11 +7,16 @@
 		<div class="control-group">
 			<stripes:label for="location" class="control-label">Destination</stripes:label>
 			<div class="controls">
-				<stripes:text class="portEntry" name="location" value="${actionBean.location}" disabled="${actionBean.disabledFormFields['location']}" style="width: 140px"/>
-				<stripes:select name="direction" style="width:65px" value="${actionBean.direction}" disabled="${actionBean.disabledFormFields['direction']}">
-					<stripes:options-enumeration enum="nz.ac.victoria.ecs.kpsmart.entities.state.Direction" />
-				</stripes:select>
-				<span class="help-inline">New Zealand</span>
+				<stripes:text class="portEntry" name="location"
+					value="${actionBean.location}"
+					disabled="${actionBean.disabledFormFields['location']}"
+					style="width: 140px" /><span
+					id="tonewzealanddirectiontext">&nbsp;to New Zealand</span><span
+					id="tofromswitchbutton">&nbsp;<span
+					class="btn"
+					${actionBean.disabledFormFields['direction']?'disabled':'onclick="KPS.event.customerprice.flipNewToFrom();"'}><i
+					class="icon-random"></i> Switch</span></span>
+					<p class="help-block"></p>
 			</div>
 		</div>
 		
@@ -48,6 +53,7 @@
 		
 		<fieldset>
 			<stripes:submit name="submitbutton" style="visibility:hidden"></stripes:submit>
+			<stripes:text id="directionfield" name="direction" value="From" style="visibility:hidden"></stripes:text>
 		</fieldset>
 	</stripes:form>
 </div>

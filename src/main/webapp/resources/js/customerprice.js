@@ -91,6 +91,23 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 		});
 	}
 	
+	cls.flipNewToFrom = function() {
+		var form = newForm;
+		
+		var was = form.elements['directionfield'].value;
+		if(was == 'From') {
+			was = 'To';
+			$(form.elements['location']).insertBefore(document.getElementById('tofromswitchbutton'));
+			$("#tonewzealanddirectiontext").html("New Zealand to&nbsp;");
+		}
+		else {
+			was = 'From';
+			$("#tonewzealanddirectiontext").insertBefore(document.getElementById('tofromswitchbutton'));
+			$("#tonewzealanddirectiontext").html("&nbsp;to New Zealand");
+		}
+		form.elements['directionfield'].value = was;
+	};
+	
 	cls.submitNewForm = function() {
 		submitForm(newForm, "customerprice?new", function() {
 			KPS.modal.hide();

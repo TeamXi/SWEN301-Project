@@ -22,7 +22,7 @@ KPS.validation = KPS.validation || {};
 	cls.validationError = function(element, message, level) {
 		level = level || 'error';
 		
-		var helptext = $(element).next(".help-block")[0];
+		var helptext = $(element).nextAll(".help-block")[0];
 		if(!helptext) {
 			helptext = $("<p class='help-block'></p>");
 			var after2 = $(element).nextAll(".add-on");

@@ -17,6 +17,7 @@ function performLogin(siteRoot,role){
 		KPS.util.redirect(siteRoot+"/dashboard");
 	});
 }
+
 var waitForFinalEvent = (function () {
 	  var timers = {};
 	  return function (callback, ms, uniqueId) {
@@ -29,6 +30,7 @@ var waitForFinalEvent = (function () {
 	    timers[uniqueId] = setTimeout(callback, ms);
 	  };
 	})();
+
 // KPS.util
 (function (cls, $, undefined) {
 	cls.redirect = function(url) {
