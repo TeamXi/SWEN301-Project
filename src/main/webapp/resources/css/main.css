@@ -84,6 +84,10 @@ tr:hover .row-hover-controls {
 	height: 250px;
 }
 
+.hover-icon-white:hover [class^="icon-"], .icon-hover-white:hover [class*=" icon-"] {
+ 	background-image: url("../img/glyphicons-halflings-white.png");
+ }
+
 /*
  *Carrousel
  */

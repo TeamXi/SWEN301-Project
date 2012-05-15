@@ -44,39 +44,39 @@
 						<div class="nav-collapse">
 							<ul class="nav">
 								<c:if test="<%= isLoggedIn() %>">
-									<li><a href="${pageContext.request.contextPath}/dashboard">Dashboard</a></li>
+									<li><a href="${pageContext.request.contextPath}/dashboard"><i class="icon-picture icon-white"></i> Dashboard</a></li>
 									<c:if test="<%= isClerk() %>">
-										<li><a href="#" class="new-mail-delivery-link">Mail delivery</a></li>
+										<li><a href="#" class="new-mail-delivery-link"><i class="icon-envelope icon-white"></i> Mail delivery</a></li>
 										<li class="dropdown">
-											<a href="#" class="dropdown-toggle" data-toggle="dropdown">Routes<b class="caret"></b></a>
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-road icon-white"></i> Routes<b class="caret"></b></a>
 											<ul class="dropdown-menu">
-												<li><a href="${pageContext.request.contextPath}/event/route">List</a></li>
-												<li><a id="menu-newRouteDropdown" href="${pageContext.request.contextPath}/event/route#new">New</a></li>
+												<li class="hover-icon-white"><a href="${pageContext.request.contextPath}/event/route"><i class="icon-th-list"></i> List</a></li>
+												<li class="hover-icon-white"><a id="menu-newRouteDropdown" href="${pageContext.request.contextPath}/event/route#new"><i class="icon-plus"></i> New</a></li>
 											</ul>
 										</li>
 										<li class="dropdown">
-											<a href="#" class="dropdown-toggle" data-toggle="dropdown">Carriers<b class="caret"></b></a>
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-plane icon-white"></i> Carriers<b class="caret"></b></a>
 											<ul class="dropdown-menu">
-												<li><a href="${pageContext.request.contextPath}/event/carrier">List</a></li>
-												<li><a id="menu-newCarrierDropdown" href="${pageContext.request.contextPath}/event/carrier#new">New</a></li>
+												<li class="hover-icon-white"><a href="${pageContext.request.contextPath}/event/carrier"><i class="icon-th-list"></i> List</a></li>
+												<li class="hover-icon-white"><a id="menu-newCarrierDropdown" href="${pageContext.request.contextPath}/event/carrier#new"><i class="icon-plus"></i> New</a></li>
 											</ul>
 										</li>
 										<li class="dropdown">
-											<a href="#" class="dropdown-toggle" data-toggle="dropdown">Customer prices<b class="caret"></b></a>
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-gift icon-white"></i> Customer prices<b class="caret"></b></a>
 											<ul class="dropdown-menu">
-												<li><a href="${pageContext.request.contextPath}/event/customerprice">List</a></li>
-												<li><a id="menu-newCustomerPriceDropdown" href="${pageContext.request.contextPath}/event/customerprice#new">New</a></li>
+												<li class="hover-icon-white"><a href="${pageContext.request.contextPath}/event/customerprice"><i class="icon-th-list"></i> List</a></li>
+												<li class="hover-icon-white"><a id="menu-newCustomerPriceDropdown" href="${pageContext.request.contextPath}/event/customerprice#new"><i class="icon-plus"></i> New</a></li>
 											</ul>
 										</li>
 									</c:if>
-									<li><a href="${pageContext.request.contextPath}/event/location?map">Locations map</a></li>
+									<li><a href="${pageContext.request.contextPath}/event/location?map"><i class="icon-map-marker icon-white"></i> Locations map</a></li>
 								</c:if>
 							</ul>
 							
 							<ul class="nav pull-right">
 								<li class="dropdown">
 									<a href="" class="dropdown-toggle" data-toggle="dropdown">
-									<%= getRoleText() %>
+									<i class="icon-user icon-white"></i> <%= getRoleText() %>
 									<b class="caret"></b></a>
 									<ul class="dropdown-menu">
 										<li><a onClick="performLogin('${pageContext.request.contextPath}','manager');">Manager</a></li>

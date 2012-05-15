@@ -12,7 +12,7 @@
 		<div class="row-fluid">
 			<div class="span12">
 				<h1 class="pull-left">Routes</h1>
-				<button class="btn btn-success smallMargin" onclick="KPS.event.route.addRoute();">Add new</button>
+				<button class="btn btn-success smallMargin" onclick="KPS.event.route.addRoute();"><i class="icon-plus icon-white"></i> Add new</button>
 				
 				<div id="routeListContainer">
 					<jsp:include page="routeList.jsp"></jsp:include>

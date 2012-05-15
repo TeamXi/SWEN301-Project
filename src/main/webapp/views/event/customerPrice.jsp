@@ -11,7 +11,7 @@
 		<div class="row-fluid">
 			<div class="span12">
 				<h1 class="pull-left">Customer prices</h1>
-				<button class="btn btn-success smallMargin" onclick="KPS.event.customerprice.addCustomerPrice();">Add new</button>
+				<button class="btn btn-success smallMargin" onclick="KPS.event.customerprice.addCustomerPrice();"><i class="icon-plus icon-white"></i> Add new</button>
 				<div id="customerPriceListContainer">
 					<jsp:include page="customerPriceList.jsp"></jsp:include>
 				</div>

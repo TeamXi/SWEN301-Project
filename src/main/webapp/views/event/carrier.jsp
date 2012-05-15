@@ -12,7 +12,7 @@
 		<div class="row-fluid">
 			<div class="span12">
 				<h1 class="pull-left">Carriers</h1>
-				<button class="btn btn-success smallMargin" onclick="KPS.event.carrier.addCarrier();">Add new</button>
+				<button class="btn btn-success smallMargin" onclick="KPS.event.carrier.addCarrier();"><i class="icon-plus icon-white"></i> Add new</button>
 				<div id="carrierListContainer">
 					<jsp:include page="carrierList.jsp"></jsp:include>
 				</div>
