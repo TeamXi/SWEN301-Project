@@ -58,7 +58,6 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 			
 			if(!status){
 				KPS.validation.validationErrors(form, returnObj.validation);
-				KPS.modal.carrousel.resize();
 			}else{
 				KPS.modal.configure(doneModalConfiguration);
 				KPS.modal.carrousel.show(1);
@@ -85,9 +84,7 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 		}
 		ok &= KPS.validation.validateNumberField(form.elements['weight'], "Weight");
 		ok &= KPS.validation.validateNumberField(form.elements['volume'], "Volume");
-		
-		KPS.modal.carrousel.resize();
-		
+				
 		return ok;
 	}
 	
@@ -113,7 +110,6 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 		
 		function dontDeliverMessage() {
 			KPS.validation.validationError(form.elements['destination'], "KPS does not deliver mail from "+source+" to "+destination);
-			KPS.modal.carrousel.resize();
 		}
 		
 		if(KPS.data.locations.exists(source) && KPS.data.locations.exists(destination)) {
@@ -142,8 +138,6 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 		if($("option:selected", priorityElm).is(":disabled")) { // If selected option is disabled select the placeholder
 			priorityElm.value = "placeholder";
 		}
-		
-		KPS.modal.carrousel.resize();
 	}
 	
 	$(document).ready(function() {
