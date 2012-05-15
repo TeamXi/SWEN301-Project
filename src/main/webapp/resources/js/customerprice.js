@@ -126,6 +126,9 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 			
 			updateForm = document.getElementById(updateFormId);
 			KPS.modal.configure(updateModalConfiguration);
+			KPS.data.locations.load(function () {
+				KPS.data.locations.setupPortEntryTypeahead();
+			});
 			KPS.modal.show();
 		});
 	};

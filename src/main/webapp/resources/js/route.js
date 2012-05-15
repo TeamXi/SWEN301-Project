@@ -127,7 +127,7 @@ KPS.event.location = KPS.event.location || {};
 			
 			updateForm = document.getElementById(updateFormId);
 			KPS.modal.configure(updateModalConfiguration);
-			KPS.data.locations.load(function () { // TODO: needed?
+			KPS.data.locations.load(function () {
 				KPS.data.locations.setupPortEntryTypeahead();
 			});
 			KPS.data.carriers.setupCarrierEntryTypeahead();
