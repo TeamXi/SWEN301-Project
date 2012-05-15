@@ -59,21 +59,23 @@ var waitForFinalEvent = (function () {
 		var img = popover.find(".location-name-hover-map-image");
 		$(document.body).append(popover);
 		
-		$(".location-name-hover").hover(function(e) {
-			var pos = $(e.currentTarget).position();
-			var width = $(e.currentTarget).width();
-			var diff = $(e.currentTarget).height()/2-popover.height()/2-4;
-			var location = KPS.data.locations.get(e.currentTarget.innerHTML);
-			img.attr('src', KPS.util.map.staticUrl(location.latitude, location.longitude));
-			popover.css({left: pos.left+width, top: pos.top+diff, display: 'block'});
-		}, function(e) {
-			if(popover.has(e.relatedTarget).length > 0) {
-				e.stopPropagation();
-				e.preventDefault();
-			}
-			else {
-				popover.css({display: 'none'});
-			}
+		KPS.data.locations.load(function() {
+			$(".location-name-hover").hover(function(e) {
+				var pos = $(e.currentTarget).position();
+				var width = $(e.currentTarget).width();
+				var diff = $(e.currentTarget).height()/2-popover.height()/2-4;
+				var location = KPS.data.locations.get(e.currentTarget.innerHTML);
+				img.attr('src', KPS.util.map.staticUrl(location.latitude, location.longitude));
+				popover.css({left: pos.left+width, top: pos.top+diff, display: 'block'});
+			}, function(e) {
+				if(popover.has(e.relatedTarget).length > 0) {
+					e.stopPropagation();
+					e.preventDefault();
+				}
+				else {
+					popover.css({display: 'none'});
+				}
+			});
 		});
 	});
 	
