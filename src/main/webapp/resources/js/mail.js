@@ -160,7 +160,6 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 					
 					KPS.modal.configure(modalConfiguration);
 					KPS.modal.show();
-					KPS.modal.carrousel.show(0);
 				});
 			});
 		});

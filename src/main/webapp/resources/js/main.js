@@ -358,6 +358,7 @@ function show(obj){
 	};
 
 	cls.show = function() {
+		cls.carrousel.show(0, false);
 		cls.$el.modal('show');
 	};
 
