@@ -110,6 +110,8 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 		var destination = form.elements['destination'].value;
 		var priorityElm = form.elements['priority'];
 		
+		KPS.validation.resetValidation(form);
+		
 		function dontDeliverMessage() {
 			KPS.validation.validationError(form.elements['destination'], "KPS does not deliver mail from "+source+" to "+destination);
 		}
