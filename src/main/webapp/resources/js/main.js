@@ -456,13 +456,13 @@ function show(obj){
 				location_popover_img.attr('src', KPS.util.map.staticUrl(location.latitude, location.longitude));
 				location_popover.css({left: pos.left+width, top: pos.top+diff, display: 'block'});
 			}, function(e) {
-				if(location_popover.has(e.relatedTarget).length > 0) {
-					e.stopPropagation();
-					e.preventDefault();
-				}
-				else {
+//				if(location_popover.has(e.relatedTarget).length > 0) {
+//					e.stopPropagation();
+//					e.preventDefault();
+//				}
+//				else {
 					location_popover.css({display: 'none'});
-				}
+//				}
 			});
 		});
 	};
