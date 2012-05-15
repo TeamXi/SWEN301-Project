@@ -121,7 +121,7 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 	};
 	
 	cls.updateCustomerPrice = function(id) {
-		KPS.modal.load("customerprice?updateform&priceId="+id+updateFormPartialURL+"&submitCallback="+updateFormSubmitCallback+"("+id+")", function (data) {
+		KPS.modal.load("customerprice?updateform&priceId="+id+updateFormPartialURL+"&submitCallback="+updateFormSubmitCallback+"("+id+")", function () {
 			KPS.util.disableInputAutocomplete();
 			
 			updateForm = document.getElementById(updateFormId);
@@ -134,7 +134,7 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 	};
 	
 	cls.updateDomesticCustomerPrice = function(priority) {
-		KPS.modal.load("customerprice?updatedomesticform&domesticPriority="+priority+updateFormPartialURL+"&submitCallback="+updateDomesticFormSubmitCallback+"('"+priority+"')", function (data) {
+		KPS.modal.load("customerprice?updatedomesticform&domesticPriority="+priority+updateFormPartialURL+"&submitCallback="+updateDomesticFormSubmitCallback+"('"+priority+"')", function () {
 			KPS.util.disableInputAutocomplete();
 			
 			updateForm = document.getElementById(updateFormId);
