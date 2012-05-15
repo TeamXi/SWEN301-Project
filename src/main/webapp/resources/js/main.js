@@ -195,23 +195,31 @@ function show(obj){
 			marginRight: this.spacing+'px'
 		});
 	};
-	
-	pack.carrousel.prototype.show = function(num, animated) {
-		this.$body.children().css({height: 'auto'});
+		
+	pack.carrousel.prototype.resize = function(num) {
+		if(num === undefined) {
+			num = this.currentPage;
+		}
+		
 		// Make sure modal is visible before getting height, parent might be invisible so .height() doesn't work all the time.
 		var child = $(this.$body.children()[num]);
 		// Add it to the body
 		$(document.body).append(child);
+		child.css({height: 'auto'});
 		var height = child.height();
-		// Insert it back at the same location
+		// Set height of all carrousel items so that the scrollbar displays correctly.
+		this.$body.children().animate({height: height+'px'});
+		// Insert child back at the same location
 		var next = this.$body.children()[num];
 		if(next) {
 			child.insertBefore(next);
 		} else {
 			this.$body.append(child);
 		}
-		// Set height of all carrousel items so that the scrollbar displays correctly.
-		this.$body.children().animate({height: height+'px'});
+	};
+	
+	pack.carrousel.prototype.show = function(num, animated) {
+		this.resize(num);
 		
 		var margin = (num*-(this.width+this.spacing))+"px";
 		if(animated === undefined || animated === true) {
