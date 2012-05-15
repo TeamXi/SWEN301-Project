@@ -4,12 +4,47 @@ KPS.event.location = KPS.event.location || {};
 (function(cls, $, undefined) {
 	var globalMap = undefined;
 	var infoWindow = undefined;
+	var lines = [];
 	
 	function createWorldMap() {
 		globalMap = KPS.util.map.newInstance(document.getElementById('allLocationsMap'), 4, -34.397, 150.644);
 		
 		infoWindow = new InfoBubble(globalMap);
 	};
+	
+	function showRoutesFor(name) {
+		$.get("location?connected", {name: name}, function(data) {
+			var list = eval(data);
+			
+			var from = KPS.data.locations.get(name);
+			
+			for(var n=0;n<list.length;n++) {
+				var to = KPS.data.locations.get(list[n]);
+				
+				var startPos = new google.maps.LatLng(from.latitude, from.longitude);
+				var endPos = new google.maps.LatLng(to.latitude, to.longitude);
+				if(startPos && endPos) {
+					lines.push(new google.maps.Polyline({
+									path: [startPos,endPos],
+									strokeColor: "#228B22",
+									strokeWeight: 2,
+									map: globalMap,
+									geodesic: true,
+									strokeOpacity: 0.5
+								})
+					);
+				}
+			}
+		});
+	}
+	
+	function hideRoutes() {
+		for(var i=0;i<lines.length;i++) {
+			lines[i].setMap(null);
+		}
+		
+		lines = [];
+	}
 	
 	function loadLocations(allLocations) {
 		for(locIdx in allLocations){
@@ -22,9 +57,13 @@ KPS.event.location = KPS.event.location || {};
 					infoWindow.setContent(location.name);
 					infoWindow.setPosition(event.latLng);
 					infoWindow.open(globalMap);
+					
+					showRoutesFor(location.name);
 				});
 				google.maps.event.addListener(marker, "mouseout", function(event) {
 					infoWindow.close();
+					
+					hideRoutes();
 				});
 			}(allLocations[locIdx]));
 		}

@@ -341,4 +341,14 @@ public final class HibernateState implements State, ReadOnlyState {
 			bind(ReadOnlyState.class).to(HibernateState.class);
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Route> getRoutesConnectedTo(Location location) {
+		return this.getEntityCriteria(Route.class)
+				.add(Restrictions.or(
+						Restrictions.eq("primaryKey.startPoint", location),
+						Restrictions.eq("primaryKey.endPoint", location)))
+				.list();
+	}
 }

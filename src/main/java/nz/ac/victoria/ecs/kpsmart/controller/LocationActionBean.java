@@ -1,12 +1,17 @@
 package nz.ac.victoria.ecs.kpsmart.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sourceforge.stripes.action.DefaultHandler;
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.HandlesEvent;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
+import net.sourceforge.stripes.ajax.JavaScriptResolution;
 import nz.ac.victoria.ecs.kpsmart.entities.logging.LocationUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Location;
+import nz.ac.victoria.ecs.kpsmart.entities.state.Route;
 import nz.ac.victoria.ecs.kpsmart.resolutions.FormValidationResolution;
 
 @UrlBinding("/event/location?{$event}") // TODO: not in /event?
@@ -29,7 +34,7 @@ public class LocationActionBean extends AbstractActionBean {
 	
 	@HandlesEvent("new")
 	public Resolution addNewLocation() {
-		if(getState().getCarrier(name) == null) {
+		if(getState().getLocationForName(name) == null) {
 			Location location = new Location(name, latitude, longitude, isInternational);
 			LocationUpdateEvent event = new LocationUpdateEvent(location);
 			getEntityManager().performEvent(event);
@@ -37,6 +42,34 @@ public class LocationActionBean extends AbstractActionBean {
 		}
 		else {
 			return new FormValidationResolution(false, null, null);
+		}
+	}
+	
+	@HandlesEvent("connected")
+	public Resolution getConnectedLocations() {
+		if(name == null || name.length() == 0) {
+			return new JavaScriptResolution(new Object[0]);
+		}
+		else {
+			Location from = getState().getLocationForName(name);
+			if(from == null) {
+				return new JavaScriptResolution(new Object[0]);
+			}
+			else {
+				List<String> answer = new ArrayList<String>();
+				
+				List<Route> routes = getState().getRoutesConnectedTo(from);
+				for(Route r : routes) {
+					if(r.getStartPoint() == from) {
+						answer.add(r.getEndPoint().getName());
+					}
+					else {
+						answer.add(r.getStartPoint().getName());
+					}
+				}
+				
+				return new JavaScriptResolution(answer);
+			}
 		}
 	}
 

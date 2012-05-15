@@ -165,4 +165,11 @@ public interface ReadOnlyState extends TimeCapable<ReadOnlyState> {
 	 * @return
 	 */
 	public CustomerPrice getCustomerPriceById(long id);
+
+	/** Get all the routes which have location as one of their end points
+	 * 
+	 * @param location the location which is one of the end points
+	 * @return a list of routes with location as one of the end points
+	 */
+	public List<Route> getRoutesConnectedTo(Location location);
 }
