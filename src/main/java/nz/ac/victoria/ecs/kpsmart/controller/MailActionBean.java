@@ -64,7 +64,7 @@ public class MailActionBean extends AbstractActionBean {
 	public Resolution availablePriorities(){
 		Location from = getState().getLocationForName(source);
 		Location to = getState().getLocationForName(destination);
-		if(from == null || to == null){
+		if(from == null || to == null || from.equals(to)){
 			return new JavaScriptResolution(new Object[0]);
 		}
 		Priority[] priorities;
@@ -112,6 +112,10 @@ public class MailActionBean extends AbstractActionBean {
 	}
 
 	private MailDelivery processDelivery(String source, String destination, Priority priority, float weight, float volume) {
+		if(source == null || destination == null || source.equals(destination)) {
+			return null;
+		}
+		
 		Location from = getState().getLocationForName(source);
 		Location to = getState().getLocationForName(destination);
 		
