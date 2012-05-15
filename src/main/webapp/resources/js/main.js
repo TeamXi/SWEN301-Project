@@ -49,36 +49,6 @@ var waitForFinalEvent = (function () {
 } (KPS.util, jQuery));
 
 (function(cls, $, undefined) {
-	$(document).ready(function() {
-		var popover = $('<div class="popover fade right in" style="display: none;">'+
-				'<div class="arrow"></div>'+
-				'<div class="popover-inner">'+
-					'<img class="location-name-hover-map-image"/>'+
-				'</div>'+
-			'</div>');
-		var img = popover.find(".location-name-hover-map-image");
-		$(document.body).append(popover);
-		
-		KPS.data.locations.load(function() {
-			$(".location-name-hover").hover(function(e) {
-				var pos = $(e.currentTarget).position();
-				var width = $(e.currentTarget).width();
-				var diff = $(e.currentTarget).height()/2-popover.height()/2-4;
-				var location = KPS.data.locations.get(e.currentTarget.innerHTML);
-				img.attr('src', KPS.util.map.staticUrl(location.latitude, location.longitude));
-				popover.css({left: pos.left+width, top: pos.top+diff, display: 'block'});
-			}, function(e) {
-				if(popover.has(e.relatedTarget).length > 0) {
-					e.stopPropagation();
-					e.preventDefault();
-				}
-				else {
-					popover.css({display: 'none'});
-				}
-			});
-		});
-	});
-	
 	cls.staticUrl = function(lat, lng) {
 		//http://maps.googleapis.com/maps/api/staticmap?center=-4.434044,136.40625&zoom=4&format=png&sensor=false&size=640x480&maptype=roadmap&style=visibility:off&style=feature:administrative.country|visibility:on&style=feature:administrative.locality|visibility:on&style=feature:water|element:geometry|visibility:on&style=feature:water|invert_lightness:true|hue:0x0066ff
 		//http://maps.googleapis.com/maps/api/staticmap?zoom=6&format=png&sensor=false&size=250x250&maptype=roadmap&style=visibility:off&style=feature:administrative.country|visibility:on&style=feature:administrative.locality|visibility:on&style=feature:water|element:geometry|visibility:on&style=feature:water|invert_lightness:true|hue:0x0066ff&markers=color:red|-41,173
@@ -396,7 +366,9 @@ function show(obj){
 	var locationList = [];
 	var locationNames = [];
 	var locationDataDirty = true;
-
+	var location_popover = undefined;
+	var location_popover_img = undefined;
+	
 	cls.setNeedsUpdate = function() {
 		locationDataDirty = true;
 	};
@@ -473,6 +445,40 @@ function show(obj){
 	cls.locationList = function() {
 		return locationList;
 	};
+	
+	cls.setupLocationNameHover = function() {
+		cls.load(function() {
+			$(".location-name-hover").unbind('mouseover mouseout').hover(function(e) {
+				var pos = $(e.currentTarget).position();
+				var width = $(e.currentTarget).width();
+				var diff = $(e.currentTarget).height()/2-location_popover.height()/2-4;
+				var location = KPS.data.locations.get(e.currentTarget.innerHTML);
+				location_popover_img.attr('src', KPS.util.map.staticUrl(location.latitude, location.longitude));
+				location_popover.css({left: pos.left+width, top: pos.top+diff, display: 'block'});
+			}, function(e) {
+				if(location_popover.has(e.relatedTarget).length > 0) {
+					e.stopPropagation();
+					e.preventDefault();
+				}
+				else {
+					location_popover.css({display: 'none'});
+				}
+			});
+		});
+	};
+	
+	$(document).ready(function() {
+		location_popover = $('<div class="popover fade right in" style="display: none;">'+
+				'<div class="arrow"></div>'+
+				'<div class="popover-inner">'+
+					'<img class="location-name-hover-map-image"/>'+
+				'</div>'+
+			'</div>');
+		location_popover_img = location_popover.find(".location-name-hover-map-image");
+		$(document.body).append(location_popover);
+		
+		cls.setupLocationNameHover();
+	});
 }(KPS.data.locations, jQuery));
 
 //KPS.data.carriers

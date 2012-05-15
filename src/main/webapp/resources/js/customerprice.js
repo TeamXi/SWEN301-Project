@@ -86,7 +86,9 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 	}
 	
 	function updatePriceList(){
-		$("#customerPriceListContainer").load("customerprice?listfragment");
+		$("#customerPriceListContainer").load("customerprice?listfragment", function() {
+			KPS.data.locations.setupLocationNameHover();
+		});
 	}
 	
 	cls.submitNewForm = function() {

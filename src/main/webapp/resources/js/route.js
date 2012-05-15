@@ -69,7 +69,9 @@ KPS.event.location = KPS.event.location || {};
 	};
 	
 	function updateRouteList(){
-		$("#routeListContainer").load("route?listfragment");
+		$("#routeListContainer").load("route?listfragment", function() {
+			KPS.data.locations.setupLocationNameHover();
+		});
 	}
 	
 	cls.validateForm = function(form) {
