@@ -53,7 +53,7 @@
 		
 		<fieldset>
 			<stripes:submit name="submitbutton" style="visibility:hidden"></stripes:submit>
-			<stripes:text id="directionfield" name="direction" value="From" style="visibility:hidden"></stripes:text>
+			<stripes:hidden id="directionfield" name="direction" value="${actionBean.direction==null?'From':actionBean.direction}" style="visibility:hidden"></stripes:hidden>
 		</fieldset>
 	</stripes:form>
 </div>
