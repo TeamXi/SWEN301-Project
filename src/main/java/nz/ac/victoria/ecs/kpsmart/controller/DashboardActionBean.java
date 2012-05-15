@@ -10,6 +10,8 @@ import net.sourceforge.stripes.ajax.JavaScriptResolution;
 import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
 import nz.ac.victoria.ecs.kpsmart.logging.ReadOnlyLog;
 import nz.ac.victoria.ecs.kpsmart.reporting.Report;
+import nz.ac.victoria.ecs.kpsmart.reporting.Report.DeliveryRevenueExpediture;
+import nz.ac.victoria.ecs.kpsmart.reporting.Report.RevenueExpenditure;
 
 @UrlBinding("/dashboard/{$event}")
 public class DashboardActionBean extends AbstractActionBean {
@@ -52,5 +54,13 @@ public class DashboardActionBean extends AbstractActionBean {
 		else {
 			manager = super.getEntityManager().getEntityManagerAtEventPoint(atevent);
 		}
+	}
+	
+	public boolean hasCriticalRoutes() {
+		for (DeliveryRevenueExpediture re : this.getReportManager().getAllRevenueExpenditure())
+			if (re.getExpenditure() > re.getRevenue())
+				return true;
+		
+		return false;
 	}
 }

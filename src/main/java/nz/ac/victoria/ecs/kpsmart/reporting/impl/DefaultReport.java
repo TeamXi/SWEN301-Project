@@ -89,11 +89,6 @@ public class DefaultReport implements Report {
 					double totalDeliveryTime = 0;
 					long mailCount = 0;
 					
-					Price price = this.state.getPrice(start, end, p);
-					
-					if (price == null)
-						continue;
-					
 					for (MailDelivery m : mailDeliveries) {
 						if (
 								!m.getPriority().equals(p) ||
@@ -102,12 +97,10 @@ public class DefaultReport implements Report {
 						)
 							continue;
 						
-						revinue += price.getCost(m);
+						revinue += m.getPrice();
+						expenditure += m.getCost();
 						totalDeliveryTime += m.getShippingDuration()/(double)msinhour;
 						mailCount++;
-						
-						for (Route r : m.getRoute())
-							expenditure += r.getCost(m);
 					}
 					
 					result.add(new DeliveryRevenueExpediture(start, end, p, revinue, expenditure, totalDeliveryTime/(double)mailCount));

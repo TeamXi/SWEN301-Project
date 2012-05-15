@@ -102,27 +102,36 @@
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach var="revenueExpenditure" items="${actionBean.reportManager.allRevenueExpenditure}">
-										<c:if test="${revenueExpenditure.expenditure>revenueExpenditure.revenue}">
-											<tr class="color-red">
-												<td><c:out value="${revenueExpenditure.startPoint.name}"/></td>
-												<td><c:out value="${revenueExpenditure.endPoint.name}"/></td>
-												<td><fmt:message key="Priority.${revenueExpenditure.priority}"/></td>
-												<td><fmt:formatNumber type="currency" value="${revenueExpenditure.revenue}" /></td>
-												<td><fmt:formatNumber type="currency" value="${revenueExpenditure.expenditure}" /></td>
-												<td>
-													<c:choose>
-														<c:when test="${revenueExpenditure.averageDeliveryTime!='NaN'}">
-															<fmt:formatNumber type="number" maxFractionDigits="1" value="${revenueExpenditure.averageDeliveryTime}"/> hours
-														</c:when>
-														<c:otherwise>
-															No data
-														</c:otherwise>
-													</c:choose>
-												</td>
+									<c:choose>
+										<c:when test="${actionBean.hasCriticalRoutes()}">
+											<c:forEach var="revenueExpenditure" items="${actionBean.reportManager.allRevenueExpenditure}">
+												<c:if test="${revenueExpenditure.expenditure>revenueExpenditure.revenue}">
+													<tr class="color-red">
+														<td><c:out value="${revenueExpenditure.startPoint.name}"/></td>
+														<td><c:out value="${revenueExpenditure.endPoint.name}"/></td>
+														<td><fmt:message key="Priority.${revenueExpenditure.priority}"/></td>
+														<td><fmt:formatNumber type="currency" value="${revenueExpenditure.revenue}" /></td>
+														<td><fmt:formatNumber type="currency" value="${revenueExpenditure.expenditure}" /></td>
+														<td>
+															<c:choose>
+																<c:when test="${revenueExpenditure.averageDeliveryTime!='NaN'}">
+																	<fmt:formatNumber type="number" maxFractionDigits="1" value="${revenueExpenditure.averageDeliveryTime}"/> hours
+																</c:when>
+																<c:otherwise>
+																	No data
+																</c:otherwise>
+															</c:choose>
+														</td>
+													</tr>
+												</c:if>
+											</c:forEach>
+										</c:when>
+										<c:otherwise>
+											<tr>
+												<td colspan="6">There are no critical routes</td>
 											</tr>
-										</c:if>
-									</c:forEach>
+										</c:otherwise>
+									</c:choose>
 								</tbody>
 							</table>
 						</div>

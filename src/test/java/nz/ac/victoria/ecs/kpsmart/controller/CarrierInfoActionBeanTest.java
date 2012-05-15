@@ -1,61 +1,20 @@
 package nz.ac.victoria.ecs.kpsmart.controller;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.never;
 import net.sourceforge.stripes.mock.MockRoundtrip;
-import nz.ac.victoria.ecs.kpsmart.GuiceServletContextListner;
 import nz.ac.victoria.ecs.kpsmart.entities.logging.CarrierDeleteEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.logging.CarrierUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Carrier;
-import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
-import nz.ac.victoria.ecs.kpsmart.logging.Log;
-import nz.ac.victoria.ecs.kpsmart.reporting.Report;
-import nz.ac.victoria.ecs.kpsmart.state.State;
 import nz.ac.victoria.ecs.kpsmart.util.StripesActionBeanTest;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.google.inject.AbstractModule;
 
 public class CarrierInfoActionBeanTest extends StripesActionBeanTest {
-	private EntityManager manager;
-	private State state;
-	private Log log;
-	private Report report;
-	
-	@BeforeClass
-	public static void guiceInit() {
-		GuiceServletContextListner.init();
-	}
-	
-	@Before
-	public void setUpMocks() {
-		this.manager = mock(EntityManager.class);
-		this.state = mock(State.class);
-		this.log = mock(Log.class);
-		this.report = mock(Report.class);
-		
-		when(this.manager.getData()).thenReturn(state);
-		when(this.manager.getLog()).thenReturn(log);
-		when(this.manager.getReports()).thenReturn(report);
-		
-		GuiceServletContextListner.createNewInjector(new AbstractModule() {
-			@Override
-			protected void configure() {
-				bind(State.class).toInstance(state);
-				bind(Log.class).toInstance(log);
-				bind(Report.class).toInstance(report);
-				bind(EntityManager.class).toInstance(manager);
-			}
-		});
-	}
-	
 	@Test
 	public void testNewCarrier() throws Exception {
 		MockRoundtrip trip = new MockRoundtrip(this.context, CarrierInfoActionBean.class);
