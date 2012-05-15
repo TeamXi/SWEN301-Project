@@ -6,8 +6,10 @@ KPS.data.locations = KPS.data.locations || {};
 KPS.data.carriers = KPS.data.carriers || {};
 KPS.data.format = KPS.data.format || {};
 
-$(document).ajaxError(function(){
-	alert("There was an error communicating with the server");
+$(document).ajaxError(function(event, jqXHR, ajaxSettings, thrownError){
+	if((jqXHR.status+"")[0] == "5" || jqXHR.status == 404) {
+		alert("There was an error communicating with the server");
+	}
 });
 
 function performLogin(siteRoot,role){
