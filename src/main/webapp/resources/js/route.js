@@ -122,7 +122,7 @@ KPS.event.location = KPS.event.location || {};
 	};
 	
 	cls.updateRoute = function(id) {
-		KPS.modal.load("route?updateform&routeId="+id+updateFormPartialURL+"&submitCallback="+updateFormSubmitCallback+"("+id+")", function (data) {
+		KPS.modal.load("route?updateform&routeId="+id+updateFormPartialURL+"&submitCallback="+updateFormSubmitCallback+"("+id+")", function () {
 			KPS.util.disableInputAutocomplete();
 			
 			updateForm = document.getElementById(updateFormId);
