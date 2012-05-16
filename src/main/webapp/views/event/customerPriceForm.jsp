@@ -5,7 +5,7 @@
 <div id="${actionBean.divId}">
 	<stripes:form id="${actionBean.formId}" class="form-horizontal" action="javascript:${actionBean.submitCallback}">
 		<div class="control-group">
-			<stripes:label for="location" class="control-label">Destination</stripes:label>
+			<stripes:label for="location" class="control-label">Route</stripes:label>
 			<div class="controls">
 				<stripes:text class="portEntry" name="location"
 					value="${actionBean.location}"
