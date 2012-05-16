@@ -4,6 +4,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sourceforge.stripes.action.DefaultHandler;
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.HandlesEvent;
@@ -17,6 +20,7 @@ import nz.ac.victoria.ecs.kpsmart.resolutions.FormValidationResolution;
 
 @UrlBinding("/event/route?{$event}")
 public class RouteActionBean extends FormActionBean {
+	private Logger logger = LoggerFactory.getLogger(RouteActionBean.class);
 	
 	private String source;
 	private String destination;
@@ -68,9 +72,27 @@ public class RouteActionBean extends FormActionBean {
 	
 	@HandlesEvent("update")
 	public Resolution updateRouteInfo(){
-		getEntityManager().performEvent(
-				new RouteUpdateEvent(fillUpdateRoute(
-						getState().getRouteByID(routeId))));
+		Route current = getState().getRouteByID(routeId);
+		
+		if (current == null)
+			return new FormValidationResolution(false, null, null);
+		
+		if (
+				(this.getState().getRouteByKey(
+					this.getState().getLocationForName(source), 
+					this.getState().getLocationForName(destination), 
+					transportType, 
+					this.getState().getCarrier(carrier)) == null)
+			||
+				(this.getState().getRouteByKey(
+					this.getState().getLocationForName(source), 
+					this.getState().getLocationForName(destination), 
+					transportType, 
+					this.getState().getCarrier(carrier)).getId() != current.getId())
+		)
+			return new FormValidationResolution(false, new String[] {"source"}, new String[] {"The route does not exist"});
+		
+		getEntityManager().performEvent(new RouteUpdateEvent(fillUpdateRoute(current)));
 		
 		return new FormValidationResolution(true, null, null);
 	}
@@ -104,9 +126,14 @@ public class RouteActionBean extends FormActionBean {
 	
 	@HandlesEvent("delete")
 	public Resolution deleteRoute() {
-		getEntityManager().performEvent(
-				new RouteDeleteEvent(
-						getState().getRouteByID(routeId)));
+		Route current = getState().getRouteByID(routeId);
+		
+		if (current == null) {
+			logger.warn("The route requested to be deleted could not be found. ID {} was asked to be deleted", routeId);
+			return new FormValidationResolution(false, new String[] {"routeId"}, new String[] {"The route could not be found"});
+		}
+		
+		getEntityManager().performEvent(new RouteDeleteEvent(current));
 		return new FormValidationResolution(true, null, null);
 	}
 
