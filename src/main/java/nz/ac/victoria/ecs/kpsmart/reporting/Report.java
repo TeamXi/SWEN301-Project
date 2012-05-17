@@ -61,6 +61,14 @@ public interface Report extends TimeCapable<Report> {
 	public List<RevenueExpenditure> getRevenueExpenditureOverTime();
 	
 	/**
+	 * Get the last lastN number of revenue/expenditure over time
+	 * 
+	 * @param lastN the number of values to return
+	 * @return a list of RevenueExpendature
+	 */
+	public List<RevenueExpenditure> getLastRevenueExpenditureOverTime(int lastN);
+	
+	/**
 	 * Represents the amount of mail for a given source-destination pair.
 	 * 
 	 * @author hodderdani

@@ -279,10 +279,13 @@ KPS.graphs = KPS.graphs || {};
             },
             xAxis: {
             	categories: categories,
+            	min: Math.max(KPS.graphs.currentEvent-40, 0),
+            	max: KPS.graphs.currentEvent-1,
             	title: {
                     text: 'Event Number'
                 },
             	labels: {
+            		rotation: -45,
                     formatter: function() {
                         return this.value; // clean, unformatted number for year
                     }

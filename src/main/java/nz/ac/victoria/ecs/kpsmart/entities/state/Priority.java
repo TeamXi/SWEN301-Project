@@ -31,4 +31,8 @@ public enum Priority {
 		priorities.add(International_Standard);
 		return priorities;
 	}
+
+	public String getFormattedName() {
+		return toString().replace('_', ' ');
+	}
 }

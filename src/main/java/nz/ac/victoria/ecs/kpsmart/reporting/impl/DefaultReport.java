@@ -275,7 +275,7 @@ public class DefaultReport implements Report {
 			GraphSummary slice = new GraphSummary(d.getStartPoint().getName()+
 													" -> "+
 													d.getEndPoint().getName()+
-													" ("+d.getPriority()+")"
+													" ("+d.getPriority().getFormattedName()+")"
 												  , d.getExpenditure(), d.getExpenditure()/totalExpenditure);
 			if(d.getEndPoint().isInternational()) {
 				international.add(slice);
@@ -289,5 +289,13 @@ public class DefaultReport implements Report {
 		result.addAll(domestic);
 		
 		return result;
+	}
+	@Override
+	public List<RevenueExpenditure> getLastRevenueExpenditureOverTime(int lastN) {
+		List<RevenueExpenditure> revexp = getRevenueExpenditureOverTime();
+		
+		
+		
+		return revexp.subList(Math.max(revexp.size()-lastN, 0), revexp.size());
 	}
 }
