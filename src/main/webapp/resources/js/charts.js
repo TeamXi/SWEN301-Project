@@ -63,8 +63,10 @@ KPS.graphs = KPS.graphs || {};
 		return false;
 	}
 	cls.refreshCharts = function(){
-		$(revenueChart).css('height',$(revenueChart).width()+"px");
-		$(expensesChart).css('height',$(expensesChart).width()+"px");
+		var chartHeight = $(revenueChart).width()*0.7;
+		
+		$(revenueChart).css('height',chartHeight+"px");
+		$(expensesChart).css('height',chartHeight+"px");
 		
 		cls.dirtyRefresh();
 		$("rect[rx=\"3\"]").hide();
