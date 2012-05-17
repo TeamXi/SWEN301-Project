@@ -110,3 +110,7 @@ body {
 	line-height: 22px;
 	color: #999;
 }
+
+#dashboard-tab-critical-routes {
+	margin-bottom: 300px;
+}
