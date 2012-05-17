@@ -335,4 +335,58 @@ public interface Report extends TimeCapable<Report> {
 		}
 		
 	}
+	
+	/**
+	 * A slice on a donut graph
+	 * 
+	 * @author ruarusmelb
+	 *
+	 */
+	public static final class GraphSummary {
+		private final double y;
+		private final double value;
+		private final String name;
+		
+		public GraphSummary(String name, double value, double y) {
+			this.name = name;
+			this.value = value;
+			this.y = y;
+		}
+
+		public double getY() {
+			return y;
+		}
+
+		public double getValue() {
+			return value;
+		}
+
+		public String getName() {
+			return name;
+		}
+	}
+	
+	/**
+	 * Get the inner circle on the revenue donut graph
+	 * @return
+	 */
+	public List<GraphSummary> getRevenueByDomesticInternational();
+	
+	/**
+	 * Get the inner circle on the expenditure donut graph
+	 * @return
+	 */
+	public List<GraphSummary> getExpenditureByDomesticInternational();
+	
+	/**
+	 * Get the outer circle on the revenue donut graph
+	 * @return
+	 */
+	public List<GraphSummary> getRevenueByRoute();
+	
+	/**
+	 * Get the outer circle on the expenditure donut graph
+	 * @return
+	 */
+	public List<GraphSummary> getExpenditureByRoute();
 }

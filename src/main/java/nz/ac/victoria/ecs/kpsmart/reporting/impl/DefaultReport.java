@@ -166,4 +166,128 @@ public class DefaultReport implements Report {
 	public Report getAtEventID(long eventID) {
 		return new DefaultReport(state.getAtEventID(eventID), log.getAtEventID(eventID));
 	}
+	@Override
+	public List<GraphSummary> getRevenueByDomesticInternational() {
+		List<GraphSummary> result = new ArrayList<GraphSummary>();
+		
+		Collection<MailDelivery> deliveries = this.state.getAllMailDeliveries();
+		
+		double totalRevenue = 0;
+		double totalRevenueInternational = 0;
+		double totalRevenueDomestic = 0;
+		
+		for(MailDelivery m : deliveries) {
+			double price = m.getPrice();
+			totalRevenue += price;
+			if(m.isInternational()) {
+				totalRevenueInternational += price;
+			}
+			else {
+				totalRevenueDomestic += price;
+			}
+		}
+		
+		result.add(new GraphSummary("International", totalRevenueInternational, totalRevenueInternational/totalRevenue));
+		result.add(new GraphSummary("Domestic", totalRevenueDomestic, totalRevenueDomestic/totalRevenue));
+
+		return result;
+	}
+	@Override
+	public List<GraphSummary> getExpenditureByDomesticInternational() {
+		List<GraphSummary> result = new ArrayList<GraphSummary>();
+		
+		Collection<MailDelivery> deliveries = this.state.getAllMailDeliveries();
+		
+		double totalExpenditure = 0;
+		double totalExpenditureInternational = 0;
+		double totalExpenditureDomestic = 0;
+		
+		for(MailDelivery m : deliveries) {
+			double cost = m.getCost();
+			totalExpenditure += cost;
+			if(m.isInternational()) {
+				totalExpenditureInternational += cost;
+			}
+			else {
+				totalExpenditureDomestic += cost;
+			}
+		}
+		
+		result.add(new GraphSummary("International", totalExpenditureInternational, totalExpenditureInternational/totalExpenditure));
+		result.add(new GraphSummary("Domestic", totalExpenditureDomestic, totalExpenditureDomestic/totalExpenditure));
+
+		return result;
+	}
+	@Override
+	public List<GraphSummary> getRevenueByRoute() {
+		List<GraphSummary> result = new ArrayList<GraphSummary>();
+		List<GraphSummary> domestic = new ArrayList<GraphSummary>();
+		List<GraphSummary> international = new ArrayList<GraphSummary>();
+		
+		Collection<DeliveryRevenueExpediture> revExp = getAllRevenueExpenditure();
+		
+		Collection<MailDelivery> deliveries = this.state.getAllMailDeliveries();
+		
+		double totalRevenue = 0;
+		
+		for(MailDelivery m : deliveries) {
+			double price = m.getPrice();
+			totalRevenue += price;
+		}
+		
+		for(DeliveryRevenueExpediture d : revExp) {
+			GraphSummary slice = new GraphSummary(d.getStartPoint().getName()+
+													" -> "+
+													d.getEndPoint().getName()+
+													" ("+d.getPriority()+")"
+												  , d.getRevenue(), d.getRevenue()/totalRevenue);
+			if(d.getEndPoint().isInternational()) {
+				international.add(slice);
+			}
+			else {
+				domestic.add(slice);
+			}
+		}
+		
+		result.addAll(international);
+		result.addAll(domestic);
+		
+		return result;
+	}
+	@Override
+	public List<GraphSummary> getExpenditureByRoute() {
+		List<GraphSummary> result = new ArrayList<GraphSummary>();
+		List<GraphSummary> domestic = new ArrayList<GraphSummary>();
+		List<GraphSummary> international = new ArrayList<GraphSummary>();
+		
+		Collection<DeliveryRevenueExpediture> revExp = getAllRevenueExpenditure();
+		
+		Collection<MailDelivery> deliveries = this.state.getAllMailDeliveries();
+		
+		double totalExpenditure = 0;
+		
+		for(MailDelivery m : deliveries) {
+			double cost = m.getCost();
+			totalExpenditure += cost;
+		}
+		
+		for(DeliveryRevenueExpediture d : revExp) {
+			GraphSummary slice = new GraphSummary(d.getStartPoint().getName()+
+													" -> "+
+													d.getEndPoint().getName()+
+													" ("+d.getPriority()+")"
+												  , d.getExpenditure(), d.getExpenditure()/totalExpenditure);
+			if(d.getEndPoint().isInternational()) {
+				international.add(slice);
+			}
+			else {
+				domestic.add(slice);
+			}
+		}
+		
+		result.addAll(international);
+		result.addAll(domestic);
+		
+		return result;
+	}
 }

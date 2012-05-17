@@ -27,15 +27,15 @@ KPS.graphs = KPS.graphs || {};
 	cls.refreshExpensesChart = function(){
 		var chartOpts = getDonutOpts(expensesChartId,"Expenses","Locations","");
 		resetCounters();
-		chartOpts.series[0].data = parseFinancesGlobal('expenditure');
-		chartOpts.series[1].data = parseFinancesByRoute('expenditure');
+		chartOpts.series[0].data = KPS.graphs.donut.expenditure.inner;
+		chartOpts.series[1].data = KPS.graphs.donut.expenditure.outer;
 		chartExpenses = new Highcharts.Chart(chartOpts);
 	};
 	cls.refreshRevenueChart = function(){
 		var chartOpts = getDonutOpts(profitsChartId,"Revenue","Locations",""); 
 		resetCounters();
-		chartOpts.series[0].data = parseFinancesGlobal('revenue');
-		chartOpts.series[1].data = parseFinancesByRoute('revenue');
+		chartOpts.series[0].data = KPS.graphs.donut.revenue.inner;
+		chartOpts.series[1].data = KPS.graphs.donut.revenue.outer;
 		chartRevenue = new Highcharts.Chart(chartOpts);
 	};
 	cls.refreshFinancesOverTime = function(){
@@ -134,52 +134,6 @@ KPS.graphs = KPS.graphs || {};
 		totalInternational = 0;
 		totalDomestic = 0;
 		total = 0;
-	}
-	
-	function parseFinancesGlobal(type){
-		var finances = KPS.graphs.finances[type];
-		
-		var parsedValues = [];
-		var finance;
-		for(var fiIdx in finances.international){
-			finance = finances.international[fiIdx];
-			total += parseFloat(finance.amount);
-			totalInternational += parseFloat(finance.amount);
-		}
-		for(var fiIdx in finances.domestic){
-			finance = finances.domestic[fiIdx];
-			total += parseFloat(finance.amount);
-			totalDomestic += parseFloat(finance.amount);
-			
-		}
-		parsedValues.push({name:"International",y:(totalInternational/total),color:colors[3],value: totalInternational});
-		parsedValues.push({name:"Domestic",		y:(totalDomestic/total),	 color:colors[2],value: totalDomestic});
-		return parsedValues;
-	}
-	
-	function parseFinancesByRoute(type){
-		var finances = KPS.graphs.finances[type];
-		var parsedValues = [];
-		var colorIdx = 0;
-		for(var fiIdx in finances.international){
-			finance = finances.international[fiIdx];
-			parsedValues.push({
-				name: finance.startPoint+" -> "+finance.endPoint+" ("+finance.priority+")",
-				color: colors[(colorIdx++%colors.length)],
-				y:parseFloat(finance.amount)/total,
-				value: parseFloat(finance.amount)
-			});
-		}
-		for(var fiIdx in finances.domestic){
-			finance = finances.domestic[fiIdx];
-			parsedValues.push({
-				name: finance.startPoint+" -> "+finance.endPoint+" ("+finance.priority+")",
-				color: colors[(colorIdx++%colors.length)],
-				y:parseFloat(finance.amount)/total,
-				value: parseFloat(finance.amount)
-			});
-		}
-		return parsedValues;
 	}
 	
 	function getDonutOpts(container, title, sub, yaxis){

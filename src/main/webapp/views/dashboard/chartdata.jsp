@@ -4,22 +4,40 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 KPS.charts = KPS.charts || {};
+	
+KPS.graphs.donut = KPS.graphs.donut || {};
+KPS.graphs.donut.revenue = KPS.graphs.donut.revenue || {};
+KPS.graphs.donut.expenditure = KPS.graphs.donut.expenditure || {};
 
-KPS.graphs.finances = {revenue:{international:[],domestic:[]},expenditure:{international:[],domestic:[]}};
-	<c:forEach var="revenueExpenditure" items="${actionBean.reportManager.allRevenueExpenditure}">
-		KPS.graphs.finances.revenue.<c:out value="${revenueExpenditure.endPoint.international? 'international': 'domestic'}"/>.push(
-				{startPoint:'<c:out value="${revenueExpenditure.startPoint.name}"/>',
-				endPoint:'<c:out value="${revenueExpenditure.endPoint.name}"/>',
-				priority:'<fmt:message key="Priority.${revenueExpenditure.priority}"/>',
-				amount:'<c:out value="${revenueExpenditure.revenue}"/>'}
-		);
-		KPS.graphs.finances.expenditure.<c:out value="${revenueExpenditure.endPoint.international? 'international': 'domestic'}"/>.push(
-				{startPoint:'<c:out value="${revenueExpenditure.startPoint.name}"/>',
-				endPoint:'<c:out value="${revenueExpenditure.endPoint.name}"/>',
-				priority:'<fmt:message key="Priority.${revenueExpenditure.priority}"/>',
-				amount:'<c:out value="${revenueExpenditure.expenditure}"/>'}
-		);
-	</c:forEach>
+KPS.graphs.donut.revenue.inner = <json:array var="value" items="${actionBean.reportManager.revenueByDomesticInternational}">
+	<json:object>
+		<json:property name="y" value="${value.y}"/>
+		<json:property name="value" value="${value.value}"/>
+		<json:property name="name" value="${value.name}"/>
+	</json:object>
+</json:array>;
+KPS.graphs.donut.revenue.outer = <json:array var="value" items="${actionBean.reportManager.revenueByRoute}">
+	<json:object>
+		<json:property name="y" value="${value.y}"/>
+		<json:property name="value" value="${value.value}"/>
+		<json:property name="name" value="${value.name}"/>
+	</json:object>
+</json:array>;
+
+KPS.graphs.donut.expenditure.inner = <json:array var="value" items="${actionBean.reportManager.expenditureByDomesticInternational}">
+	<json:object>
+		<json:property name="y" value="${value.y}"/>
+		<json:property name="value" value="${value.value}"/>
+		<json:property name="name" value="${value.name}"/>
+	</json:object>
+</json:array>;
+KPS.graphs.donut.expenditure.outer = <json:array var="value" items="${actionBean.reportManager.expenditureByRoute}">
+	<json:object>
+		<json:property name="y" value="${value.y}"/>
+		<json:property name="value" value="${value.value}"/>
+		<json:property name="name" value="${value.name}"/>
+	</json:object>
+</json:array>;
 
 
 KPS.graphs.revenueexpenditure = <json:array name="revenue" var="revexp" items="${actionBean.reportManager.revenueExpenditureOverTime}">
@@ -29,4 +47,4 @@ KPS.graphs.revenueexpenditure = <json:array name="revenue" var="revexp" items="$
 		<json:property name="timestamp" value="${revexp.date.time}" />
 		<json:property name="eventId" value="${revexp.eventId}" />
 	</json:object>
-</json:array>
+</json:array>;

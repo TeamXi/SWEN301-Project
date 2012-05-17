@@ -75,11 +75,10 @@ public final class MailDelivery extends StorageEntity implements Serializable {
 	}
 	
 	public boolean isInternational() {
-		for (Route r : this.route)
-			if (!r.isInternational())
-				return false;
+		Location start = route.get(0).getStartPoint();
+		Location end = route.get(route.size()-1).getEndPoint();
 		
-		return true;
+		return start.isInternational() || end.isInternational();
 	}
 
 	public long getId() {
