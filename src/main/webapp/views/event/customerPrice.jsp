@@ -3,6 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <stripes:layout-render name="/layouts/KPSmart.jsp">
 	<stripes:layout-component name="title">Customer prices</stripes:layout-component>
+	<stripes:layout-component name="styles">
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/customerprice.css" />
+	</stripes:layout-component>
 	<stripes:layout-component name="scripts">
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/customerprice.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/formvalidation.js"></script>

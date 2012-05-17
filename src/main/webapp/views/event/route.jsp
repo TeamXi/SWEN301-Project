@@ -4,6 +4,9 @@
 <stripes:layout-render name="/layouts/KPSmart.jsp">
 
 	<stripes:layout-component name="title">Routes</stripes:layout-component>
+	<stripes:layout-component name="styles">
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/route.css" />
+	</stripes:layout-component>
 	<stripes:layout-component name="scripts">
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/route.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/formvalidation.js"></script>

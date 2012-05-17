@@ -4,6 +4,9 @@
 <stripes:layout-render name="/layouts/KPSmart.jsp">
 
 	<stripes:layout-component name="title">Carriers</stripes:layout-component>
+	<stripes:layout-component name="styles">
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/carrier.css" />
+	</stripes:layout-component>
 	<stripes:layout-component name="scripts">
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/carrier.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/formvalidation.js"></script>
