@@ -4,5 +4,6 @@
 	<json:object>
 		<json:property name="id" value="${event.id}"></json:property>
 		<json:property name="timestamp" value="${event.timestamp.time}"></json:property>
+		<json:property name="description" value="test"></json:property>
 	</json:object>
 </json:array>

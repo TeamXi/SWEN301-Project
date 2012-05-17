@@ -638,6 +638,6 @@ var waitForFinalEvent = (function () {
 
 (function(cls, $, undefined) {
 	cls.date = function(date) {
-		return date.format("h:Mtt ddd dS mmm 'yy");
+		return date.format("h:MMtt ddd dS mmm 'yy");
 	};
 }(KPS.data.format, jQuery));

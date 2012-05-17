@@ -29,7 +29,7 @@ KPS.dashboard = KPS.dashboard || {};
 			var eventEl = document.createElement('a');
 			eventEl.innerHTML = cls.events[n].id;
 			(function(event) {
-				$(eventEl).tooltip({title: KPS.data.format.date(new Date(event.timestamp))}).click(function() {
+				$(eventEl).tooltip({title: event.description + " on " + KPS.data.format.date(new Date(event.timestamp))}).click(function() {
 					var id = event.id;
 					if(event.id == cls.events.length) {
 						id = 0;
