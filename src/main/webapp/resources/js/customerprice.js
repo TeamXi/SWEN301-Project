@@ -18,7 +18,7 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 	var updateForm = undefined;
 	
 	var addModalConfiguration = {
-			title: "Add customer price",
+			title: "Add a customer price",
 			okButton: {
 				title: "Add",
 				action: function() {
@@ -27,7 +27,7 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 			}
 	};
 	var updateModalConfiguration = {
-			title: "Update customer price",
+			title: "Update a customer price",
 			okButton: {
 				title: "Update",
 				action: function() {

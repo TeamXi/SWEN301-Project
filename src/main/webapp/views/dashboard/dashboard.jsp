@@ -38,22 +38,34 @@
 					<a class="close" href="javascript:KPS.dashboard.hideEventAlert()">&times;</a>
 					<b>Heads up!</b> <span id="eventbacklogcount"></span> occurred since you loaded the page, refresh to view the updates.
 				</div>
-				<h1>Dashboard</h1>
+				<header class="jumbotron subhead">
+					<h1>Dashboard</h1>
+					<p class="lead">
+						<c:choose>
+							<c:when test="<%= isManager() %>">
+								Welcome to the dashboard, use the event bar to view statistics about KPSmart throughout time.
+							</c:when>
+							<c:otherwise>
+								Welcome to the dashboard, here you can view the current financial status of KPSmart.
+							</c:otherwise>
+						</c:choose>
+					</p>
+				</header>
 			</div>
 		</div>
 		
-		<c:if test="<%= true /*isManager()*/ %>">
+		<c:if test="<%= isManager() %>">
 			<div class="row-fluid">
-				<div class="span12" id="eventscrubber">
+				<div class="span12" id="eventscrubber" style="opacity:0.001">
 					<table id="eventpager">
 						<tr>
-							<td id="larrId"><a href="#" onclick="KPS.dashboard.goLeft(this)">&larr;</a></td>
+							<td id="larrId"><a href="#" onclick="KPS.dashboard.goLeft(this)">&larr; Older events</a></td>
 							<td id="eventListContainer">
 								<div style="width: 10000px;" id="eventList">
 									
 								</div>
 							</td>
-							<td id="rarrId"><a href="#" onclick="KPS.dashboard.goRight(this)">&rarr;</a></td>
+							<td id="rarrId"><a href="#" onclick="KPS.dashboard.goRight(this)">Newer events &rarr;</a></td>
 						</tr>
 					</table>
 				</div>

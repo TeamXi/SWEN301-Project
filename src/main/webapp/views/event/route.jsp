@@ -11,8 +11,13 @@
 	<stripes:layout-component name="content">
 		<div class="row-fluid">
 			<div class="span12">
-				<h1 class="pull-left">Routes</h1>
-				<button class="btn btn-success smallMargin" onclick="KPS.event.route.addRoute();"><i class="icon-plus icon-white"></i> Add new</button>
+				<header class="jumbotron subhead">
+					<h1>Routes</h1>
+					<button class="btn btn-success add-button" onclick="KPS.event.route.addRoute();"><i class="icon-plus icon-white"></i> Add new</button>
+					<p class="lead">
+						Here you can update and add new routes between ports.
+					</p>
+				</header>
 				
 				<div id="routeListContainer">
 					<jsp:include page="routeList.jsp"></jsp:include>

@@ -2,7 +2,7 @@ var KPS = KPS || {};
 KPS.dashboard = KPS.dashboard || {};
 
 (function(cls, $, undefined) {
-	var numberToShow = 12;
+	var numberToShow = 10;
 	var currentBase = 0;
 	
 	var currentList = null;
@@ -106,6 +106,8 @@ KPS.dashboard = KPS.dashboard || {};
 			
 			checkArrows();
 		}
+		
+		$("#eventscrubber").css({opacity:1});
 		
 		if(cls.currentEvent == cls.events.length) {
 			setupEventListener();

@@ -10,8 +10,14 @@
 	<stripes:layout-component name="content">
 		<div class="row-fluid">
 			<div class="span12">
-				<h1 class="pull-left">Customer prices</h1>
-				<button class="btn btn-success smallMargin" onclick="KPS.event.customerprice.addCustomerPrice();"><i class="icon-plus icon-white"></i> Add new</button>
+				<header class="jumbotron subhead">
+					<h1>Customer prices</h1>
+					<button class="btn btn-success add-button" onclick="KPS.event.customerprice.addCustomerPrice();"><i class="icon-plus icon-white"></i> Add new</button>
+					<p class="lead">
+						Charge the customers exorbitant amounts using our friendly UI.
+					</p>
+				</header>
+				
 				<div id="customerPriceListContainer">
 					<jsp:include page="customerPriceList.jsp"></jsp:include>
 				</div>

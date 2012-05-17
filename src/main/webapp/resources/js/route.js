@@ -20,7 +20,7 @@ KPS.event.location = KPS.event.location || {};
 	var updateForm = undefined;
 	
 	var addModalConfiguration = {
-			title: "Add route",
+			title: "Add a route",
 			okButton: {
 				title: "Create route",
 				action: function() {
@@ -29,7 +29,7 @@ KPS.event.location = KPS.event.location || {};
 			}
 	};
 	var updateModalConfiguration = {
-			title: "Update route",
+			title: "Update a route",
 			okButton: {
 				title: "Update",
 				action: function() {

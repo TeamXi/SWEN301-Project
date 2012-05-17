@@ -11,8 +11,14 @@
 	<stripes:layout-component name="content">
 		<div class="row-fluid">
 			<div class="span12">
-				<h1 class="pull-left">Carriers</h1>
-				<button class="btn btn-success smallMargin" onclick="KPS.event.carrier.addCarrier();"><i class="icon-plus icon-white"></i> Add new</button>
+				<header class="jumbotron subhead">
+					<h1>Carriers</h1>
+					<button class="btn btn-success add-button" onclick="KPS.event.carrier.addCarrier();"><i class="icon-plus icon-white"></i> Add new</button>
+					<p class="lead">
+						View a list of KPSmart carriers&mdash;add, update or delete them to your hearts content!
+					</p>
+				</header>
+				
 				<div id="carrierListContainer">
 					<jsp:include page="carrierList.jsp"></jsp:include>
 				</div>
