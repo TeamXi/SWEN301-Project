@@ -32,9 +32,15 @@ public abstract class EntityOperationEvent<E extends StorageEntity> implements S
 	
 	protected EntityOperationEvent(E entity) {
 		this.entity = entity;
-//		
-//		if (entity != null)
-//			this.entity.setRelateEventID(uid);
+	}
+	
+	/**
+	 * Gets the pretty name of this event
+	 * 
+	 * @return	The name of the event
+	 */
+	public String prettyName() {
+		return this.getClass().getSimpleName().replaceAll("(\\p{Ll})(\\p{Lu})","$1 $2");
 	}
 
 	public E getEntity() {
@@ -113,5 +119,4 @@ public abstract class EntityOperationEvent<E extends StorageEntity> implements S
 		return "EntityOperationEvent [entity=" + entity + ", timestamp="
 				+ timestamp + ", uid=" + uid + "]";
 	}
-
 }
