@@ -239,7 +239,7 @@ public class DefaultReport implements Report {
 			GraphSummary slice = new GraphSummary(d.getStartPoint().getName()+
 													" -> "+
 													d.getEndPoint().getName()+
-													" ("+d.getPriority()+")"
+													" ("+d.getPriority().getFormattedName()+")"
 												  , d.getRevenue(), d.getRevenue()/totalRevenue);
 			if(d.getEndPoint().isInternational()) {
 				international.add(slice);
