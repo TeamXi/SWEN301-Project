@@ -27,7 +27,7 @@
 						<option value="placeholder">Select a Priority</option>
 						<stripes:options-enumeration
 							enum="nz.ac.victoria.ecs.kpsmart.entities.state.Priority" />
-					</stripes:select>
+					</stripes:select> <img id="select-spinner" style="display:none" src="${pageContext.request.contextPath}/resources/img/spinner.gif"></img>
 				</div>
 			</div>
 		

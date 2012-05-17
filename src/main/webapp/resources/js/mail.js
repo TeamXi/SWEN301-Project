@@ -117,6 +117,7 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 				dontDeliverMessage();
 			}
 			else {
+				$("#select-spinner").show();
 				$.get(KPS.siteRoot+"/event/mail?availablepriorities",{source:source, destination:destination},function(data){
 					var priorities = eval(data);
 					if (priorities.length == 0){
@@ -127,6 +128,8 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 							child.disabled= priorities.indexOf(child.value)<0;
 						});
 					}
+					
+					$("#select-spinner").hide();
 				});
 			}
 		}
