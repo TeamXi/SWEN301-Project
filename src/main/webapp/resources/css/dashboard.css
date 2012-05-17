@@ -1,5 +1,5 @@
 body {
-	background-image: url(../img/grid-18px-masked.png);
+	background-image: url(../img/dashboard-background-tile.png);
 	background-repeat: repeat-x;
 }
 
@@ -107,6 +107,6 @@ body {
 
 .loading-content h1 {
 	font-size: 17px;
-	line-height: 20px;
+	line-height: 22px;
 	color: #999;
 }

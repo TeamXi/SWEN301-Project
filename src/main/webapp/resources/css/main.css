@@ -88,7 +88,11 @@ tr:hover .row-hover-controls {
 .add-button {
 	float: right;
 }
- 
+
+.no-background-color {
+	background-color: transparent;
+}
+
 /**
  * From bootstrap docs
  */
