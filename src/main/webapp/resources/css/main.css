@@ -164,12 +164,12 @@ tr:hover .row-hover-controls {
 }
 #profitsChart{
 	width: 45%;
-	float: right;
+	float: left;
 	min-width: 250px;
 }
 #expensesChart{
 	width: 45%;
-	float: left;
+	float: right;
 	height: auto;
 	min-width: 250px;
 }
