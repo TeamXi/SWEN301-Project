@@ -25,7 +25,7 @@ public String getRoleText() {
 	if(s != null && s.length() > 0) {
 		return s;
 	}
-	return "Log in";
+	return "Sign in";
 }
 
 public boolean isLoggedIn() {

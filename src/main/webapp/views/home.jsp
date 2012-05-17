@@ -19,7 +19,7 @@
 						<div class="login-arrow"></div>
 						<div class="hero-unit no-background-color">
 							<h1>Welcome to KPSmart</h1>
-							<p>Please login above to begin delivering mail!</p>
+							<p>Please sign in above to begin delivering mail!</p>
 						</div>
 					</div>
 				</div>

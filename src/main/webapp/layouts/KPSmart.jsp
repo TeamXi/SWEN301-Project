@@ -82,7 +82,7 @@
 										<li><a onClick="KPS.util.user.login('manager');">Manager</a></li>
 										<li><a onClick="KPS.util.user.login('clerk');">Clerk</a></li>
 										<c:if test="<%= isLoggedIn() %>">
-											<li><a onClick="KPS.util.user.logout();">Logout</a></li>
+											<li><a onClick="KPS.util.user.logout();">Sign out</a></li>
 										</c:if>
 									</ul>
 								</li>
