@@ -79,8 +79,11 @@
 									<i class="icon-user icon-white"></i> <%= getRoleText() %>
 									<b class="caret"></b></a>
 									<ul class="dropdown-menu">
-										<li><a onClick="performLogin('${pageContext.request.contextPath}','manager');">Manager</a></li>
-										<li><a onClick="performLogin('${pageContext.request.contextPath}','clerk');">Clerk</a></li>
+										<li><a onClick="KPS.util.user.login('manager');">Manager</a></li>
+										<li><a onClick="KPS.util.user.login('clerk');">Clerk</a></li>
+										<c:if test="<%= isLoggedIn() %>">
+											<li><a onClick="KPS.util.user.logout();">Logout</a></li>
+										</c:if>
 									</ul>
 								</li>
 							</ul>

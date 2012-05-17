@@ -1,5 +1,6 @@
 KPS.util = KPS.util || {};
 KPS.util.map = KPS.util.map || {};
+KPS.util.user = KPS.util.user || {};
 KPS.modal = KPS.modal || {};
 KPS.data = KPS.data || {};
 KPS.data.locations = KPS.data.locations || {};
@@ -15,12 +16,6 @@ $(document).ready(function() {
         }
     });
 });
-
-function performLogin(siteRoot,role){
-	$.post(siteRoot+"/login", {role: role}, function(data) {
-		KPS.util.redirect(siteRoot+"/dashboard");
-	});
-}
 
 var waitForFinalEvent = (function () {
 	  var timers = {};
@@ -139,9 +134,20 @@ var waitForFinalEvent = (function () {
 	};
 }(KPS.util.map, jQuery));
 
-function show(obj){
-	alert(JSON.stringify(obj, null, "\t"));
-}
+// KPS.util.user
+(function(cls, $, undefined) {
+	cls.login = function(role){
+		$.post(KPS.siteRoot+"/login?in", {role: role}, function(data) {
+			KPS.util.redirect(KPS.siteRoot+"/dashboard");
+		});
+	};
+
+	cls.logout = function(){
+		$.post(KPS.siteRoot+"/login?out", function(data) {
+			KPS.util.redirect(KPS.siteRoot);
+		});
+	};
+}(KPS.util.user,jQuery));
 
 // KPS.carrousel object
 (function (pack, $, undefined) {
