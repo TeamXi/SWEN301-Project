@@ -65,6 +65,7 @@
 								</div>
 							</td>
 							<td id="rarrId"><a href="#" onclick="KPS.dashboard.goRight(this)">Newer events &rarr;</a></td>
+							<td><a href="dashboard" onclick="">Now</a></td>
 						</tr>
 					</table>
 				</div>
