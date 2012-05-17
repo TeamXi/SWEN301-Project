@@ -86,6 +86,11 @@ KPS.dashboard = KPS.dashboard || {};
 	};
 	
 	$(document).ready(function() {
+		$('#main-tabs a[href="'+($.cookie('dashboard-main-tab') || '#dashboard-tab-revenue-expenditure')+'"]').tab('show');
+		$("#main-tabs > li > a").click(function(el) {
+			$.cookie('dashboard-main-tab', $(el.currentTarget).attr('href'));
+		});
+		
 		eventList = document.getElementById("eventList");
 		if(eventList) {
 			eventListContainer = document.getElementById("eventListContainer");
@@ -112,8 +117,6 @@ KPS.dashboard = KPS.dashboard || {};
 		if(cls.currentEvent == cls.events.length) {
 			setupEventListener();
 		}
-		
-		KPS.graphs.refreshCharts();
 	});
 	
 	function checkArrows() {

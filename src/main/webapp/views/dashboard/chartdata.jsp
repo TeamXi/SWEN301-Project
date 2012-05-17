@@ -3,6 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+KPS.charts = KPS.charts || {};
+
 KPS.graphs.finances = {revenue:{international:[],domestic:[]},expenditure:{international:[],domestic:[]}};
 	<c:forEach var="revenueExpenditure" items="${actionBean.reportManager.allRevenueExpenditure}">
 		KPS.graphs.finances.revenue.<c:out value="${revenueExpenditure.endPoint.international? 'international': 'domestic'}"/>.push(

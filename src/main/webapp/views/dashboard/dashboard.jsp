@@ -23,7 +23,6 @@
 				KPS.dashboard.currentEvent = KPS.dashboard.events.length;
 			}
 			
-			<%@include file="charts.jsp"%>
 			KPS.graphs.currentEvent = KPS.dashboard.currentEvent;
 			KPS.graphs.events = KPS.dashboard.events;
 		</script>

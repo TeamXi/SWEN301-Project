@@ -19,10 +19,10 @@ KPS.graphs = KPS.graphs || {};
 	var eventsTimeChart 	= $("<div id=\""+eventsTimeId+"\"    class='graph'></div>");
 	var financesTimeChart 	= $("<div id=\""+financesTimeId+"\"  class='graph'></div>");
 	
-	var chartRevenue;
-	var chartExpenses;
-	var chartEventsTime;
-	var chartFinances;
+	var chartRevenue = undefined;
+	var chartExpenses = undefined;
+	var chartEventsTime = undefined;
+	var chartFinances = undefined;
 	
 	cls.refreshExpensesChart = function(){
 		var chartOpts = getDonutOpts(expensesChartId,"Expenses","Locations","");
@@ -53,7 +53,7 @@ KPS.graphs = KPS.graphs || {};
 		if(! refreshIfExists(chartEventsTime) ) cls.refreshEventsTimeChart();
 		if(! refreshIfExists(chartExpenses)   ) cls.refreshExpensesChart();
 		if(! refreshIfExists(chartRevenue)    ) cls.refreshRevenueChart();
-	}
+	};
 	
 	function refreshIfExists(chart){
 		if(chart && chart){
@@ -78,6 +78,7 @@ KPS.graphs = KPS.graphs || {};
 	$(window).resize(function(){
 		$(".tab-pane").css({width:$(".tabbable").first().width()});
 	});
+	
 	function getFinanceData(){
 		var revenue = [];
 		var expenditure = [];
@@ -105,6 +106,7 @@ KPS.graphs = KPS.graphs || {};
 		}
 		return {vals:{'revenue': revenue, 'expenditure': expenditure},cats:categories};
 	}
+	
 	function getTimeCategories(){
 	
 		var last = KPS.graphs.events[KPS.graphs.currentEvent-1].timestamp;
@@ -127,11 +129,13 @@ KPS.graphs = KPS.graphs || {};
 		eventCounts[eventCounts.length - 1] = KPS.graphs.currentEvent;
 		return {cats:cats,values:eventCounts};
 	}
+	
 	function resetCounters(){
 		totalInternational = 0;
 		totalDomestic = 0;
 		total = 0;
 	}
+	
 	function parseFinancesGlobal(type){
 		var finances = KPS.graphs.finances[type];
 		
@@ -151,7 +155,8 @@ KPS.graphs = KPS.graphs || {};
 		parsedValues.push({name:"International",y:(totalInternational/total),color:colors[3],value: totalInternational});
 		parsedValues.push({name:"Domestic",		y:(totalDomestic/total),	 color:colors[2],value: totalDomestic});
 		return parsedValues;
-	};
+	}
+	
 	function parseFinancesByRoute(type){
 		var finances = KPS.graphs.finances[type];
 		var parsedValues = [];
@@ -176,6 +181,7 @@ KPS.graphs = KPS.graphs || {};
 		}
 		return parsedValues;
 	}
+	
 	function getDonutOpts(container, title, sub, yaxis){
 		  var chartOpts = {
             chart: {
@@ -228,6 +234,7 @@ KPS.graphs = KPS.graphs || {};
         };
 		  return chartOpts;
 	}
+	
 	function getEventsOverTimeOpts(container,categories,values){
 		for(var catIdx in categories){
 			var timestamp = categories[catIdx];
@@ -275,6 +282,7 @@ KPS.graphs = KPS.graphs || {};
         };
 		return chartOpts;
 	}
+	
 	function getFinancesOverTimeOpts(container,financeData,categories){
 		var colors = Highcharts.getOptions().colors; //gets the colours so rev and exp can be same colour as the reported values
 		
@@ -365,34 +373,31 @@ KPS.graphs = KPS.graphs || {};
 	
 	
 	$(document).ready(function(){
-		$('#main-tabs a[href="'+($.cookie('dashboard-main-tab') || '#dashboard-tab-revenue-expenditure')+'"]').tab('show');
-		$revExpSection = $("#dashboard-tab-revenue-expenditure").empty();
-		$noEventsSection = $("#dashboard-tab-no-of-events").empty();
-
-		$revExpSection.append(financesTimeChart);
-		$revExpSection.append(expensesChart);
-		$revExpSection.append(revenueChart);
-		$noEventsSection.append(eventsTimeChart);
-		
-		$(".activate-graph").click(function(){
-			setTimeout(function() {
-				cls.refreshCharts();
-				
-				if (document.createEvent) {
-					var evt = document.createEvent('UIEvents');
-					evt.initUIEvent('resize', true, false,window,0);
-					window.dispatchEvent(evt);
+		$.getScript("dashboard?chartdata", function() {
+			$revExpSection = $("#dashboard-tab-revenue-expenditure").empty();
+			$noEventsSection = $("#dashboard-tab-no-of-events").empty();
 	
-				} else if (document.createEventObject) {
-				    window.fireEvent('onresize');
-				}
-			}, 1);
-		});
+			$revExpSection.append(financesTimeChart);
+			$revExpSection.append(expensesChart);
+			$revExpSection.append(revenueChart);
+			$noEventsSection.append(eventsTimeChart);
+			
+			$(".activate-graph").click(function(){
+				setTimeout(function() {
+					cls.refreshCharts();
+					
+					if (document.createEvent) {
+						var evt = document.createEvent('UIEvents');
+						evt.initUIEvent('resize', true, false,window,0);
+						window.dispatchEvent(evt);
 		
-		$("#main-tabs > li > a").click(function(el) {
-			$.cookie('dashboard-main-tab', $(el.currentTarget).attr('href'));
+					} else if (document.createEventObject) {
+					    window.fireEvent('onresize');
+					}
+				}, 1);
+			});
+			
+			cls.refreshCharts();
 		});
 	});
-	
-	})
-(KPS.graphs, jQuery);
+}(KPS.graphs, jQuery));
