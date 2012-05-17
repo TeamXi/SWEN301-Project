@@ -54,8 +54,8 @@
 				<td><c:out value="${mailCount.startPoint.name}"></c:out></td>
 				<td><c:out value="${mailCount.endPoint.name}"></c:out></td>
 				<td><c:out value="${mailCount.items}"></c:out></td>
-				<td><c:out value="${mailCount.totalWeight}"></c:out></td>
-				<td><c:out value="${mailCount.totalVolume}"></c:out></td>
+				<td><fmt:formatNumber type="number" maxFractionDigits="1" value="${mailCount.totalWeight}"></fmt:formatNumber></td>
+				<td><fmt:formatNumber type="number" maxFractionDigits="1" value="${mailCount.totalVolume}"></fmt:formatNumber></td>
 			</tr>
 		</c:forEach>
 	</tbody>

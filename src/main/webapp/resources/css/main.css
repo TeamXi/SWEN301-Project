@@ -39,10 +39,6 @@ tr:hover .row-hover-controls {
 	opacity: 1;
 }
 
-.smallMargin {
-	margin: 5px;
-}
-
 .alertSpacer {
 	height: 40px;
 	margin: -15px 0px 10px 0px;
@@ -87,31 +83,10 @@ tr:hover .row-hover-controls {
 .hover-icon-white:hover [class^="icon-"], .icon-hover-white:hover [class*=" icon-"] {
  	background-image: url("../img/glyphicons-halflings-white.png");
  }
- 
-#eventscrubber {
-	margin-top: 15px;
-}
+
  
 .add-button {
 	float: right;
-}
-
-.loading-container {
-	text-align: center;
-}
-
-.loading-content {
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 100px;
-	text-align: left;
-	width: 300px;
-}
-
-.loading-content h1 {
-	font-size: 17px;
-	line-height: 20px;
-	color: #999;
 }
  
 /**
