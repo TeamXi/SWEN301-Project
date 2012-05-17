@@ -102,114 +102,56 @@
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane" id="dashboard-tab-critical-routes">
-							<table id="critical-routes-table" class="table table-bordered table-striped responsive-utilities">
-								<thead>
-									<tr>
-										<td>Source</td>
-										<td>Destination</td>
-										<td>Priority</td>
-										<td>Revenue</td>
-										<td>Expenditure</td>
-										<td>Average delivery time</td>
-									</tr>
-								</thead>
-								<tbody>
-									<c:choose>
-										<c:when test="${actionBean.hasCriticalRoutes()}">
-											<c:forEach var="revenueExpenditure" items="${actionBean.reportManager.allRevenueExpenditure}">
-												<c:if test="${revenueExpenditure.expenditure>revenueExpenditure.revenue}">
-													<tr class="color-red">
-														<td><c:out value="${revenueExpenditure.startPoint.name}"/></td>
-														<td><c:out value="${revenueExpenditure.endPoint.name}"/></td>
-														<td><fmt:message key="Priority.${revenueExpenditure.priority}"/></td>
-														<td><fmt:formatNumber type="currency" value="${revenueExpenditure.revenue}" /></td>
-														<td><fmt:formatNumber type="currency" value="${revenueExpenditure.expenditure}" /></td>
-														<td>
-															<c:choose>
-																<c:when test="${revenueExpenditure.averageDeliveryTime!='NaN'}">
-																	<fmt:formatNumber type="number" maxFractionDigits="1" value="${revenueExpenditure.averageDeliveryTime}"/> hours
-																</c:when>
-																<c:otherwise>
-																	No data
-																</c:otherwise>
-															</c:choose>
-														</td>
-													</tr>
-												</c:if>
-											</c:forEach>
-										</c:when>
-										<c:otherwise>
-											<tr>
-												<td colspan="6">There are no critical routes</td>
-											</tr>
-										</c:otherwise>
-									</c:choose>
-								</tbody>
-							</table>
+							<div class="loading-container">
+								<div class="loading-content">
+									<h1>Loading</h1>
+									<div class="progress progress-striped active">
+										<div class="bar" style="width: 100%;"></div>
+									</div>
+								</div>
+							</div>
+							
+							<script>
+								$(document).ready(function() {
+									$("#dashboard-tab-critical-routes").load("dashboard?tab-criticalroutes");
+								});
+							</script>
 						</div>
 						<div class="tab-pane" id="dashboard-tab-revenue-expenditure">
+							<div class="loading-container">
+								<div class="loading-content">
+									<h1>Loading</h1>
+									<div class="progress progress-striped active">
+										<div class="bar" style="width: 100%;"></div>
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="tab-pane" id="dashboard-tab-no-of-events">
+							<div class="loading-container">
+								<div class="loading-content">
+									<h1>Loading</h1>
+									<div class="progress progress-striped active">
+										<div class="bar" style="width: 100%;"></div>
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="tab-pane" id="dashboard-tab-rawdata">
-							<table class="table table-bordered table-striped responsive-utilities">
-								<thead>
-									<tr>
-										<td>Source</td>
-										<td>Destination</td>
-										<td>Priority</td>
-										<td>Revenue</td>
-										<td>Expenditure</td>
-										<td>Average delivery time</td>
-									</tr>
-								</thead>
-								<tbody>
-									<c:forEach var="revenueExpenditure" items="${actionBean.reportManager.allRevenueExpenditure}">
-										<c:set value="${revenueExpenditure.revenue}" var="revenue"></c:set>
-										<c:set value="${revenueExpenditure.expenditure}" var="expenditure"></c:set>
-										<c:set value="${revenueExpenditure.averageDeliveryTime}" var="averageDeliveryTime"></c:set>
-										<tr class="${expenditure>revenue?'color-red':''}">
-											<td><c:out value="${revenueExpenditure.startPoint.name}"></c:out></td>
-											<td><c:out value="${revenueExpenditure.endPoint.name}"></c:out></td>
-											<td><fmt:message key="Priority.${revenueExpenditure.priority}"/></td>
-											<td><fmt:formatNumber type="currency" value="${revenue}" /></td>
-											<td><fmt:formatNumber type="currency" value="${expenditure}" /></td>
-											<td>
-												<c:choose>
-													<c:when test="${averageDeliveryTime!='NaN'}">
-														<fmt:formatNumber type="number" maxFractionDigits="1" value="${averageDeliveryTime}"/> hours
-													</c:when>
-													<c:otherwise>
-														No data
-													</c:otherwise>
-												</c:choose>
-											</td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-							<table class="table table-bordered table-striped responsive-utilities">
-								<thead>
-									<tr>
-										<td>Source</td>
-										<td>Destination</td>
-										<td>Number of items</td>
-										<td>Total weight (grams)</td>
-										<td>Total volume (cm&sup3;)</td>
-									</tr>
-								</thead>
-								<tbody>
-									<c:forEach var="mailCount" items="${actionBean.reportManager.amountsOfMailForAllRoutes}">
-										<tr>
-											<td><c:out value="${mailCount.startPoint.name}"></c:out></td>
-											<td><c:out value="${mailCount.endPoint.name}"></c:out></td>
-											<td><c:out value="${mailCount.items}"></c:out></td>
-											<td><c:out value="${mailCount.totalWeight}"></c:out></td>
-											<td><c:out value="${mailCount.totalVolume}"></c:out></td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
+							<div class="loading-container">
+								<div class="loading-content">
+									<h1>Loading</h1>
+									<div class="progress progress-striped active">
+										<div class="bar" style="width: 100%;"></div>
+									</div>
+								</div>
+							</div>
+							
+							<script>
+								$(document).ready(function() {
+									$("#dashboard-tab-rawdata").load("dashboard?tab-rawdata");
+								});
+							</script>
 						</div>
 					</div>
 				</div>

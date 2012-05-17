@@ -11,9 +11,8 @@ import nz.ac.victoria.ecs.kpsmart.integration.EntityManager;
 import nz.ac.victoria.ecs.kpsmart.logging.ReadOnlyLog;
 import nz.ac.victoria.ecs.kpsmart.reporting.Report;
 import nz.ac.victoria.ecs.kpsmart.reporting.Report.DeliveryRevenueExpediture;
-import nz.ac.victoria.ecs.kpsmart.reporting.Report.RevenueExpenditure;
 
-@UrlBinding("/dashboard/{$event}")
+@UrlBinding("/dashboard?{$event}")
 public class DashboardActionBean extends AbstractActionBean {
 	private long atevent = 0;
 	private EntityManager manager = super.getEntityManager();
@@ -26,6 +25,16 @@ public class DashboardActionBean extends AbstractActionBean {
 	@HandlesEvent("eventcount")
 	public Resolution getEventCount() {
 		return new JavaScriptResolution(getLog().getNumberOfEvents());
+	}
+	
+	@HandlesEvent("tab-criticalroutes")
+	public Resolution getCriticalRoutesTab() {
+		return new ForwardResolution("/views/dashboard/tab-criticalroutes.jsp");
+	}
+	
+	@HandlesEvent("tab-rawdata")
+	public Resolution getRawDataTab() {
+		return new ForwardResolution("/views/dashboard/tab-rawdata.jsp");
 	}
 	
 	public Report getReportManager() {

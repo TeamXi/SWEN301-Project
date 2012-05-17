@@ -366,8 +366,8 @@ KPS.graphs = KPS.graphs || {};
 	
 	$(document).ready(function(){
 		$('#main-tabs a[href="'+($.cookie('dashboard-main-tab') || '#dashboard-tab-revenue-expenditure')+'"]').tab('show');
-		$revExpSection = $("#dashboard-tab-revenue-expenditure");
-		$noEventsSection = $("#dashboard-tab-no-of-events");
+		$revExpSection = $("#dashboard-tab-revenue-expenditure").empty();
+		$noEventsSection = $("#dashboard-tab-no-of-events").empty();
 
 		$revExpSection.append(financesTimeChart);
 		$revExpSection.append(expensesChart);
