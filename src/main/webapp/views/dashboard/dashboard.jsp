@@ -113,7 +113,9 @@
 							
 							<script>
 								$(document).ready(function() {
-									$("#dashboard-tab-critical-routes").load("dashboard?tab-criticalroutes");
+									$("#dashboard-tab-critical-routes").load("dashboard?tab-criticalroutes", function() {
+										KPS.data.locations.setupLocationNameHover();
+									});
 								});
 							</script>
 						</div>
@@ -149,7 +151,9 @@
 							
 							<script>
 								$(document).ready(function() {
-									$("#dashboard-tab-rawdata").load("dashboard?tab-rawdata");
+									$("#dashboard-tab-rawdata").load("dashboard?tab-rawdata", function() {
+										KPS.data.locations.setupLocationNameHover();
+									});
 								});
 							</script>
 						</div>
