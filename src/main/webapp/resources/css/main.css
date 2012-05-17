@@ -93,6 +93,11 @@ tr:hover .row-hover-controls {
 	background-color: transparent;
 }
 
+#critical-routes-hover-map {
+	width: 400px;
+	height: 250px;
+}
+
 /**
  * From bootstrap docs
  */

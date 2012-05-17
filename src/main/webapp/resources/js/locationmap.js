@@ -4,7 +4,6 @@ KPS.event.location = KPS.event.location || {};
 (function(cls, $, undefined) {
 	var globalMap = undefined;
 	var infoWindow = undefined;
-	var lines = [];
 	
 	function createWorldMap() {
 		globalMap = KPS.util.map.newInstance(document.getElementById('allLocationsMap'), 4, -34.397, 150.644);
@@ -24,26 +23,16 @@ KPS.event.location = KPS.event.location || {};
 				var startPos = new google.maps.LatLng(from.latitude, from.longitude);
 				var endPos = new google.maps.LatLng(to.latitude, to.longitude);
 				if(startPos && endPos) {
-					lines.push(new google.maps.Polyline({
-									path: [startPos,endPos],
-									strokeColor: "#228B22",
-									strokeWeight: 2,
-									map: globalMap,
-									geodesic: true,
-									strokeOpacity: 0.5
-								})
-					);
+					KPS.util.map.addPolyline(globalMap, {
+						path: [startPos,endPos]
+					});
 				}
 			}
 		});
 	}
 	
 	function hideRoutes() {
-		for(var i=0;i<lines.length;i++) {
-			lines[i].setMap(null);
-		}
-		
-		lines = [];
+		KPS.util.map.removePolylines(globalMap);
 	}
 	
 	function loadLocations(allLocations) {

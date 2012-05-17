@@ -115,6 +115,7 @@
 								$(document).ready(function() {
 									$("#dashboard-tab-critical-routes").load("dashboard?tab-criticalroutes", function() {
 										KPS.data.locations.setupLocationNameHover();
+										KPS.util.criticalroutes.setupCriticalRouteHover();
 									});
 								});
 							</script>

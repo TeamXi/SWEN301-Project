@@ -18,9 +18,9 @@
 			<c:when test="${actionBean.hasCriticalRoutes()}">
 				<c:forEach var="revenueExpenditure" items="${actionBean.reportManager.allRevenueExpenditure}">
 					<c:if test="${revenueExpenditure.expenditure>revenueExpenditure.revenue}">
-						<tr class="color-red">
-							<td><span class="location-name-hover"><c:out value="${revenueExpenditure.startPoint.name}"/></span></td>
-							<td><span class="location-name-hover"><c:out value="${revenueExpenditure.endPoint.name}"/></span></td>
+						<tr class="color-red critical-route-hover" data-from="${revenueExpenditure.startPoint.name}" data-to="${revenueExpenditure.endPoint.name}">
+							<td><c:out value="${revenueExpenditure.startPoint.name}"/></td>
+							<td><c:out value="${revenueExpenditure.endPoint.name}"/></td>
 							<td><fmt:message key="Priority.${revenueExpenditure.priority}"/></td>
 							<td><fmt:formatNumber type="currency" value="${revenueExpenditure.revenue}" /></td>
 							<td><fmt:formatNumber type="currency" value="${revenueExpenditure.expenditure}" /></td>

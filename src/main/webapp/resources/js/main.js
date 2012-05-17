@@ -1,6 +1,7 @@
 KPS.util = KPS.util || {};
 KPS.util.map = KPS.util.map || {};
 KPS.util.user = KPS.util.user || {};
+KPS.util.criticalroutes = KPS.util.criticalroutes || {};
 KPS.modal = KPS.modal || {};
 KPS.data = KPS.data || {};
 KPS.data.locations = KPS.data.locations || {};
@@ -132,6 +133,45 @@ var waitForFinalEvent = (function () {
 		
 		return ret;
 	};
+	
+	cls.removePolylines = function(map) {
+		map.__polylines = map.__polylines || [];
+		
+		for(var n=0;n<map.__polylines.length;n++) {
+			map.__polylines[n].setMap(null);
+		}
+		map.__polylines = [];
+	};
+	
+	cls.addPolyline = function(map, options) {
+		map.__polylines = map.__polylines || [];
+		
+		options.map = map;
+		
+		options.strokeColor = options.strokeColor===undefined?"#228B22":options.strokeColor;
+		options.strokeWeight = options.strokeWeight===undefined?2:options.strokeWeight;
+		options.geodesic = options.geodesic===undefined?true:options.geodesic;
+		options.strokeOpacity = options.strokeOpacity===undefined?0.5:options.strokeOpacity;
+		
+		map.__polylines.push(new google.maps.Polyline(options));
+	};
+	
+	cls.removeMarkers = function(map) {
+		map.__markers = map.__markers || [];
+		
+		for(var n=0;n<map.__markers.length;n++) {
+			map.__markers[n].setMap(null);
+		}
+		map.__markers = [];
+	};
+	
+	cls.addMarker = function(map, options) {
+		map.__markers = map.__markers || [];
+		
+		options.map = map;
+		
+		map.__markers.push(new google.maps.Marker(options));
+	};
 }(KPS.util.map, jQuery));
 
 // KPS.util.user
@@ -148,6 +188,69 @@ var waitForFinalEvent = (function () {
 		});
 	};
 }(KPS.util.user,jQuery));
+
+(function(cls, $, undefined) {
+	var route_popover = undefined;
+	var route_popover_map_div = undefined;
+	var map = undefined;
+	
+	cls.setupCriticalRouteHover = function() {
+		KPS.data.locations.load(function() {
+			$(".critical-route-hover").unbind('mouseover mouseout').hover(function(e) {
+				var pos = $(e.currentTarget).position();
+				var xdiff = $(e.currentTarget).width()/2-route_popover.width()/2;
+				var ydiff = $(e.currentTarget).height();
+				
+				var from = KPS.data.locations.get($(e.currentTarget).attr("data-from"));
+				var to = KPS.data.locations.get($(e.currentTarget).attr("data-to"));
+								
+				route_popover.css({left: pos.left+xdiff, top: pos.top+ydiff, display: 'block'});
+				
+				if(map) {
+					KPS.util.map.removePolylines(map);
+					KPS.util.map.removeMarkers(map);
+				}
+				else {
+					map = KPS.util.map.newInstance(route_popover_map_div[0], 0, 0, 0);
+				}
+				
+				var startPos = new google.maps.LatLng(from.latitude, from.longitude);
+				var endPos = new google.maps.LatLng(to.latitude, to.longitude);
+				if(startPos && endPos) {
+					KPS.util.map.addPolyline(map, {
+						path: [startPos,endPos]
+					});
+					
+					KPS.util.map.addMarker(map, {
+						position: startPos
+					});
+					KPS.util.map.addMarker(map, {
+						position: endPos
+					});
+					
+					var bounds = new google.maps.LatLngBounds();
+					bounds.extend(startPos);
+					bounds.extend(endPos);
+					map.fitBounds(bounds);
+				}
+			}, function(e) {
+				route_popover.css({display: 'none'});
+			});
+		});
+	};
+	
+	$(document).ready(function() {
+		route_popover = $('<div class="popover fade bottom in" style="display: none;">'+
+				'<div class="arrow"></div>'+
+				'<div class="popover-inner">'+
+					'<div id="critical-routes-hover-map"></div>'+
+				'</div>'+
+			'</div>');
+		route_popover_map_div = route_popover.find("#critical-routes-hover-map");
+		
+		$(document.body).append(route_popover);
+	});
+}(KPS.util.criticalroutes, jQuery));
 
 // KPS.carrousel object
 (function (pack, $, undefined) {
