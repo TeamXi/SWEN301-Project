@@ -95,9 +95,9 @@
 			<div class="span12">
 				<div class="tabbable">
 					<ul id="main-tabs" class="nav nav-tabs">
-						<li><a href="#dashboard-tab-critical-routes" data-toggle="tab"><i class="icon-exclamation-sign"></i> Critical Routes</a></li>
-						<li class="activate-graph"><a href="#dashboard-tab-revenue-expenditure" data-toggle="tab"><i class="icon-signal"></i> Revenue &amp; Expenditure</a></li>
-						<li class="activate-graph"><a href="#dashboard-tab-no-of-events" data-toggle="tab"><i class="icon-time"></i> Number of Events</a></li>
+						<li><a href="#dashboard-tab-critical-routes" data-toggle="tab"><i class="icon-exclamation-sign"></i> Critical routes</a></li>
+						<li class="activate-graph"><a href="#dashboard-tab-revenue-expenditure" data-toggle="tab"><i class="icon-signal"></i> Revenue &amp; expenditure</a></li>
+						<li class="activate-graph"><a href="#dashboard-tab-no-of-events" data-toggle="tab"><i class="icon-time"></i> Number of events</a></li>
 						<li><a href="#dashboard-tab-rawdata" data-toggle="tab"><i class="icon-list-alt"></i> Raw data</a></li>
 					</ul>
 					<div class="tab-content">
