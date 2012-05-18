@@ -57,7 +57,7 @@ var waitForFinalEvent = (function () {
 		//http://maps.googleapis.com/maps/api/staticmap?center=-4.434044,136.40625&zoom=4&format=png&sensor=false&size=640x480&maptype=roadmap&style=visibility:off&style=feature:administrative.country|visibility:on&style=feature:administrative.locality|visibility:on&style=feature:water|element:geometry|visibility:on&style=feature:water|invert_lightness:true|hue:0x0066ff
 		//http://maps.googleapis.com/maps/api/staticmap?zoom=6&format=png&sensor=false&size=250x250&maptype=roadmap&style=visibility:off&style=feature:administrative.country|visibility:on&style=feature:administrative.locality|visibility:on&style=feature:water|element:geometry|visibility:on&style=feature:water|invert_lightness:true|hue:0x0066ff&markers=color:red|-41,173
 		
-		return "http://maps.googleapis.com/maps/api/staticmap?zoom=6&format=png&sensor=false&size=250x250&maptype=roadmap&style=visibility:off&style=feature:administrative.country|visibility:on&style=feature:administrative.locality|visibility:on&style=feature:water|element:geometry|visibility:on&style=feature:water|invert_lightness:true|hue:0x0066ff&markers=color:red|"+lat+","+lng;
+		return "http://maps.googleapis.com/maps/api/staticmap?zoom=6&format=png&sensor=false&size=250x250&maptype=roadmap&style=feature:administrative|visibility:off&style=feature:landscape|visibility:off&style=feature:poi|visibility:off&style=feature:road|visibility:off&style=feature:transit|visibility:off&style=feature:administrative.country|visibility:on&style=feature:administrative.locality|visibility:on&style=feature:water|element:geometry|visibility:on&style=feature:water|invert_lightness:true|hue:0x0066ff&markers=color:red|"+lat+","+lng;
 	};
 	
 	cls.addMarker = function(map, marker) {
@@ -78,6 +78,27 @@ var waitForFinalEvent = (function () {
 		
 	cls.style = function(map) {
 		var mapStyles = [ {
+			featureType : "administrative",
+			stylers : [ {
+				visibility : "off"
+			} ]
+		}, {
+			featureType : "landscape",
+			stylers : [ {
+				visibility : "off"
+			} ]
+		}, {
+			featureType : "poi",
+			stylers : [ {
+				visibility : "off"
+			} ]
+		}, {
+			featureType : "road",
+			stylers : [ {
+				visibility : "off"
+			} ]
+		}, {
+			featureType : "transit",
 			stylers : [ {
 				visibility : "off"
 			} ]
