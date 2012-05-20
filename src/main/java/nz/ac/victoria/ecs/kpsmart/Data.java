@@ -82,11 +82,37 @@ public final class Data {
 		sm.performEvent(new LocationUpdateEvent(new Location("Cairo", 30.058056, 31.228889, true)));
 		sm.performEvent(new LocationUpdateEvent(new Location("Athens", 37.966667, 23.716667, true)));
 		sm.performEvent(new LocationUpdateEvent(new Location("Beirut", 33.886944, 35.513056, true)));
+		sm.performEvent(new LocationUpdateEvent(new Location("Hamilton", -37.783333, 175.283333, false)));
+		sm.performEvent(new LocationUpdateEvent(new Location("Rotorua", -38.137778, 176.251389, false)));
+		sm.performEvent(new LocationUpdateEvent(new Location("Palmerston North", -40.355, 175.611667, false)));
+		sm.performEvent(new LocationUpdateEvent(new Location("Dunedin", -45.866667, 170.5, false)));
 		/*
 		 * 
 		 * Routes
 		 * 
 		 */
+		this.createRoute(TransportMeans.Land, "Auckland", "Wellington", 2, (float)20, (float)20, 8, 6);
+		this.createRoute(TransportMeans.Land, "Wellington", "Auckland", 2, (float)20, (float)20, 8, 6);
+		this.createRoute(TransportMeans.Sea, "Wellington", "Christchurch", 2, (float)5, (float)5, 12, 12);
+		this.createRoute(TransportMeans.Sea, "Christchurch", "Wellington", 2, (float)5, (float)5, 12, 12);
+		this.createRoute(TransportMeans.Air, "Auckland", "Christchurch", 1, (float)40, (float)40, 2, 1);
+		this.createRoute(TransportMeans.Air, "Christchurch", "Auckland", 1, (float)40, (float)40, 2, 1);
+		this.createRoute(TransportMeans.Land, "Christchurch", "Dunedin", 2, (float)15, (float)15, 2, 1);
+		this.createRoute(TransportMeans.Land, "Dunedin", "Christchurch", 2, (float)15, (float)15, 2, 1);
+		this.createRoute(TransportMeans.Land, "Palmerston North", "Wellington", 2, (float)15, (float)15, 2, 1);
+		this.createRoute(TransportMeans.Land, "Wellington", "Palmerston North", 2, (float)15, (float)15, 2, 1);
+		this.createRoute(TransportMeans.Land, "Rotorua", "Palmerston North", 2, (float)10, (float)10, 2, 1);
+		this.createRoute(TransportMeans.Land, "Palmerston North", "Rotorua", 2, (float)10, (float)10, 2, 1);
+		this.createRoute(TransportMeans.Land, "Hamilton", "Rotorua", 2, (float)10, (float)10, 2, 1);
+		this.createRoute(TransportMeans.Land, "Rotorua", "Hamilton", 2, (float)10, (float)10, 2, 1);
+		this.createRoute(TransportMeans.Land, "Auckland", "Hamilton", 2, (float)10, (float)10, 2, 1);
+		this.createRoute(TransportMeans.Land, "Hamilton", "Auckland", 2, (float)10, (float)10, 2, 1);
+		this.createRoute(TransportMeans.Air, "Wellington", "Hamilton", 2, (float)20, (float)20, 8, 6);
+		this.createRoute(TransportMeans.Air, "Hamilton", "Wellington", 2, (float)20, (float)20, 8, 6);
+		this.createRoute(TransportMeans.Air, "Wellington", "Dunedin", 2, (float)40, (float)40, 8, 6);
+		this.createRoute(TransportMeans.Air, "Dunedin", "Wellington", 2, (float)40, (float)40, 8, 6);
+		this.createRoute(TransportMeans.Land, "Hamilton", "Palmerston North", 2, (float)10, (float)10, 8, 6);
+		this.createRoute(TransportMeans.Land, "Palmerston North", "Hamilton", 2, (float)10, (float)10, 8, 6);
 		
 		this.createRoute(TransportMeans.Air, "Wellington", "Sydney", 1, (float)30, (float)30, 3, 12);
 		this.createRoute(TransportMeans.Sea, "Athens", "Beirut", 7, (float)0.75, (float)0.75, 30, 170);
@@ -99,12 +125,6 @@ public final class Data {
 		this.createRoute(TransportMeans.Air, "London", "Reykjavik", 5, (float)70, (float)70, 7, 72);
 		this.createRoute(TransportMeans.Air, "Sydney", "Singapore", 3, (float)70, (float)70, 7, 12);
 		this.createRoute(TransportMeans.Air, "Sydney", "Los Angeles", 4, (float)160, (float)160, 16, 24);
-		this.createRoute(TransportMeans.Land, "Auckland", "Wellington", 2, (float)20, (float)20, 8, 6);
-		this.createRoute(TransportMeans.Land, "Wellington", "Auckland", 2, (float)20, (float)20, 8, 6);
-		this.createRoute(TransportMeans.Sea, "Wellington", "Christchurch", 2, (float)5, (float)5, 12, 12);
-		this.createRoute(TransportMeans.Sea, "Christchurch", "Wellington", 2, (float)5, (float)5, 12, 12);
-		this.createRoute(TransportMeans.Air, "Auckland", "Christchurch", 1, (float)40, (float)40, 2, 1);
-		this.createRoute(TransportMeans.Air, "Christchurch", "Auckland", 1, (float)40, (float)40, 2, 1);
 		this.createRoute(TransportMeans.Air, "Auckland", "Singapore", 1, (float)90, (float)90, 9, 24);
 		this.createRoute(TransportMeans.Air, "Singapore", "Shanghai", 3, (float)50, (float)50, 5, 24);
 		this.createRoute(TransportMeans.Air, "Singapore", "New Delhi", 3, (float)60, (float)60, 6, 24);
