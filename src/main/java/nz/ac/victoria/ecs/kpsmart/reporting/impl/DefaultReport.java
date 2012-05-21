@@ -248,11 +248,13 @@ public class DefaultReport implements Report {
 													d.getEndPoint().getName()+
 													" ("+d.getPriority().getFormattedName()+")"
 												  , d.getRevenue(), d.getRevenue()/totalRevenue);
-			if(d.getEndPoint().isInternational()) {
-				international.add(slice);
-			}
-			else {
-				domestic.add(slice);
+			if(slice.getY() > 0) {
+				if(d.getEndPoint().isInternational()) {
+					international.add(slice);
+				}
+				else {
+					domestic.add(slice);
+				}
 			}
 		}
 		
@@ -284,11 +286,13 @@ public class DefaultReport implements Report {
 													d.getEndPoint().getName()+
 													" ("+d.getPriority().getFormattedName()+")"
 												  , d.getExpenditure(), d.getExpenditure()/totalExpenditure);
-			if(d.getEndPoint().isInternational()) {
-				international.add(slice);
-			}
-			else {
-				domestic.add(slice);
+			if(slice.getY() > 0) {
+				if(d.getEndPoint().isInternational()) {
+					international.add(slice);
+				}
+				else {
+					domestic.add(slice);
+				}
 			}
 		}
 		
