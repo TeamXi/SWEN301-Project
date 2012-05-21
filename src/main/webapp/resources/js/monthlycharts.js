@@ -43,33 +43,38 @@ KPS.graphs.monthly = KPS.graphs.monthly || {};
 		};
 	}
 	
-	cls.init = function(container, html){
-		var chartOpts = getOptions(container);
-		var revIndex = -1;
-		var expIndex = -1;
-		$('thead > tr > th', html).each(function(index, child) {
-			if(child.innerHTML.toLowerCase() == 'revenue') {
-				revIndex = index;
-			}
-			else if(child.innerHTML.toLowerCase() == 'expenditure') {
-				expIndex = index;
-			}
-		});
+	cls.refresh = function(){
+		var container = document.getElementById('monthly-chart');
+		var html = document.getElementById('monthly-overview-table');
 		
-		if(revIndex > 0 && expIndex > 0) {
-			$('tbody > tr > td:first-child', html).each(function(index, child) {
-				chartOpts.xAxis.categories.push(child.innerHTML);
+		if(container && html) {
+			var chartOpts = getOptions(container);
+			var revIndex = -1;
+			var expIndex = -1;
+			$('thead > tr > th', html).each(function(index, child) {
+				if(child.innerHTML.toLowerCase() == 'revenue') {
+					revIndex = index;
+				}
+				else if(child.innerHTML.toLowerCase() == 'expenditure') {
+					expIndex = index;
+				}
 			});
-			$('tbody > tr > td:nth-child('+(revIndex+1)+')', html).each(function(index, child) {
-				chartOpts.series[0].data.push(parseFloat(child.innerHTML.substring(1).replace(',','')));
-			});
-			$('tbody > tr > td:nth-child('+(expIndex+1)+')', html).each(function(index, child) {
-				chartOpts.series[1].data.push(parseFloat(child.innerHTML.substring(1).replace(',','')));
-			});
-			chart = new Highcharts.Chart(chartOpts);
-		}
-		else {
-			console.log("Unable to find revenue & expenditure columns");
+			
+			if(revIndex > 0 && expIndex > 0) {
+				$('tbody > tr > td:first-child', html).each(function(index, child) {
+					chartOpts.xAxis.categories.push(child.innerHTML);
+				});
+				$('tbody > tr > td:nth-child('+(revIndex+1)+')', html).each(function(index, child) {
+					chartOpts.series[0].data.push(parseFloat(child.innerHTML.substring(1).replace(',','')));
+				});
+				$('tbody > tr > td:nth-child('+(expIndex+1)+')', html).each(function(index, child) {
+					chartOpts.series[1].data.push(parseFloat(child.innerHTML.substring(1).replace(',','')));
+				});
+				chart = new Highcharts.Chart(chartOpts);
+			}
+			else {
+				console.log("Unable to find revenue & expenditure columns");
+			}
 		}
 	};
 }(KPS.graphs.monthly, jQuery));

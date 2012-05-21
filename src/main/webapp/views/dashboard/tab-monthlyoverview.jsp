@@ -31,5 +31,5 @@
 </table>
 
 <script type="text/javascript">
-	KPS.graphs.monthly.init(document.getElementById('monthly-chart'), document.getElementById('monthly-overview-table'));
+	KPS.graphs.monthly.refresh();
 </script>
