@@ -226,13 +226,13 @@ public final class Data {
 	
 	private void createCarrier(String carrierName) {
 		CarrierUpdateEvent event = new CarrierUpdateEvent(new Carrier(carrierName));
-		event.setTimestamp(getNextEventTime());
+		event.setTimestamp(getStartEventTime());
 		sm.performEvent(event);
 	}
 	
 	private void createLocation(String name, double lat, double longd, boolean international) {
 		LocationUpdateEvent event = new LocationUpdateEvent(new Location(name, (float) lat, (float) longd, international));
-		event.setTimestamp(getNextEventTime());
+		event.setTimestamp(getStartEventTime());
 		sm.performEvent(event);
 	}
 	
@@ -242,25 +242,22 @@ public final class Data {
 			Priority priority, 
 			float volume, 
 			float weight) {
-		int hour = new Random().nextInt(23);
+		Date submissionTime = this.getNextEventTime();
 		
-		try {
-			MailDeliveryUpdateEvent event = new MailDeliveryUpdateEvent(new MailDelivery(
-					this.finder.calculateRoute(
-							priority, 
-							this.sm.getData().getLocationForName(source), 
-							this.sm.getData().getLocationForName(destination), 
-							weight, 
-							volume), 
-					priority, 
-					weight, 
-					volume, 
-					new SimpleDateFormat("y-m-d h:m:s").parse("2010-05-16 "+hour+":18:18")));
-			event.setTimestamp(getNextEventTime());
-			this.sm.performEvent(event);
-		} catch (ParseException e) {
-			throw new RuntimeException(e);
-		}
+		
+		MailDeliveryUpdateEvent event = new MailDeliveryUpdateEvent(new MailDelivery(
+				this.finder.calculateRoute(
+						priority, 
+						this.sm.getData().getLocationForName(source), 
+						this.sm.getData().getLocationForName(destination), 
+						weight, 
+						volume), 
+				priority, 
+				weight, 
+				volume, 
+				submissionTime));
+		event.setTimestamp(submissionTime);
+		this.sm.performEvent(event);
 	}
 
 	private void createRoute(
@@ -278,21 +275,16 @@ public final class Data {
 				sm.getData().getLocationForName(source),
 				sm.getData().getLocationForName(destination),
 				sm.getData().getCarrier(carrierId));
-		try {
-			r1.setCarrierVolumeUnitCost(volcost / (float) 100);
-			r1.setCarrierWeightUnitCost(weightcost / (float) 1000);
-			r1.setDisabled(false);
-			r1.setDuration(duration);
-			r1.setFrequency(frequency);
-			
-			int day = new Random().nextInt(30);
-			int hour = new Random().nextInt(23);
-			r1.setStartingTime(new SimpleDateFormat("y-m-d h:m:s").parse("2012-03-"+day+" "+hour+":18:18"));
-		} catch (ParseException e) {
-			throw new RuntimeException(e);
-		}
+		Date startingTime = getStartEventTime();
+		r1.setCarrierVolumeUnitCost(volcost / (float) 100);
+		r1.setCarrierWeightUnitCost(weightcost / (float) 1000);
+		r1.setDisabled(false);
+		r1.setDuration(duration);
+		r1.setFrequency(frequency);
+		
+		r1.setStartingTime(startingTime);
 		RouteUpdateEvent event = new RouteUpdateEvent(r1);
-		event.setTimestamp(getNextEventTime());
+		event.setTimestamp(startingTime);
 		sm.performEvent(event);
 	}
 	
@@ -304,7 +296,7 @@ public final class Data {
 		price.setPricePerUnitVolume(volumeCost);
 		price.setPricePerUnitWeight(weightCost);
 		CustomerPriceUpdateEvent event = new CustomerPriceUpdateEvent(price);
-		event.setTimestamp(getNextEventTime());
+		event.setTimestamp(getStartEventTime());
 		sm.performEvent(event);
 	}
 	
@@ -313,12 +305,12 @@ public final class Data {
 		price.setPricePerUnitVolume(volume);
 		price.setPricePerUnitWeight(weight);
 		DomesticCustomerPriceUpdateEvent event = new DomesticCustomerPriceUpdateEvent(price);
-		event.setTimestamp(getNextEventTime());
+		event.setTimestamp(getStartEventTime());
 		this.sm.performEvent(event);
 	}
 	
 	private void performRawEvent(EntityOperationEvent<?> event) {
-		event.setTimestamp(getNextEventTime());
+		event.setTimestamp(getStartEventTime());
 		sm.performEvent(event);
 	}
 	
@@ -326,7 +318,20 @@ public final class Data {
 	private Date getNextEventTime() {
 		this.counter++;
 		try {
-			return new SimpleDateFormat("y-m-d h:m:s").parse("2012-01-"+((this.counter/31)+1)+" "+this.counter%23+":18:18");
+			return new SimpleDateFormat("y-M-d H:m:s").parse(
+					"2012-"+
+					(((this.counter / 2) / 28)+1)+"-"+ // Month
+					(((this.counter / 2) % 28)+1)+" "+ // Day
+					((this.counter % 2) * 12) // Hour
+					+ ":18:18");
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	private Date getStartEventTime() {
+		try {
+			return new SimpleDateFormat("y-M-d H:m:s").parse("2012-01-01 00:00:01");
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
