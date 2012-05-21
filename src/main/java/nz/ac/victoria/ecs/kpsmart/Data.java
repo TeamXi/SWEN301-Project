@@ -2,12 +2,13 @@ package nz.ac.victoria.ecs.kpsmart;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 import nz.ac.victoria.ecs.kpsmart.entities.logging.CarrierUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.logging.CustomerPriceUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.logging.DomesticCustomerPriceUpdateEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.EntityOperationEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.logging.LocationUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.logging.MailDeliveryUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.logging.RouteUpdateEvent;
@@ -39,53 +40,53 @@ public final class Data {
 		 * Domestic customer prices
 		 * 
 		 */
-		sm.performEvent(new DomesticCustomerPriceUpdateEvent(new DomesticCustomerPrice(0.01f, 0.02f, Priority.Domestic_Standard)));
-		sm.performEvent(new DomesticCustomerPriceUpdateEvent(new DomesticCustomerPrice(0.02f, 0.04f, Priority.Domestic_Air)));
+		this.performRawEvent(new DomesticCustomerPriceUpdateEvent(new DomesticCustomerPrice(0.01f, 0.02f, Priority.Domestic_Standard)));
+		this.performRawEvent(new DomesticCustomerPriceUpdateEvent(new DomesticCustomerPrice(0.02f, 0.04f, Priority.Domestic_Air)));
 		
 		/*
 		 * 
 		 * Carriers
 		 * 
 		 */
-		sm.performEvent(new CarrierUpdateEvent(new Carrier("Air New Zealand"))); // 1
-		sm.performEvent(new CarrierUpdateEvent(new Carrier("New Zealand Post"))); // 2
-		sm.performEvent(new CarrierUpdateEvent(new Carrier("Singapore Air"))); // 3
-		sm.performEvent(new CarrierUpdateEvent(new Carrier("Trans World Airlines"))); // 4
-		sm.performEvent(new CarrierUpdateEvent(new Carrier("IcelandAir"))); // 5
-		sm.performEvent(new CarrierUpdateEvent(new Carrier("Emirates"))); // 6
-		sm.performEvent(new CarrierUpdateEvent(new Carrier("FedEx"))); // 7
-		sm.performEvent(new CarrierUpdateEvent(new Carrier("Aeroflot"))); // 8
+		this.createCarrier("Air New Zealand"); // 1
+		this.createCarrier("New Zealand Post"); // 2
+		this.createCarrier("Singapore Air"); // 3
+		this.createCarrier("Trans World Airlines"); // 4
+		this.createCarrier("IcelandAir"); // 5
+		this.createCarrier("Emirates"); // 6
+		this.createCarrier("FedEx"); // 7
+		this.createCarrier("Aeroflot"); // 8
 		
 		/*
 		 * 
 		 * Locations
 		 * 
 		 */
-		sm.performEvent(new LocationUpdateEvent(new Location("Rome", 41.9, 12.5, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Wellington", -41.288889, 174.777222, false)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Auckland", -36.840417, 174.739869, false)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Sofia", 42.7, 23.333333, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Amsterdam", 52.373056, 4.892222, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Christchurch", -43.53, 172.620278, false)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Sydney", -33.859972, 151.211111, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Singapore", 1.3, 103.8, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Los Angeles", 34.05, -118.25, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("New York", 40.664167, -73.938611, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("London", 51.507222, -0.1275, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Reykjavik", 64.133333, -21.933333, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Stockholm", 59.329444, 18.068611, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Moscow", 55.75, 37.616667, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Shanghai", 31.2, 121.5, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("New Delhi", 28.613889, 77.208889, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Cape Town", -33.925278, 18.423889, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Tel Aviv", 32.066667, 34.783333, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Cairo", 30.058056, 31.228889, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Athens", 37.966667, 23.716667, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Beirut", 33.886944, 35.513056, true)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Hamilton", -37.783333, 175.283333, false)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Rotorua", -38.137778, 176.251389, false)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Palmerston North", -40.355, 175.611667, false)));
-		sm.performEvent(new LocationUpdateEvent(new Location("Dunedin", -45.866667, 170.5, false)));
+		this.createLocation("Rome", 41.9, 12.5, true);
+		this.createLocation("Wellington", -41.288889, 174.777222, false);
+		this.createLocation("Auckland", -36.840417, 174.739869, false);
+		this.createLocation("Sofia", 42.7, 23.333333, true);
+		this.createLocation("Amsterdam", 52.373056, 4.892222, true);
+		this.createLocation("Christchurch", -43.53, 172.620278, false);
+		this.createLocation("Sydney", -33.859972, 151.211111, true);
+		this.createLocation("Singapore", 1.3, 103.8, true);
+		this.createLocation("Los Angeles", 34.05, -118.25, true);
+		this.createLocation("New York", 40.664167, -73.938611, true);
+		this.createLocation("London", 51.507222, -0.1275, true);
+		this.createLocation("Reykjavik", 64.133333, -21.933333, true);
+		this.createLocation("Stockholm", 59.329444, 18.068611, true);
+		this.createLocation("Moscow", 55.75, 37.616667, true);
+		this.createLocation("Shanghai", 31.2, 121.5, true);
+		this.createLocation("New Delhi", 28.613889, 77.208889, true);
+		this.createLocation("Cape Town", -33.925278, 18.423889, true);
+		this.createLocation("Tel Aviv", 32.066667, 34.783333, true);
+		this.createLocation("Cairo", 30.058056, 31.228889, true);
+		this.createLocation("Athens", 37.966667, 23.716667, true);
+		this.createLocation("Beirut", 33.886944, 35.513056, true);
+		this.createLocation("Hamilton", -37.783333, 175.283333, false);
+		this.createLocation("Rotorua", -38.137778, 176.251389, false);
+		this.createLocation("Palmerston North", -40.355, 175.611667, false);
+		this.createLocation("Dunedin", -45.866667, 170.5, false);
 		/*
 		 * 
 		 * Routes
@@ -223,6 +224,18 @@ public final class Data {
 		}
 	}
 	
+	private void createCarrier(String carrierName) {
+		CarrierUpdateEvent event = new CarrierUpdateEvent(new Carrier(carrierName));
+		event.setTimestamp(getNextEventTime());
+		sm.performEvent(event);
+	}
+	
+	private void createLocation(String name, double lat, double longd, boolean international) {
+		LocationUpdateEvent event = new LocationUpdateEvent(new Location(name, (float) lat, (float) longd, international));
+		event.setTimestamp(getNextEventTime());
+		sm.performEvent(event);
+	}
+	
 	private void createMailDelivery(
 			String source, 
 			String destination,
@@ -232,7 +245,7 @@ public final class Data {
 		int hour = new Random().nextInt(23);
 		
 		try {
-			this.sm.performEvent(new MailDeliveryUpdateEvent(new MailDelivery(
+			MailDeliveryUpdateEvent event = new MailDeliveryUpdateEvent(new MailDelivery(
 					this.finder.calculateRoute(
 							priority, 
 							this.sm.getData().getLocationForName(source), 
@@ -242,7 +255,9 @@ public final class Data {
 					priority, 
 					weight, 
 					volume, 
-					new SimpleDateFormat("y-m-d h:m:s").parse("2010-05-16 "+hour+":18:18"))));
+					new SimpleDateFormat("y-m-d h:m:s").parse("2010-05-16 "+hour+":18:18")));
+			event.setTimestamp(getNextEventTime());
+			this.sm.performEvent(event);
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
@@ -272,11 +287,13 @@ public final class Data {
 			
 			int day = new Random().nextInt(30);
 			int hour = new Random().nextInt(23);
-			r1.setStartingTime(new SimpleDateFormat("y-m-d h:m:s").parse("2010-03-"+day+" "+hour+":18:18"));
+			r1.setStartingTime(new SimpleDateFormat("y-m-d h:m:s").parse("2012-03-"+day+" "+hour+":18:18"));
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
-		sm.performEvent(new RouteUpdateEvent(r1));
+		RouteUpdateEvent event = new RouteUpdateEvent(r1);
+		event.setTimestamp(getNextEventTime());
+		sm.performEvent(event);
 	}
 	
 	private void createCustomerPrice(String location, Priority priority, float volumeCost, float weightCost) {
@@ -286,13 +303,32 @@ public final class Data {
 				priority);
 		price.setPricePerUnitVolume(volumeCost);
 		price.setPricePerUnitWeight(weightCost);
-		sm.performEvent(new CustomerPriceUpdateEvent(price));
+		CustomerPriceUpdateEvent event = new CustomerPriceUpdateEvent(price);
+		event.setTimestamp(getNextEventTime());
+		sm.performEvent(event);
 	}
 	
 	private void setDomesticCustomerPrice(Priority p, float weight, float volume) {
 		DomesticCustomerPrice price = this.sm.getData().getDomesticCustomerPrice(p);
 		price.setPricePerUnitVolume(volume);
 		price.setPricePerUnitWeight(weight);
-		this.sm.performEvent(new DomesticCustomerPriceUpdateEvent(price));
+		DomesticCustomerPriceUpdateEvent event = new DomesticCustomerPriceUpdateEvent(price);
+		event.setTimestamp(getNextEventTime());
+		this.sm.performEvent(event);
+	}
+	
+	private void performRawEvent(EntityOperationEvent<?> event) {
+		event.setTimestamp(getNextEventTime());
+		sm.performEvent(event);
+	}
+	
+	private int counter = 0;
+	private Date getNextEventTime() {
+		this.counter++;
+		try {
+			return new SimpleDateFormat("y-m-d h:m:s").parse("2012-01-"+((this.counter/31)+1)+" "+this.counter%23+":18:18");
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

@@ -73,7 +73,8 @@ public final class HibernateLogger implements Log, ReadOnlyLog {
 
 	@Override
 	public void save(EntityOperationEvent<? extends StorageEntity> event) {
-		event.setTimestamp(Calendar.getInstance().getTime());
+		if (event.getTimestamp() == null)
+			event.setTimestamp(Calendar.getInstance().getTime());
 		this.session.save(event.getUid());
 		this.session.save(event);
 	}
