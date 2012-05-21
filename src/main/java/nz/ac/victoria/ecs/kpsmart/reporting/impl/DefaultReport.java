@@ -1,16 +1,23 @@
 package nz.ac.victoria.ecs.kpsmart.reporting.impl;
 
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import nz.ac.victoria.ecs.kpsmart.InjectOnCall;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.EntityOperationEvent;
+import nz.ac.victoria.ecs.kpsmart.entities.logging.MailDeliveryUpdateEvent;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Location;
 import nz.ac.victoria.ecs.kpsmart.entities.state.MailDelivery;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Price;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Priority;
 import nz.ac.victoria.ecs.kpsmart.entities.state.Route;
+import nz.ac.victoria.ecs.kpsmart.entities.state.StorageEntity;
 import nz.ac.victoria.ecs.kpsmart.logging.ReadOnlyLog;
 import nz.ac.victoria.ecs.kpsmart.reporting.Report;
 import nz.ac.victoria.ecs.kpsmart.state.ReadOnlyState;
@@ -294,8 +301,52 @@ public class DefaultReport implements Report {
 	public List<RevenueExpenditure> getLastRevenueExpenditureOverTime(int lastN) {
 		List<RevenueExpenditure> revexp = getRevenueExpenditureOverTime();
 		
-		
-		
 		return revexp.subList(Math.max(revexp.size()-lastN, 0), revexp.size());
+	}
+	@Override
+	public List<MonthSummary> getMonthlySummary() {
+		List<MonthSummary> result = new ArrayList<MonthSummary>();
+		Collection<EntityOperationEvent<? extends StorageEntity>> events = this.log.getAllEvents();
+		Iterator<EntityOperationEvent<? extends StorageEntity>> iterator = events.iterator();
+		
+		String[] months = new DateFormatSymbols().getMonths();
+		
+		while(iterator.hasNext()) {
+			long eventCount = 0;
+			double revenue = 0;
+			double expenditure = 0;
+			double weight = 0;
+			double volume = 0;
+			
+			EntityOperationEvent<? extends StorageEntity> event = iterator.next();
+			
+			int year = event.getTimestamp().getYear();
+			int month = event.getTimestamp().getMonth();
+			Date start = new Date(year, month, 1);
+			int endyear = year;
+			int endmonth = month+1;
+			if(endmonth >= 12) { // Zero based
+				endyear++;
+				endmonth = 1;
+			}
+			Date end = new Date(endyear, endmonth, 1);
+			
+			while(event != null && event.getTimestamp().before(end)) {
+				eventCount++;
+				if(event instanceof MailDeliveryUpdateEvent) {
+					MailDelivery mail = ((MailDeliveryUpdateEvent)event).getEntity();
+					revenue += mail.getPrice();
+					expenditure += mail.getCost();
+					weight += mail.getWeight();
+					volume += mail.getVolume();
+				}
+				
+				event = iterator.hasNext()?iterator.next():null;
+			}
+			
+			result.add(new MonthSummary(months[month], revenue, expenditure, eventCount, weight, volume));
+		}
+		
+		return result;
 	}
 }

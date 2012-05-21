@@ -397,4 +397,54 @@ public interface Report extends TimeCapable<Report> {
 	 * @return
 	 */
 	public List<GraphSummary> getExpenditureByRoute();
+	
+	/**
+	 * A summary of a months worth of KPS events
+	 * 
+	 * @author ruarusmelb
+	 *
+	 */
+	public static final class MonthSummary {
+		private final String name;
+		private final double revenue;
+		private final double expenditure;
+		private final long eventCount;
+		private final double weight;
+		private final double volume;
+		
+		public MonthSummary(String name, double revenue, double expenditure, long eventCount, double weight, double volume) {
+			this.name = name;
+			this.revenue = revenue;
+			this.expenditure = expenditure;
+			this.eventCount = eventCount;
+			this.weight = weight;
+			this.volume = volume;	
+		}
+
+		public double getRevenue() {
+			return revenue;
+		}
+
+		public double getExpenditure() {
+			return expenditure;
+		}
+
+		public long getEventCount() {
+			return eventCount;
+		}
+
+		public double getWeight() {
+			return weight;
+		}
+
+		public double getVolume() {
+			return volume;
+		}
+
+		public String getName() {
+			return name;
+		}
+	}
+	
+	public List<MonthSummary> getMonthlySummary();
 }

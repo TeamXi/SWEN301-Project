@@ -37,6 +37,11 @@ public class DashboardActionBean extends AbstractActionBean {
 		return new ForwardResolution("/views/dashboard/tab-rawdata.jsp");
 	}
 	
+	@HandlesEvent("tab-monthlyoverview")
+	public Resolution getMonthlyOverviewTab() {
+		return new ForwardResolution("/views/dashboard/tab-monthlyoverview.jsp");
+	}
+	
 	@HandlesEvent("chartdata")
 	public Resolution getChartData() {
 		return new ForwardResolution("/views/dashboard/chartdata.jsp");

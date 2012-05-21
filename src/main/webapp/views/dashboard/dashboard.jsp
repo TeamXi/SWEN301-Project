@@ -96,6 +96,7 @@
 				<div class="tabbable">
 					<ul id="main-tabs" class="nav nav-tabs">
 						<li><a href="#dashboard-tab-critical-routes" data-toggle="tab"><i class="icon-exclamation-sign"></i> Critical routes</a></li>
+						<li><a href="#dashboard-tab-monthly-overview" data-toggle="tab"><i class="icon-eye-open"></i> Monthly overview</a></li>
 						<li class="activate-graph"><a href="#dashboard-tab-revenue-expenditure" data-toggle="tab"><i class="icon-signal"></i> Revenue &amp; expenditure</a></li>
 						<li class="activate-graph"><a href="#dashboard-tab-no-of-events" data-toggle="tab"><i class="icon-time"></i> Number of events</a></li>
 						<li><a href="#dashboard-tab-rawdata" data-toggle="tab"><i class="icon-list-alt"></i> Raw data</a></li>
@@ -117,6 +118,22 @@
 										KPS.data.locations.setupLocationNameHover();
 										KPS.util.criticalroutes.setupCriticalRouteHover();
 									});
+								});
+							</script>
+						</div>
+						<div class="tab-pane" id="dashboard-tab-monthly-overview">
+							<div class="loading-container">
+								<div class="loading-content">
+									<h1>Loading</h1>
+									<div class="progress progress-striped active">
+										<div class="bar" style="width: 100%;"></div>
+									</div>
+								</div>
+							</div>
+							
+							<script>
+								$(document).ready(function() {
+									$("#dashboard-tab-monthly-overview").load("dashboard?tab-monthlyoverview");
 								});
 							</script>
 						</div>
