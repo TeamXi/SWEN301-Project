@@ -39,11 +39,15 @@ var waitForFinalEvent = (function () {
 
 	cls.submitForm = function(form, url, callback) { // TODO: reason if not 200?
 		var values = {};
+		
+		KPS.util.showLoadingBar();
+		
 		$(form).find("input, select").each(function(index, child) {
 			values[child.name] = child.value;
 		});
 		$.post(url, values, function(data) {
 			callback(data);
+			KPS.util.hideLoadingBar();
 		});
 	};
 	
@@ -59,6 +63,18 @@ var waitForFinalEvent = (function () {
             $("head").append($("<link rel='stylesheet' href='"+url+"' type='text/css' />"));
         }
 	};
+	
+	cls.showLoadingBar = function(){
+		$loadingBar = $(".progress");
+		$loadingBar.css('right',"10%");
+		$loadingBar.css('height',"40px");
+		$loadingBar.parent('#loadingMask').fadeIn(200);
+	};
+	cls.hideLoadingBar = function(){
+		$loadingBar = $(".progress");
+		$loadingBar.parent('#loadingMask').fadeOut(200);
+	};
+	
 } (KPS.util, jQuery));
 
 (function(cls, $, undefined) {

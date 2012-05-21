@@ -164,3 +164,26 @@ tr:hover .row-hover-controls {
 	height: auto;
 	min-width: 250px;
 }
+#loadingMask{
+ 	background: black;
+	position: fixed;
+	top:0; left:0; right:0; bottom: 0;	
+	display: none;
+}
+#loadingMessage{
+	top: 15%;
+	height: 20px;
+	width: 100%;
+	text-align: center;
+	color: white;
+	position: fixed;
+}
+.progress{
+	top: 20%;
+	left: 10%;
+	right: 90%;
+	height: 0px;
+	position: fixed;
+	border-radius: 5px;
+	box-shadow: 0px 0px 255px 255px rgba(0,0,0,0.3);
+}

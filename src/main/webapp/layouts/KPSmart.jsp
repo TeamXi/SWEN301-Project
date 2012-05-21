@@ -103,6 +103,14 @@
 			<div class="container content">
 				<stripes:layout-component name="content" />
 			</div>
+			<div id="loadingMask">
+				<p id="loadingMessage">
+					Loading. Please be patient..
+				</p>
+				<div class="progress progress-striped active">
+ 					 <div class="bar"style="width: 100%; border-radius: 5px; height: 100%;"></div>
+				</div>
+			</div >
 		</body>
 	</html>
 </stripes:layout-definition>
