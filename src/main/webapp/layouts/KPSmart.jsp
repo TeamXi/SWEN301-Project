@@ -22,12 +22,20 @@
 				};
 			</script>
 			<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/modernizr.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jQuery-1.7.0.min.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dateformat.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/main.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/formvalidation.js"></script>
 			<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/mail.js"></script>
+			<script type="text/javascript">
+				if(Modernizr.touch) {
+					$(document).ready(function() {
+			            KPS.util.loadStyleSheet(KPS.siteRoot+'/resources/css/touch.css');
+					});
+				}
+			</script>
 			<stripes:layout-component name="scripts" />
 		</head>
 		

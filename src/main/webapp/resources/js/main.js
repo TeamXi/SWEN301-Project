@@ -50,6 +50,15 @@ var waitForFinalEvent = (function () {
 	cls.disableInputAutocomplete = function() {
 		$("input").attr("autocomplete", "off");
 	};
+	
+	cls.loadStyleSheet = function(url) {
+		if(document.createStyleSheet) {
+            document.createStyleSheet(url);
+        }
+        else {
+            $("head").append($("<link rel='stylesheet' href='"+url+"' type='text/css' />"));
+        }
+	};
 } (KPS.util, jQuery));
 
 (function(cls, $, undefined) {

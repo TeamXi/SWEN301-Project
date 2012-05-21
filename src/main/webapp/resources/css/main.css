@@ -31,7 +31,7 @@ input.validate-error, textarea.validate-error, select.validate-error {
 
 tr .row-hover-controls {
 	float: right;
-	opacity: 0;
+	opacity: 0; /* Overridden in touch.css */
 	cursor: pointer;
 }
 
