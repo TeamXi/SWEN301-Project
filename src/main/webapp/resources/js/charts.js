@@ -80,9 +80,57 @@ KPS.graphs = KPS.graphs || {};
 	});
 	
 	function getFinanceData(){
+		var interval = 1000*60*60*24; // 1 Day
+		
 		var revenue = [];
 		var expenditure = [];
 		var categories = [];
+		
+		var eventIdx = 0;
+		if(KPS.graphs.revenueexpenditure.length > 0) {
+			var rev = 0;
+			var exp = 0;
+			
+			var event = KPS.graphs.revenueexpenditure[eventIdx];
+			eventIdx++;
+			
+			var start = new Date(event.timestamp);
+			start.setMilliseconds(0);
+			start.setSeconds(0);
+			start.setMinutes(0);
+			start.setHours(0);
+			var end = start+interval;
+			
+			while(event) {
+				while(event && event.timestamp < end) {
+					rev = event.revenue;
+					exp = event.expenditure;
+					
+					event = KPS.graphs.revenueexpenditure[eventIdx];
+					eventIdx++
+				}
+				
+				revenue.push(rev);
+				expenditure.push(exp);
+				categories.push(start);
+				
+				if(event) {
+					while(true) {
+						start+=interval;
+						end = start+interval;
+						
+						if(event.timestamp > end) {
+							categories.push(start);
+							revenue.push(rev);
+							expenditure.push(exp);
+						}
+						else {
+							break;
+						}
+					}
+				}
+			}
+		}
 		
 		var lastRevenue = 0;
 		var lastExenditure = 0;
