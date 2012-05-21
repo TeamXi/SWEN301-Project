@@ -2,15 +2,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<div id="monthly-chart" class="graph">
+</div>
+
 <table id="monthly-overview-table" class="table table-bordered table-striped responsive-utilities">
 	<thead>
 		<tr>
-			<td>Month</td>
-			<td>Revenue</td>
-			<td>Expenditure</td>
-			<td>Event count</td>
-			<td>Mail weight (grams)</td>
-			<td>Mail volume (cm&sup3;)</td>
+			<th>Month</th>
+			<th>Revenue</th>
+			<th>Expenditure</th>
+			<th>Event count</th>
+			<th>Mail weight (grams)</th>
+			<th>Mail volume (cm&sup3;)</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -26,3 +29,7 @@
 		</c:forEach>
 	</tbody>
 </table>
+
+<script type="text/javascript">
+	KPS.graphs.monthly.init(document.getElementById('monthly-chart'), document.getElementById('monthly-overview-table'));
+</script>

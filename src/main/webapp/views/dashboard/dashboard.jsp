@@ -13,6 +13,7 @@
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.cookie.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/charts.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dashboard.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/monthlycharts.js"></script>
 		<script type="text/javascript">
 			var KPS = KPS || {};
 			KPS.dashboard = KPS.dashboard || {};

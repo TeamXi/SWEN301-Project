@@ -4,11 +4,11 @@
 <table class="table table-bordered table-striped responsive-utilities">
 	<thead>
 		<tr>
-			<td>From</td>
-			<td>To</td>
-			<td>Carrier</td>
-			<td>Transport method</td>
-			<td>Category</td>
+			<th>From</th>
+			<th>To</th>
+			<th>Carrier</th>
+			<th>Transport method</th>
+			<th>Category</th>
 		</tr>
 	</thead>
 	<tbody>

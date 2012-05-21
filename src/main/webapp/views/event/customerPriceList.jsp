@@ -5,11 +5,11 @@
 <table class="table table-bordered table-striped responsive-utilities">
 	<thead>
 		<tr>
-			<td>From</td>
-			<td>To</td>
-			<td>Priority</td>
-			<td>Price per gram</td>
-			<td>Price per cm&sup3;</td>
+			<th>From</th>
+			<th>To</th>
+			<th>Priority</th>
+			<th>Price per gram</th>
+			<th>Price per cm&sup3;</th>
 		</tr>
 	</thead>
 	<tbody>

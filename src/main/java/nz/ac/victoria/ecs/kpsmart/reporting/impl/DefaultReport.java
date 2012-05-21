@@ -315,13 +315,7 @@ public class DefaultReport implements Report {
 		
 		String[] months = new DateFormatSymbols().getMonths();
 		
-		while(iterator.hasNext()) {
-			long eventCount = 0;
-			double revenue = 0;
-			double expenditure = 0;
-			double weight = 0;
-			double volume = 0;
-			
+		if(iterator.hasNext()) {
 			EntityOperationEvent<? extends StorageEntity> event = iterator.next();
 			
 			int year = event.getTimestamp().getYear();
@@ -331,24 +325,57 @@ public class DefaultReport implements Report {
 			int endmonth = month+1;
 			if(endmonth >= 12) { // Zero based
 				endyear++;
-				endmonth = 1;
+				endmonth = 0;
 			}
 			Date end = new Date(endyear, endmonth, 1);
 			
-			while(event != null && event.getTimestamp().before(end)) {
-				eventCount++;
-				if(event instanceof MailDeliveryUpdateEvent) {
-					MailDelivery mail = ((MailDeliveryUpdateEvent)event).getEntity();
-					revenue += mail.getPrice();
-					expenditure += mail.getCost();
-					weight += mail.getWeight();
-					volume += mail.getVolume();
+			while(event != null) {
+				long eventCount = 0;
+				double revenue = 0;
+				double expenditure = 0;
+				double weight = 0;
+				double volume = 0;
+				
+				while(event != null && event.getTimestamp().before(end)) {
+					eventCount++;
+					if(event instanceof MailDeliveryUpdateEvent) {
+						MailDelivery mail = ((MailDeliveryUpdateEvent)event).getEntity();
+						revenue += mail.getPrice();
+						expenditure += mail.getCost();
+						weight += mail.getWeight();
+						volume += mail.getVolume();
+					}
+					
+					event = iterator.hasNext()?iterator.next():null;
 				}
 				
-				event = iterator.hasNext()?iterator.next():null;
+				result.add(new MonthSummary(months[month]+" "+(1900+year), revenue, expenditure, eventCount, weight, volume));
+				
+				if(event != null) {
+					while(true) {
+						month++;
+						if(month >= 12) { // Zero based
+							year++;
+							month = 0;
+						}
+						start = new Date(year, month, 1);
+						endyear = year;
+						endmonth = month+1;
+						if(endmonth >= 12) { // Zero based
+							endyear++;
+							endmonth = 0;
+						}
+						end = new Date(endyear, endmonth, 1);
+						
+						if(event.getTimestamp().after(end)) {
+							result.add(new MonthSummary(months[month]+" "+(1900+year), 0, 0, 0, 0, 0));
+						}
+						else {
+							break;
+						}
+					}
+				}
 			}
-			
-			result.add(new MonthSummary(months[month], revenue, expenditure, eventCount, weight, volume));
 		}
 		
 		return result;

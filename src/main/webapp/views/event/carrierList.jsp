@@ -3,7 +3,7 @@
 <table class="table table-bordered table-striped responsive-utilities">
 	<thead>
 		<tr>
-			<td>Name</td>
+			<th>Name</th>
 		</tr>
 	</thead>
 	<tbody>

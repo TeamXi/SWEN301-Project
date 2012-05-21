@@ -5,12 +5,12 @@
 <table id="critical-routes-table" class="table table-bordered table-striped responsive-utilities">
 	<thead>
 		<tr>
-			<td>Source</td>
-			<td>Destination</td>
-			<td>Priority</td>
-			<td>Revenue</td>
-			<td>Expenditure</td>
-			<td>Average delivery time</td>
+			<th>Source</th>
+			<th>Destination</th>
+			<th>Priority</th>
+			<th>Revenue</th>
+			<th>Expenditure</th>
+			<th>Average delivery time</th>
 		</tr>
 	</thead>
 	<tbody>
