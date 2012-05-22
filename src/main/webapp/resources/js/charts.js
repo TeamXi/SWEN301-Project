@@ -90,36 +90,31 @@ KPS.graphs = KPS.graphs || {};
 		return date;
 	}
 	
-	function getFinanceData(){
+	function loopOverEventsByTime(data, push) {
 		var interval = duration_one_day;
 		
-		var revenue = [];
-		var expenditure = [];
-		var categories = [];
+		var lastEvent = {};
 		
 		var eventIdx = 0;
-		if(KPS.graphs.revenueexpenditure.length > 0) {
-			var rev = 0;
-			var exp = 0;
-			
-			var event = KPS.graphs.revenueexpenditure[eventIdx];
+		if(data.length > 0) {
+			var event = data[eventIdx];
 			eventIdx++;
 			
 			var start = getDay(new Date(event.timestamp));
 			var end = new Date(start.getTime()+interval);
 			
 			while(event) {
+				var count = 0;
 				while(event && event.timestamp < end.getTime()) {
-					rev = event.revenue;
-					exp = event.expenditure;
+					lastEvent = event;
 					
-					event = KPS.graphs.revenueexpenditure[eventIdx];
+					event = data[eventIdx];
 					eventIdx++;
+					
+					count++;
 				}
 				
-				revenue.push(rev);
-				expenditure.push(exp);
-				categories.push(start);
+				push(start, count, lastEvent);
 				
 				if(event) {
 					while(true) {
@@ -127,9 +122,7 @@ KPS.graphs = KPS.graphs || {};
 						end = new Date(start.getTime()+interval);
 						
 						if(event.timestamp > end.getTime()) {
-							categories.push(start);
-							revenue.push(rev);
-							expenditure.push(exp);
+							push(start, 0, lastEvent);
 						}
 						else {
 							break;
@@ -144,35 +137,34 @@ KPS.graphs = KPS.graphs || {};
 				start = new Date(start.getTime()+interval);
 				end = new Date(start.getTime()+interval);
 				
-				categories.push(start);
-				revenue.push(rev);
-				expenditure.push(exp);
+				push(start, 0, lastEvent);
 			}
 		}
+	}
+	
+	function getFinanceData(){
+		var revenue = [];
+		var expenditure = [];
+		var categories = [];
+		
+		loopOverEventsByTime(KPS.graphs.revenueexpenditure, function(date, count, lastEvent) {
+			categories.push(date);
+			revenue.push(lastEvent.revenue);
+			expenditure.push(lastEvent.expenditure);
+		});
 		
 		return {vals:{'revenue': revenue, 'expenditure': expenditure},cats:categories};
 	}
 	
 	function getTimeCategories(){
-	
-		var last = KPS.graphs.events[KPS.graphs.currentEvent-1].timestamp;
-		var first = KPS.graphs.events[0].timestamp;
-		var diff = (last - first)/numberOfEventCategories;
-		var eventIdx = 0;
 		var cats = [];
 		var eventCounts = [];
-		for(var i = 0;i< numberOfEventCategories; i++){
-			for(;eventIdx < KPS.graphs.currentEvent; eventIdx++){
-				if(KPS.graphs.events[eventIdx].timestamp >= first){
-					cats.push(KPS.graphs.events[eventIdx].timestamp);
-					eventCounts.push(eventIdx);
-					break;
-				}
+		
+		loopOverEventsByTime(KPS.graphs.events, function(date, count, lastEvent) {
+			cats.push(date);
+			eventCounts.push(count);
+		});
 				
-			}
-			first += diff;
-		}
-		eventCounts[eventCounts.length - 1] = KPS.graphs.currentEvent;
 		return {cats:cats,values:eventCounts};
 	}
 	
@@ -236,10 +228,6 @@ KPS.graphs = KPS.graphs || {};
 	}
 	
 	function getEventsOverTimeOpts(container,categories,values){
-		for(var catIdx in categories){
-			var timestamp = categories[catIdx];
-			categories[catIdx] =  KPS.data.format.date(new Date(timestamp));
-		};
 		var chartOpts = {
             chart: {
                 renderTo: container,
@@ -253,25 +241,40 @@ KPS.graphs = KPS.graphs || {};
                 text: 'KPSmart'
             },
             xAxis: {
-                categories: categories
+                categories: categories,
+                min: graphMin(),
+                max: graphMax(),
+                labels: {
+            		step: 5,
+            		y: 33,
+            		rotation: -45,
+                    formatter: function() {
+                    	if(this.value) {
+                    		return KPS.data.format.shortDate(this.value); // clean, unformatted number for year
+                    	}
+                    	else {
+                    		return '';
+                    	}
+                    }
+                }
             },
             yAxis: {
                 title: {
                     text: 'Number of Events'
-                }
+                },
+	            min: 0
             },
             tooltip: {
-                enabled: false,
+                enabled: true,
                 formatter: function() {
-                    return '';
+                    return "<b>"+this.y+" "+(this.y==1?'event':'events')+"</b> on "+KPS.data.format.shortDate(this.point.category);
                 }
             },
             plotOptions: {
                 line: {
-                    dataLabels: {
-                        enabled: true
-                    },
-                    enableMouseTracking: false
+                    marker: {
+                        enabled: false
+                    }
                 }
             },
             series: [
@@ -283,7 +286,7 @@ KPS.graphs = KPS.graphs || {};
 		return chartOpts;
 	}
 	
-	function getFinancesOverTimeOpts(container,financeData,categories){
+	function dayCount() {
 		var now;
 		if(KPS.graphs.currentEvent == KPS.graphs.events.length) {
 			now = getDay(new Date());
@@ -292,8 +295,18 @@ KPS.graphs = KPS.graphs || {};
 			now = getDay(new Date(KPS.graphs.events[KPS.graphs.currentEvent-1].timestamp));
 		}
 		
-		var numDays = Math.floor((now.getTime()-categories[0].getTime())/duration_one_day);
-		
+		return Math.floor((now.getTime()-getDay(new Date(KPS.graphs.events[0].timestamp)).getTime())/duration_one_day);
+	}
+	
+	function graphMin() {
+		return Math.max(dayCount()-90, 0);
+	}
+	
+	function graphMax() {
+		return dayCount();
+	}
+	
+	function getFinancesOverTimeOpts(container,financeData,categories){
 		var colors = Highcharts.getOptions().colors; //gets the colours so rev and exp can be same colour as the reported values
 		
 		var series;
@@ -335,8 +348,8 @@ KPS.graphs = KPS.graphs || {};
             },
             xAxis: {
             	categories: categories,
-            	min: Math.max(numDays-90, 1),
-            	max: numDays,
+            	min: graphMin(),
+            	max: graphMax(),
             	title: {
                     text: 'Date'
                 },
@@ -374,14 +387,7 @@ KPS.graphs = KPS.graphs || {};
                 area: {
                     pointStart: 0,
                     marker: {
-                        enabled: false,
-                        symbol: 'circle',
-                        radius: 2,
-                        states: {
-                            hover: {
-                                enabled: true
-                            }
-                        }
+                        enabled: false
                     }
                 }
             },
