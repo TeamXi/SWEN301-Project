@@ -65,14 +65,14 @@ var waitForFinalEvent = (function () {
 	};
 	
 	cls.showLoadingBar = function(){
-		$loadingBar = $(".progress");
+		$loadingBar = $(".loadingOverlay");
 		$loadingBar.css('right',"10%");
 		$loadingBar.css('height',"40px");
-		$loadingBar.parent('#loadingMask').fadeIn(200);
+		$loadingBar.parent('#loadingMask').fadeIn(500);
 	};
 	cls.hideLoadingBar = function(){
-		$loadingBar = $(".progress");
-		$loadingBar.parent('#loadingMask').fadeOut(200);
+		$loadingBar = $(".loadingOverlay");
+		$loadingBar.parent('#loadingMask').fadeOut(100);
 	};
 	
 } (KPS.util, jQuery));

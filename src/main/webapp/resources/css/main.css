@@ -178,7 +178,7 @@ tr:hover .row-hover-controls {
 	color: white;
 	position: fixed;
 }
-.progress{
+.loadingOverlay{
 	top: 20%;
 	left: 10%;
 	right: 90%;
