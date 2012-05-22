@@ -30,6 +30,7 @@ public class DijkstraRouteFinderBugTest extends HibernateDataTest {
 				new HibernateLogger.Module(),
 				new DefaultReport.Module(),
 				new EntityManager.Module(),
+				new DijkstraRouteFinder.Module(),
 				new HibernateModule("hibernate.memory.properties"));
 		
 		this.state = (HibernateState) GuiceServletContextListner.getInjector().getInstance(State.class);
