@@ -9,6 +9,8 @@ KPS.data.carriers = KPS.data.carriers || {};
 KPS.data.format = KPS.data.format || {};
 
 $(document).ready(function() {
+	// Display message when any ajax operation fails
+	
     $.ajaxSetup({
         error: function(x, e) {
         	if((x.status+"")[0] == "5" || x.status == 404) {
@@ -18,49 +20,68 @@ $(document).ready(function() {
     });
 });
 
-var waitForFinalEvent = (function () {
-	  var timers = {};
-	  return function (callback, ms, uniqueId) {
-	    if (!uniqueId) {
-	      uniqueId = "Don't call this twice without a uniqueId";
-	    }
-	    if (timers[uniqueId]) {
-	      clearTimeout (timers[uniqueId]);
-	    }
-	    timers[uniqueId] = setTimeout(callback, ms);
-	  };
-	})();
-
-// KPS.util
+/**
+ * KPS.util
+ * 
+ * Utility methods
+ */
 (function (cls, $, undefined) {
+	/**
+	 * Redirect to a url
+	 */
 	cls.redirect = function(url) {
 		window.location = url;
 	};
 
+	/**
+	 * Submit a html form using ajax
+	 * @param form the form to submit
+	 * @param url the url to submit to
+	 * @param callback the callback to call with the response, optional
+	 * 
+	 * @note uses POST and only includes input and
+	 * 			select values in submission data
+	 */
 	cls.submitForm = function(form, url, callback) { // TODO: reason if not 200?
 		var values = {};
 		
+		// Turn form into dictionary
 		$(form).find("input, select").each(function(index, child) {
 			values[child.name] = child.value;
 		});
+		
+		// Submit
 		$.post(url, values, function(data) {
-			callback(data);	
+			if(callback) {
+				callback(data);	
+			}
 		});
 	};
 	
+	/**
+	 * Disable the brosers default autocompleate on all input elements
+	 */
 	cls.disableInputAutocomplete = function() {
 		$("input").attr("autocomplete", "off");
 	};
 	
+	/**
+	 * Load a stylesheet
+	 */
 	cls.loadStyleSheet = function(url) {
 		if(document.createStyleSheet) {
+			// IE likes this way
             document.createStyleSheet(url);
         }
         else {
+        	// Every other browser
             $("head").append($("<link rel='stylesheet' href='"+url+"' type='text/css' />"));
         }
 	};
 	
+	/**
+	 * Show a fullscreen modal loading bar
+	 */
 	cls.showLoadingBar = function(text){
 		$loadingBar = $(".loadingOverlay");
 		$loadingBar.css('right',"10%");
@@ -68,14 +89,27 @@ var waitForFinalEvent = (function () {
 		$("#loadingMessage").html(text);
 		$loadingBar.parent('#loadingMask').fadeIn(500);
 	};
+	
+	/**
+	 * Hide the fullscreen modal loading bar
+	 */
 	cls.hideLoadingBar = function(){
 		$loadingBar = $(".loadingOverlay");
 		$loadingBar.parent('#loadingMask').fadeOut(100);
 	};
 	
-} (KPS.util, jQuery));
+}(KPS.util, jQuery));
 
+/**
+ * KPS.util.map
+ * 
+ * Map utilities
+ */
 (function(cls, $, undefined) {
+	/**
+	 * Get a static map url for a lat/lng pair using the common style
+	 * This renders a cenetered marker on a 250x250 png at zoom level 6
+	 */
 	cls.staticUrl = function(lat, lng) {
 		//http://maps.googleapis.com/maps/api/staticmap?center=-4.434044,136.40625&zoom=4&format=png&sensor=false&size=640x480&maptype=roadmap&style=visibility:off&style=feature:administrative.country|visibility:on&style=feature:administrative.locality|visibility:on&style=feature:water|element:geometry|visibility:on&style=feature:water|invert_lightness:true|hue:0x0066ff
 		//http://maps.googleapis.com/maps/api/staticmap?zoom=6&format=png&sensor=false&size=250x250&maptype=roadmap&style=visibility:off&style=feature:administrative.country|visibility:on&style=feature:administrative.locality|visibility:on&style=feature:water|element:geometry|visibility:on&style=feature:water|invert_lightness:true|hue:0x0066ff&markers=color:red|-41,173
@@ -83,22 +117,9 @@ var waitForFinalEvent = (function () {
 		return "http://maps.googleapis.com/maps/api/staticmap?zoom=6&format=png&sensor=false&size=250x250&maptype=roadmap&style=feature:administrative|visibility:off&style=feature:landscape|visibility:off&style=feature:poi|visibility:off&style=feature:road|visibility:off&style=feature:transit|visibility:off&style=feature:administrative.country|visibility:on&style=feature:administrative.locality|visibility:on&style=feature:water|element:geometry|visibility:on&style=feature:water|invert_lightness:true|hue:0x0066ff&markers=color:red|"+lat+","+lng;
 	};
 	
-	cls.addMarker = function(map, marker) {
-		if(!map.markers) {
-			map.markers = [];
-		}
-		map.markers.push(marker);
-	};
-	
-	cls.clearMarkers = function(map) {
-		if(map.markers) {
-			for(var i=0; i < map.markers.length; i++){
-				map.markers[i].setMap(null);
-			}
-			map.markers = [];
-		}
-	};
-		
+	/**
+	 * Get the KPS map style
+	 */
 	cls.style = function(map) {
 		var mapStyles = [ {
 			featureType : "administrative",
@@ -160,6 +181,9 @@ var waitForFinalEvent = (function () {
 		map.setMapTypeId('kpsmartstyle');
 	};
 	
+	/**
+	 * Get the default KPS map options
+	 */
 	cls.options = function(_zoom, _lat, _lng) {
 		return {
 			zoom : _zoom,
@@ -171,6 +195,9 @@ var waitForFinalEvent = (function () {
 		};
 	};
 	
+	/**
+	 * Initialize a new KPS styled map
+	 */
 	cls.newInstance = function(el, zoom, lat, lng) {
 		var ret = new google.maps.Map(el, KPS.util.map.options(zoom, lat, lng));
 		KPS.util.map.style(ret);
@@ -178,6 +205,9 @@ var waitForFinalEvent = (function () {
 		return ret;
 	};
 	
+	/**
+	 * Remove all the polylines added using addPolyline from a map
+	 */
 	cls.removePolylines = function(map) {
 		map.__polylines = map.__polylines || [];
 		
@@ -187,6 +217,9 @@ var waitForFinalEvent = (function () {
 		map.__polylines = [];
 	};
 	
+	/**
+	 * Add a polyline to a map
+	 */
 	cls.addPolyline = function(map, options) {
 		map.__polylines = map.__polylines || [];
 		
@@ -200,6 +233,9 @@ var waitForFinalEvent = (function () {
 		map.__polylines.push(new google.maps.Polyline(options));
 	};
 	
+	/**
+	 * Remove all the markers from a map added using addMarker()
+	 */
 	cls.removeMarkers = function(map) {
 		map.__markers = map.__markers || [];
 		
@@ -209,6 +245,9 @@ var waitForFinalEvent = (function () {
 		map.__markers = [];
 	};
 	
+	/**
+	 * Add a marker to a map
+	 */
 	cls.addMarker = function(map, options) {
 		map.__markers = map.__markers || [];
 		
@@ -218,10 +257,16 @@ var waitForFinalEvent = (function () {
 	};
 }(KPS.util.map, jQuery));
 
-// KPS.util.user
+/**
+ * KPS.util.user
+ * 
+ * User login/logout utilities
+ */
 (function(cls, $, undefined) {
+	/**
+	 * Perform a login
+	 */
 	cls.login = function(role){
-		
 		KPS.util.showLoadingBar("Signing in...");
 		$.post(KPS.siteRoot+"/login?in", {role: role}, function(data) {
 			KPS.util.hideLoadingBar();
@@ -229,6 +274,9 @@ var waitForFinalEvent = (function () {
 		});
 	};
 
+	/**
+	 * Perform a logout
+	 */
 	cls.logout = function(){
 		KPS.util.showLoadingBar("Signing out...");
 		$.post(KPS.siteRoot+"/login?out", function(data) {
@@ -238,23 +286,40 @@ var waitForFinalEvent = (function () {
 	};
 }(KPS.util.user,jQuery));
 
+/**
+ * KPS.util.criticalroutes
+ * 
+ * Critical route utilities
+ * 
+ * TODO: new js file or other js file?
+ */
 (function(cls, $, undefined) {
 	var route_popover = undefined;
 	var route_popover_map_div = undefined;
 	var map = undefined;
 	
+	/**
+	 * Setup the critical route map popover
+	 */
 	cls.setupCriticalRouteHover = function() {
+		// Load the locations list
 		KPS.data.locations.load(function() {
 			$(".critical-route-hover").unbind('mouseover mouseout').hover(function(e) {
+				// When a element with the .critical-route-hover style is hovered over...
+				
+				// Calculate the absolute position of the popover
 				var pos = $(e.currentTarget).position();
 				var xdiff = $(e.currentTarget).width()/2-route_popover.width()/2;
 				var ydiff = $(e.currentTarget).height();
 				
+				// Get the to/from locations
 				var from = KPS.data.locations.get($(e.currentTarget).attr("data-from"));
 				var to = KPS.data.locations.get($(e.currentTarget).attr("data-to"));
-								
+				
+				// Position the popover
 				route_popover.css({left: pos.left+xdiff, top: pos.top+ydiff, display: 'block'});
 				
+				// Setup the map
 				if(map) {
 					KPS.util.map.removePolylines(map);
 					KPS.util.map.removeMarkers(map);
@@ -263,6 +328,7 @@ var waitForFinalEvent = (function () {
 					map = KPS.util.map.newInstance(route_popover_map_div[0], 0, 0, 0);
 				}
 				
+				// Add the markers/polyline to the map
 				var startPos = new google.maps.LatLng(from.latitude, from.longitude);
 				var endPos = new google.maps.LatLng(to.latitude, to.longitude);
 				if(startPos && endPos) {
@@ -277,18 +343,21 @@ var waitForFinalEvent = (function () {
 						position: endPos
 					});
 					
+					// Zoom/center on the relevant part of the map
 					var bounds = new google.maps.LatLngBounds();
 					bounds.extend(startPos);
 					bounds.extend(endPos);
 					map.fitBounds(bounds);
 				}
 			}, function(e) {
+				// Unhover, hide the popover
 				route_popover.css({display: 'none'});
 			});
 		});
 	};
 	
 	$(document).ready(function() {
+		// Create the popover element
 		route_popover = $('<div class="popover fade bottom in" style="display: none;">'+
 				'<div class="arrow"></div>'+
 				'<div class="popover-inner">'+
@@ -301,8 +370,15 @@ var waitForFinalEvent = (function () {
 	});
 }(KPS.util.criticalroutes, jQuery));
 
-// KPS.carrousel object
+/**
+ * KPS.carrousel **OBJECT**
+ * 
+ * A carrousel object, not a static class
+ */
 (function (pack, $, undefined) {
+	/**
+	 * Constructor
+	 */
 	pack.carrousel = function() {
 		this.el = document.createElement('div');
 		this.$el = $(this.el);
@@ -318,6 +394,9 @@ var waitForFinalEvent = (function () {
 		this.currentPage = -1;
 	};
 	
+	/**
+	 * Set whether the carrousel clips the content (default)
+	 */
 	pack.carrousel.prototype.setClips = function(clips) {
 		if(clips) {
 			this.$el.addClass('clip');
@@ -327,13 +406,20 @@ var waitForFinalEvent = (function () {
 		}
 	};
 	
+	/**
+	 * Layout the contents of the carrousel
+	 */
 	pack.carrousel.prototype.layout = function() {
 		this.$body.find('> div').css({
 			width: this.width+'px',
 			marginRight: this.spacing+'px'
 		});
 	};
-		
+	
+	/**
+	 * Resize the carrousel
+	 * @param num the page to resize for, optionl defaults to the current page
+	 */
 	pack.carrousel.prototype.resize = function(num) {
 		if(num === undefined) {
 			num = this.currentPage;
@@ -356,6 +442,11 @@ var waitForFinalEvent = (function () {
 		}
 	};
 	
+	/**
+	 * Show a given container
+	 * @param num the number view to show
+	 * @param animated whether to animate, optional - defaults to true
+	 */
 	pack.carrousel.prototype.show = function(num, animated) {
 		this.resize(num);
 		
@@ -369,24 +460,41 @@ var waitForFinalEvent = (function () {
 		this.currentPage = num;
 	};
 	
+	/**
+	 * Show the next item in the carrousel
+	 */
 	pack.carrousel.prototype.next = function() {
 		this.show(this.currentPage+1);
 	};
 	
+	/**
+	 * Show the previous item in the carrousel
+	 */
 	pack.carrousel.prototype.previous = function() {
 		this.show(this.currentPage-1);
 	};
 	
+	/**
+	 * Load the content of the carrousel
+	 * @param url the url to load from
+	 * @param callback the callback to call after load - optional
+	 * 			The callback function is passed in the loaded elements as the first argument
+	 */
 	pack.carrousel.prototype.load = function(url, callback) {
 		var self = this;
 		self.$body.load(url, {}, function (responseText, textStatus, XMLHttpRequest) {
 			if(XMLHttpRequest.status == 200) {
 				self.layout();
-				callback(self.$body.children());
+				if(callback) {
+					callback(self.$body.children());
+				}
 			}
 		});
 	};
 	
+	/**
+	 * Add an element to the carrousel
+	 */
 	pack.carrousel.prototype.add = function(element) {
 		// TODO: checks
 		this.body.appendChild(element);
@@ -394,21 +502,12 @@ var waitForFinalEvent = (function () {
 	};
 }(KPS, jQuery));
 
-// KPS.modal
-(function (cls, $, undefined) { // TODO: common alert area in modals?
-//<div class="modal fade">
-//	<div class="modal-header">
-//		<a class="close" data-dismiss="modal"></a>
-//		<h3></h3>
-//	</div>
-//	<div class="modal-body">
-//	</div>
-//	<div class="modal-footer">
-//		<a href="#" class="btn btn-warning"></a>
-//		<a href="#" class="btn btn-success"></a>
-//	</div>
-//</div>
-	
+/**
+ * KPS.modal
+ * 
+ * The global singleton modal dialouge
+ */
+(function (cls, $, undefined) {
 	// El setup
 
 	cls.el = document.createElement('div');
@@ -473,37 +572,62 @@ var waitForFinalEvent = (function () {
 	};
 	var currentConfiguration = defaultConfiguration;
 
+	/**
+	 * Set the title
+	 */
 	function setTitle(title) {
 		$title.html(title);
 	};
 
+	/**
+	 * Set the ok button title
+	 */
 	function setOkButtonTitle(name) {
 		$okButton.html(name);
 	};
 
+	/**
+	 * Set the ok button action
+	 */
 	function setOkButtonAction(action) {
 		$okButton.unbind('click');
 		$okButton.click(action);
 	};
 
+	/**
+	 * Set the cancel button title
+	 */
 	function setCancelButtonTitle(name) {
 		$cancelButton.html(name);
 	};
 
+	/**
+	 * Set the cancel button action
+	 */
 	function setCancelButtonAction(action) {
 		$cancelButton.unbind('click');
 		$cancelButton.click(action);
 	};
 
+	/**
+	 * Show the modal
+	 */
 	cls.show = function() {
 		cls.carrousel.show(0, false);
 		cls.$el.modal('show');
 	};
 
+	/**
+	 * Hide the modal
+	 */
 	cls.hide = function() {
 		cls.$el.modal('hide');
 	};
 
+	/**
+	 * Configure the carrousel
+	 * @returns the old configuration
+	 */
 	cls.configure = function(configuration) {
 		setTitle(configuration.title || defaultConfiguration.title);
 		setOkButtonTitle((configuration.okButton || {}).title || defaultConfiguration.okButton.title);
@@ -516,6 +640,12 @@ var waitForFinalEvent = (function () {
 		return tmp;
 	};
 
+	/**
+	 * Load the contents of the modal (inside the carrousel)
+	 * @param url the url to load from
+	 * @param callback the callback passes to carrousel.load, optional
+	 * @see KPS.carrousel
+	 */
 	cls.load = function(url, callback) {
 		KPS.util.showLoadingBar("Loading. Please be patient...");
 		cls.carrousel.load(url, function(children) {
@@ -533,7 +663,11 @@ var waitForFinalEvent = (function () {
 	});
 } (KPS.modal, jQuery));
 
-// KPS.data.locations
+/**
+ * KPS.data.locations
+ * 
+ * Location data utilities
+ */
 (function (cls, $, undefined)  {
 	var locationList = [];
 	var locationNames = [];
@@ -541,16 +675,25 @@ var waitForFinalEvent = (function () {
 	var location_popover = undefined;
 	var location_popover_img = undefined;
 	
+	/**
+	 * Mark that the location data needs update
+	 */
 	cls.setNeedsUpdate = function() {
 		locationDataDirty = true;
 	};
 
+	/**
+	 * Load the location data.
+	 * Immeadiatly calls callback if the data is cached
+	 * @param callback the callback to call on success
+	 * 			The loaded location list is passed in as the first argument
+	 */
 	cls.load = function(callback) {
 		if(locationDataDirty) {
 			$.get(KPS.siteRoot+"/event/location?list&format=json", function(data) {
 				response = eval(data);
 				names = [];
-
+				
 				for(var n=0;n<response.length;n++) {
 					var location = response[n];
 					names.push(location.name);
@@ -568,13 +711,16 @@ var waitForFinalEvent = (function () {
 		}
 		else {
 			if(callback) {
-				callback();
+				callback(locationList);
 			}
 		}
 	};
 
+	/**
+	 * Setup all the location name autocomplete fields
+	 */
 	cls.setupPortEntryTypeahead = function(iterator) {
-		$(".portEntry").each(function(index, child) { // TODO: ????
+		$(".portEntry").each(function(index, child) {
 			if(child.typeahead) { // Update
 				child.typeahead.source = locationNames;
 			}
@@ -587,6 +733,9 @@ var waitForFinalEvent = (function () {
 		});
 	};
 
+	/**
+	 * Check to see if a location exists
+	 */
 	cls.exists = function(name) {
 		for(var n=0;n<locationList.length;n++) {
 			if(locationList[n].name.toLowerCase() == name.toLowerCase()) {
@@ -596,6 +745,10 @@ var waitForFinalEvent = (function () {
 		return false;
 	};
 	
+	/**
+	 * Get a location by name
+	 * @return the location or null if not found
+	 */
 	cls.get = function(name) {
 		for(var n=0;n<locationList.length;n++) {
 			if(locationList[n].name.toLowerCase() == name.toLowerCase()) {
@@ -605,6 +758,10 @@ var waitForFinalEvent = (function () {
 		return null;
 	};
 
+	/**
+	 * Check if a location is international or not
+	 * @return true/false or undefined if the location is not found
+	 */
 	cls.isInternational = function(name) {
 		for(var n=0;n<locationList.length;n++) {
 			if(locationList[n].name.toLowerCase() == name.toLowerCase()) {
@@ -614,32 +771,41 @@ var waitForFinalEvent = (function () {
 		return undefined;
 	};
 	
+	/**
+	 * Get the entire location list
+	 */
 	cls.locationList = function() {
 		return locationList;
 	};
 	
+	/**
+	 * Setup the location name map popover hover
+	 */
 	cls.setupLocationNameHover = function() {
 		cls.load(function() {
 			$(".location-name-hover").unbind('mouseover mouseout').hover(function(e) {
+				// When a location name is hovered over
+				
+				// Calulate the position of the popover
 				var pos = $(e.currentTarget).position();
 				var width = $(e.currentTarget).width();
 				var diff = $(e.currentTarget).height()/2-location_popover.height()/2-4;
+				
+				// Get the location
 				var location = KPS.data.locations.get(e.currentTarget.innerHTML);
+				
+				// Position the popover and load the image
 				location_popover_img.attr('src', KPS.util.map.staticUrl(location.latitude, location.longitude));
 				location_popover.css({left: pos.left+width, top: pos.top+diff, display: 'block'});
 			}, function(e) {
-//				if(location_popover.has(e.relatedTarget).length > 0) {
-//					e.stopPropagation();
-//					e.preventDefault();
-//				}
-//				else {
-					location_popover.css({display: 'none'});
-//				}
+				// Unhover, hide the popover
+				location_popover.css({display: 'none'});
 			});
 		});
 	};
 	
 	$(document).ready(function() {
+		// Create the popover
 		location_popover = $('<div class="popover fade right in" style="display: none;">'+
 				'<div class="arrow"></div>'+
 				'<div class="popover-inner">'+
@@ -653,22 +819,41 @@ var waitForFinalEvent = (function () {
 	});
 }(KPS.data.locations, jQuery));
 
-//KPS.data.carriers
+/**
+ * KPS.data.carriers
+ * 
+ * Carrier data utilities
+ */
 (function (cls, $, undefined)  {
 	var carrierList = [];
 	
+	/**
+	 * Load the carrier list
+	 * @param callback - optional callback, carrier list passed in as first argument
+	 * @note data is cached
+	 */
 	cls.load = function(callback) {
-		$.get(KPS.siteRoot+"/event/carrier?list&format=json", function(data) {
-			carrierList = eval(data);
-			
+		if(carrierList.length > 0) {
 			if(callback) {
-				callback();
+				callback(carrierList);
 			}
-		});
+		}
+		else {
+			$.get(KPS.siteRoot+"/event/carrier?list&format=json", function(data) {
+				carrierList = eval(data);
+				
+				if(callback) {
+					callback(carrierList);
+				}
+			});
+		}
 	};
 
+	/**
+	 * Setup the autocomplete fields on all .carrierEntry inputs
+	 */
 	cls.setupCarrierEntryTypeahead = function(iterator) {
-		$(".carrierEntry").each(function(index, child) { // TODO: ????
+		$(".carrierEntry").each(function(index, child) {
 			if(child.typeahead) { // Update
 				child.typeahead.source = carrierList;
 			}
@@ -681,6 +866,10 @@ var waitForFinalEvent = (function () {
 		});
 	};
 
+	/**
+	 * Check to see if a carrier exists
+	 * @return true/false
+	 */
 	cls.exists = function(name) {
 		for(var n=0;n<carrierList.length;n++) {
 			if(carrierList[n].toLowerCase() == name.toLowerCase()) {
@@ -691,11 +880,22 @@ var waitForFinalEvent = (function () {
 	};
 }(KPS.data.carriers, jQuery));
 
+/**
+ * KPS.data.format
+ * 
+ * Formatting utilities
+ */
 (function(cls, $, undefined) {
+	/**
+	 * Format a nice descriptive date
+	 */
 	cls.date = function(date) {
 		return date.format("h:MMtt ddd dS mmm 'yy");
 	};
 	
+	/**
+	 * Format a short dd/mm/yy date
+	 */
 	cls.shortDate = function(date) {
 		return date.format("dd/mm/yy");
 	};
