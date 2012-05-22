@@ -115,7 +115,7 @@
 							
 							<script>
 								$(document).ready(function() {
-									$("#dashboard-tab-critical-routes").load("dashboard?tab-criticalroutes", function() {
+									$("#dashboard-tab-critical-routes").load("dashboard?tab-criticalroutes", {atevent:KPS.dashboard.currentEvent}, function() {
 										KPS.data.locations.setupLocationNameHover();
 										KPS.util.criticalroutes.setupCriticalRouteHover();
 									});
@@ -170,7 +170,7 @@
 							
 							<script>
 								$(document).ready(function() {
-									$("#dashboard-tab-rawdata").load("dashboard?tab-rawdata", function() {
+									$("#dashboard-tab-rawdata").load("dashboard?tab-rawdata", {atevent:KPS.dashboard.currentEvent}, function() {
 										KPS.data.locations.setupLocationNameHover();
 									});
 								});

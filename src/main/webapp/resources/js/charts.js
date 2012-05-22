@@ -399,7 +399,7 @@ KPS.graphs = KPS.graphs || {};
 	
 	
 	$(document).ready(function(){
-		$.getScript("dashboard?chartdata", function() {
+		$.getScript("dashboard?chartdata&atevent="+KPS.dashboard.currentEvent, function() {
 			$revExpSection = $("#dashboard-tab-revenue-expenditure").empty();
 			$noEventsSection = $("#dashboard-tab-no-of-events").empty();
 	
