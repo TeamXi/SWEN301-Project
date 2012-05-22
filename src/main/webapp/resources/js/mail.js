@@ -17,42 +17,42 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 	var doneModalConfiguration = {
 			title: "Delivery summary",
 			okButton: {
-				title: "Close",
+				title: "Confirm",
 				action: function() {
-					KPS.modal.hide();
+					submitNewMailForm('newMailForm');
+				}
+			},
+			cancelButton: {
+				title: "Back",
+				action: function() {
+					KPS.modal.configure(modalConfiguration);
+					KPS.modal.carrousel.show(0);
 				}
 			}
 	};
 	
-	var summaryMap = undefined;
-	
-	function applyRoutesOverlay(routes){
-		for(var routeIdx in routes){
-			var route = routes[routeIdx];
-			var startPos = new google.maps.LatLng(route.from.lat, route.from.lng);
-			var endPos = new google.maps.LatLng(route.to.lat, route.to.lng);
-			if(startPos && endPos) {
-				new google.maps.Polyline({
-					path: [startPos,endPos],
-					strokeColor: "#228B22",
-					strokeWeight: 2,
-					map: summaryMap,
-					geodesic: true,
-					strokeOpacity: 0.5
-				});
-			}
-		}
-	}
-	
-	function setUpMap() {
-		summaryMap = KPS.util.map.newInstance(document.getElementById('mail-success-info-route-map'), 1, 0, 0);
-	}
-	
-	cls.submitForm = function(id) {
+	function submitNewMailForm(id) {
 		var form = document.getElementById(id);
-		if(!validateForm(form)) return;
 		
-		KPS.util.submitForm(form, KPS.siteRoot+"/event/mail?new", function(data){
+		if(!validateForm(form)) return;KPS.util.submitForm(form, KPS.siteRoot+"/event/mail?new", function(data){
+			var returnObj = eval(data);
+			var status = returnObj.status;
+			
+			if(!status){
+				KPS.validation.validationErrors(form, returnObj.validation);
+				KPS.modal.configure(modalConfiguration);
+				KPS.modal.carrousel.show(0);
+			}else{
+				KPS.modal.hide();
+			}
+		});
+	};
+	
+	cls.quoteForm = function(id) {
+		var form = document.getElementById(id);
+		
+		if(!validateForm(form)) return;
+		KPS.util.submitForm(form, KPS.siteRoot+"/event/mail?quote", function(data){
 			var returnObj = eval(data);
 			var status = returnObj.status;
 			
@@ -62,9 +62,12 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 				KPS.modal.configure(doneModalConfiguration);
 				KPS.modal.carrousel.show(1);
 				
-				setUpMap();
-					
-				applyRoutesOverlay(returnObj.data.summary.route);
+				
+				
+				map = setUpMap();
+				KPS.util.map.removePolylines(map);	
+				KPS.util.map.removeMarkers(map);
+				applyRoutesOverlay(map, returnObj.data.summary.route);
 				
 				document.getElementById('mail-success-info-revenue').innerHTML = returnObj.data.summary.revenue;
 				document.getElementById('mail-success-info-expenditure').innerHTML = returnObj.data.summary.expenditure;
@@ -72,6 +75,39 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 			}
 		});
 	};
+		
+	var summaryMap = undefined;
+	
+	function applyRoutesOverlay(map, routes){
+		var bounds = new google.maps.LatLngBounds();
+		var startPos;
+		var endPos = undefined;
+
+		for(var routeIdx in routes){
+			var route = routes[routeIdx];
+			startPos = new google.maps.LatLng(route.from.lat, route.from.lng);
+			endPos = new google.maps.LatLng(route.to.lat, route.to.lng);
+			KPS.util.map.addMarker(map,{position:startPos});
+			if(startPos && endPos) {
+				bounds.extend(startPos);
+				bounds.extend(endPos);
+				KPS.util.map.addPolyline(map, {
+					path: [startPos,endPos]
+				});
+			}
+		}
+		if(endPos){
+			KPS.util.map.addMarker(map,{position:endPos});
+		}
+		map.fitBounds(bounds);
+	}
+	
+	function setUpMap() {
+		if(!summaryMap){
+			summaryMap = KPS.util.map.newInstance(document.getElementById('mail-success-info-route-map'), 1, 0, 0);
+		}
+		return summaryMap;
+	}
 	
 	function validateForm(form) {
 		var ok = true;

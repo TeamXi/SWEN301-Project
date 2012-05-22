@@ -4,7 +4,7 @@
 	uri="http://stripes.sourceforge.net/stripes.tld"%>
 
 <div>
-	<stripes:form id="newMailForm" class="form-horizontal" action="javascript:KPS.event.maildelivery.submitForm('newMailForm')">
+	<stripes:form id="newMailForm" class="form-horizontal" action="javascript:KPS.event.maildelivery.quoteForm('newMailForm')">
 		<fieldset>
 			<div class="control-group">
 				<stripes:label class="control-label" for="source">Source</stripes:label>

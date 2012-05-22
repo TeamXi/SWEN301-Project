@@ -60,6 +60,21 @@ public class MailActionBean extends AbstractActionBean {
 		}
 	}
 	
+	@HandlesEvent("quote")
+	public Resolution quoteMailDelivery() {
+		MailDelivery delivery = processDelivery(source, destination, priority, weight, volume);
+		if(delivery != null) {
+//			getEntityManager().performEvent(new MailDeliveryUpdateEvent(delivery));
+			
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("summary", makeSummary(delivery));
+			return new FormValidationResolution(true, null, null, data);
+		}
+		else {
+			return new FormValidationResolution(false,new String[]{"destination"},new String[]{"KPS does not deliver mail from "+source+" to "+destination});
+		}
+	}
+	
 	@HandlesEvent("availablepriorities")
 	public Resolution availablePriorities(){
 		Location from = getState().getLocationForName(source);
