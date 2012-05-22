@@ -43,7 +43,7 @@ public class CustomerPriceActionBean extends FormActionBean {
 		
 		CustomerPrice price = getState().getCustomerPriceById(priceId);
 		location = price.getLocation().getName();
-		direction = price.getDirection().flip();
+		direction = price.getDirection();
 		priority = price.getPriority();
 		weightPrice = price.getPricePerUnitWeight();
 		volumePrice = price.getPricePerUnitVolume();
@@ -94,7 +94,7 @@ public class CustomerPriceActionBean extends FormActionBean {
 	private CustomerPrice getExistingPrice() {
 		CustomerPrice exist = null;
 		
-		switch(direction.flip()) {
+		switch(direction) {
 			case To:
 				exist = getState().getCustomerPrice(null, getState().getLocationForName(location), priority);
 				break;

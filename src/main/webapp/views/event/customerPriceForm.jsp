@@ -7,11 +7,12 @@
 		<div class="control-group">
 			<stripes:label for="location" class="control-label">Route</stripes:label>
 			<div class="controls">
-				<stripes:text class="portEntry" name="location"
+				<span id="tonewzealanddirectiontext">New Zealand to&nbsp;</span><stripes:text
+					class="portEntry"
+					name="location"
 					value="${actionBean.location}"
 					disabled="${actionBean.disabledFormFields['location']}"
 					style="width: 140px" /><span
-					id="tonewzealanddirectiontext">&nbsp;to New Zealand</span><span
 					id="tofromswitchbutton">&nbsp;<span
 					class="btn"
 					${actionBean.disabledFormFields['direction']?'disabled':'onclick="KPS.event.customerprice.flipNewToFrom();"'}><i
@@ -53,7 +54,7 @@
 		
 		<fieldset>
 			<stripes:submit name="submitbutton" style="visibility:hidden"></stripes:submit>
-			<stripes:hidden id="directionfield" name="direction" value="${actionBean.direction==null?'From':actionBean.direction}" style="visibility:hidden"></stripes:hidden>
+			<stripes:hidden id="directionfield" name="direction" value="${actionBean.direction==null?'To':actionBean.direction}" style="visibility:hidden"></stripes:hidden>
 		</fieldset>
 	</stripes:form>
 </div>
