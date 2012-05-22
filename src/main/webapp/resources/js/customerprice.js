@@ -17,6 +17,9 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 	var newForm = undefined;
 	var updateForm = undefined;
 	
+	/**
+	 * The add customer price modal configuration
+	 */
 	var addModalConfiguration = {
 			title: "Add a customer price",
 			okButton: {
@@ -26,6 +29,9 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 				}
 			}
 	};
+	/**
+	 * The update customer price modal configuration
+	 */
 	var updateModalConfiguration = {
 			title: "Update a customer price",
 			okButton: {
@@ -36,6 +42,9 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 			}
 	};
 	
+	/**
+	 * Submit a form and apply the validation
+	 */
 	function submitForm(form, url, callback) {
 		if(!validateForm(form)) return;
 
@@ -54,6 +63,9 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 		});
 	};
 	
+	/**
+	 * Perform the client-side validation
+	 */
 	function validateForm(form) {
 		var ok = true;
 		KPS.validation.resetValidation(form);
@@ -73,6 +85,9 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 		return ok;
 	};
 	
+	/**
+	 * Validate a location name field
+	 */
 	function validateLocationField(element) {
 		if(!KPS.data.locations.exists(element.value)) {
 			KPS.validation.validationError(element, '"'+element.value+'" is not a valid location.');
@@ -85,16 +100,25 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 		return true;
 	}
 	
+	/**
+	 * Update the customer price list
+	 */
 	function updatePriceList(){
 		$("#customerPriceListContainer").load("customerprice?listfragment", function() {
 			KPS.data.locations.setupLocationNameHover();
 		});
 	}
 	
+	/**
+	 * Flip the to/from button on the new form
+	 */
 	cls.flipNewToFrom = function() {
 		var form = newForm;
 		
+		// Get the old to/from direction
 		var was = form.elements['directionfield'].value;
+		
+		// Switch the values and update the ui
 		if(was == 'From') {
 			was = 'To';
 			$(form.elements['location']).insertBefore(document.getElementById('tofromswitchbutton'));
@@ -105,53 +129,77 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 			$("#tonewzealanddirectiontext").insertBefore(document.getElementById('tofromswitchbutton'));
 			$("#tonewzealanddirectiontext").html("&nbsp;to New Zealand");
 		}
+		
+		// Update the hidden field
 		form.elements['directionfield'].value = was;
 	};
 	
+	/**
+	 * Submit the new form
+	 */
 	cls.submitNewForm = function() {
 		submitForm(newForm, "customerprice?new", function() {
 			KPS.modal.hide();
 		});
 	};
 	
+	/**
+	 * Submit the update form
+	 */
 	cls.submitUpdateForm = function(id) {
 		submitForm(updateForm, "customerprice?update&priceId="+id, function() {
 			KPS.modal.hide();
 		});
 	};
 	
+	/**
+	 * Submit a domestic customer price update form (different url to others)
+	 */
 	cls.submitDomesticUpdateForm = function(priority) {
 		submitForm(updateForm, "customerprice?updatedomestic&domesticPriority="+priority, function() {
 			KPS.modal.hide();
 		});
 	};
 	
+	/**
+	 * Display the add customer price UI
+	 */
 	cls.addCustomerPrice = function() {
 		KPS.modal.load("customerprice?addform"+newFormURL,function(){
 			KPS.util.disableInputAutocomplete();
 			
+			// Configure the modal
 			newForm = document.getElementById(newFormId);
 			KPS.modal.configure(addModalConfiguration);
-			KPS.data.locations.load(function () { // TODO: needed?
+			KPS.data.locations.load(function () {
+				// Setup the location name autocompletion
 				KPS.data.locations.setupPortEntryTypeahead();
 			});
 			KPS.modal.show();
 		});
 	};
 	
+	/**
+	 * Display the uptate customer price UI
+	 */
 	cls.updateCustomerPrice = function(id) {
 		KPS.modal.load("customerprice?updateform&priceId="+id+updateFormPartialURL+"&submitCallback="+updateFormSubmitCallback+"("+id+")", function () {
 			KPS.util.disableInputAutocomplete();
 			
+			// Configure the modal
 			updateForm = document.getElementById(updateFormId);
 			KPS.modal.configure(updateModalConfiguration);
 			KPS.data.locations.load(function () {
+				// Setup the location name autocompletion
 				KPS.data.locations.setupPortEntryTypeahead();
 			});
 			KPS.modal.show();
 		});
 	};
 	
+	/**
+	 * Show the update domestic customer price UI
+	 */
 	cls.updateDomesticCustomerPrice = function(priority) {
 		KPS.modal.load("customerprice?updatedomesticform&domesticPriority="+priority+updateFormPartialURL+"&submitCallback="+updateDomesticFormSubmitCallback+"('"+priority+"')", function () {
 			KPS.util.disableInputAutocomplete();
@@ -162,12 +210,16 @@ KPS.event.customerprice = KPS.event.customerprice || {};
 		});
 	};
 	
+	/**
+	 * Delete a customer price
+	 */
 	cls.deleteCustomerPrice = function(message, id) {
 		if(confirm("Are you sure you wish to delete the customer price " + message + "?")) {
 			$.post("customerprice?delete&priceId="+id, function (data) {
 				var response = eval(data);
 				
 				if(response.status) {
+					// Update the list
 					updatePriceList();
 				} else {
 					alert("There was an error deleting this route.");

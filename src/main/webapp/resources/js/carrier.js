@@ -13,6 +13,9 @@ KPS.event.carrier = KPS.event.carrier || {};
 	var newForm = undefined;
 	var updateForm = undefined;
 	
+	/**
+	 * The modal configuration for the add carrier modal
+	 */
 	var addModalConfiguration = {
 			title: "Add carrier",
 			okButton: {
@@ -22,6 +25,9 @@ KPS.event.carrier = KPS.event.carrier || {};
 				}
 			}
 	};
+	/**
+	 * The modal configuration for the update carrier modal
+	 */
 	var updateModalConfiguration = {
 			title: "Update carrier",
 			okButton: {
@@ -32,6 +38,9 @@ KPS.event.carrier = KPS.event.carrier || {};
 			}
 	};
 
+	/**
+	 * Validate validate the form
+	 */
 	function validateForm(form) {
 		var ok = true;
 		KPS.validation.resetValidation(form);
@@ -43,6 +52,9 @@ KPS.event.carrier = KPS.event.carrier || {};
 		return ok;
 	}
 
+	/**
+	 * Submit a form and apply the form validation
+	 */
 	function submitForm(form, url, callback) {
 		if(!validateForm(form)) return;
 
@@ -61,6 +73,9 @@ KPS.event.carrier = KPS.event.carrier || {};
 		});
 	}
 
+	/**
+	 * Submit the new form
+	 */
 	cls.submitNewForm = function() {
 		submitForm(newForm, "carrier?new", function (data) {
 			var response = eval(data);
@@ -74,6 +89,9 @@ KPS.event.carrier = KPS.event.carrier || {};
 		});
 	};
 
+	/**
+	 * Submit the update form
+	 */
 	cls.submitUpdateForm = function(carrierId) {
 		submitForm(updateForm, "carrier?update&carrierId="+carrierId, function (data) {
 			var response = eval(data);
@@ -87,6 +105,9 @@ KPS.event.carrier = KPS.event.carrier || {};
 		});
 	};
 
+	/**
+	 * Delete a carrier
+	 */
 	cls.deleteCarrier = function(name, id) {
 		if(confirm("Are you sure you wish to delete " + name + "? If you do this all the routes run by this carrier will be discontinued.")) {
 			$.post("carrier?delete&carrierId="+id, function (data) {
@@ -101,6 +122,9 @@ KPS.event.carrier = KPS.event.carrier || {};
 		}
 	};
 
+	/**
+	 * Show the add carrier ui
+	 */
 	cls.addCarrier = function() {
 		KPS.modal.load("carrier?newform"+newFormURL, function (){
 			newForm = document.getElementById(newFormId);
@@ -112,6 +136,9 @@ KPS.event.carrier = KPS.event.carrier || {};
 		});
 	};
 
+	/**
+	 * Show the update carrier ui
+	 */
 	cls.updateCarrier = function(carrierID) {
 		KPS.modal.load("carrier?updateform&carrierId="+carrierID+updateFormPartialURL+"&submitCallback="+updateFormSubmitCallback+"("+carrierID+")", function () {
 			updateForm = document.getElementById(updateFormId);
@@ -123,6 +150,9 @@ KPS.event.carrier = KPS.event.carrier || {};
 		});
 	};
 
+	/**
+	 * Update the list of carriers
+	 */
 	function updateCarrierList() {
 		$.get("carrier?listfragment", function (data) {
 			$("#carrierListContainer").html(data);
