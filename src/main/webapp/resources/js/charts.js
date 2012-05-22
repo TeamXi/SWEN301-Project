@@ -24,6 +24,8 @@ KPS.graphs = KPS.graphs || {};
 	var chartEventsTime = undefined;
 	var chartFinances = undefined;
 	
+	var duration_one_day = 1000*60*60*24;
+	
 	cls.refreshExpensesChart = function(){
 		var chartOpts = getDonutOpts(expensesChartId,"Expenses","Locations","");
 		resetCounters();
@@ -79,8 +81,17 @@ KPS.graphs = KPS.graphs || {};
 		$(".tab-pane").css({width:$(".tabbable").first().width()});
 	});
 	
+	function getDay(date) {
+		date.setMilliseconds(0);
+		date.setSeconds(0);
+		date.setMinutes(0);
+		date.setHours(0);
+		
+		return date;
+	}
+	
 	function getFinanceData(){
-		var interval = 1000*60*60*24; // 1 Day
+		var interval = duration_one_day;
 		
 		var revenue = [];
 		var expenditure = [];
@@ -94,20 +105,16 @@ KPS.graphs = KPS.graphs || {};
 			var event = KPS.graphs.revenueexpenditure[eventIdx];
 			eventIdx++;
 			
-			var start = new Date(event.timestamp);
-			start.setMilliseconds(0);
-			start.setSeconds(0);
-			start.setMinutes(0);
-			start.setHours(0);
-			var end = start+interval;
+			var start = getDay(new Date(event.timestamp));
+			var end = new Date(start.getTime()+interval);
 			
 			while(event) {
-				while(event && event.timestamp < end) {
+				while(event && event.timestamp < end.getTime()) {
 					rev = event.revenue;
 					exp = event.expenditure;
 					
 					event = KPS.graphs.revenueexpenditure[eventIdx];
-					eventIdx++
+					eventIdx++;
 				}
 				
 				revenue.push(rev);
@@ -116,10 +123,10 @@ KPS.graphs = KPS.graphs || {};
 				
 				if(event) {
 					while(true) {
-						start+=interval;
-						end = start+interval;
+						start = new Date(start.getTime()+interval);
+						end = new Date(start.getTime()+interval);
 						
-						if(event.timestamp > end) {
+						if(event.timestamp > end.getTime()) {
 							categories.push(start);
 							revenue.push(rev);
 							expenditure.push(exp);
@@ -130,28 +137,19 @@ KPS.graphs = KPS.graphs || {};
 					}
 				}
 			}
-		}
-		
-		var lastRevenue = 0;
-		var lastExenditure = 0;
-		
-		var mailCount = 0;
-		for(var n=0;n<KPS.graphs.currentEvent;n++) {
-			var event = KPS.graphs.events[n];
+						
+			var now = getDay(new Date());
 			
-			var currentMail = KPS.graphs.revenueexpenditure[mailCount] ? KPS.graphs.revenueexpenditure[mailCount] : {eventId: -1};
-			
-			if(currentMail.eventId == event.id) {
-				lastRevenue = currentMail.revenue;
-				lastExenditure = currentMail.expenditure;
-				mailCount++;
+			while(start < now) {
+				start = new Date(start.getTime()+interval);
+				end = new Date(start.getTime()+interval);
+				
+				categories.push(start);
+				revenue.push(rev);
+				expenditure.push(exp);
 			}
-			
-			revenue.push(lastRevenue);
-			expenditure.push(lastExenditure);
-			categories.push(event.id);
-			
 		}
+		
 		return {vals:{'revenue': revenue, 'expenditure': expenditure},cats:categories};
 	}
 	
@@ -286,6 +284,16 @@ KPS.graphs = KPS.graphs || {};
 	}
 	
 	function getFinancesOverTimeOpts(container,financeData,categories){
+		var now;
+		if(KPS.graphs.currentEvent == KPS.graphs.events.length) {
+			now = getDay(new Date());
+		}
+		else {
+			now = getDay(new Date(KPS.graphs.events[KPS.graphs.currentEvent-1].timestamp));
+		}
+		
+		var numDays = Math.floor((now.getTime()-categories[0].getTime())/duration_one_day);
+		
 		var colors = Highcharts.getOptions().colors; //gets the colours so rev and exp can be same colour as the reported values
 		
 		var series;
@@ -327,17 +335,22 @@ KPS.graphs = KPS.graphs || {};
             },
             xAxis: {
             	categories: categories,
-            	min: Math.max(KPS.graphs.currentEvent-200, 0),
-            	max: KPS.graphs.currentEvent-1,
+            	min: Math.max(numDays-90, 1),
+            	max: numDays,
             	title: {
-                    text: 'Event Number'
+                    text: 'Date'
                 },
             	labels: {
             		step: 5,
-            		y: 20,
+            		y: 33,
             		rotation: -45,
                     formatter: function() {
-                        return this.value; // clean, unformatted number for year
+                    	if(this.value) {
+                    		return KPS.data.format.shortDate(this.value); // clean, unformatted number for year
+                    	}
+                    	else {
+                    		return '';
+                    	}
                     }
                 }
             },
@@ -354,7 +367,7 @@ KPS.graphs = KPS.graphs || {};
             tooltip: {
                 enabled: true,
                 formatter: function() {
-                    return "<b>NZD $"+this.y.toFixed(2)+" </b><br/>"+this.series.name+"  at event #"+this.x;
+                    return "<b>NZD $"+this.y.toFixed(2)+" </b><br/>"+this.series.name+" on "+KPS.data.format.shortDate(this.x);
                 }
             },
             plotOptions: {
