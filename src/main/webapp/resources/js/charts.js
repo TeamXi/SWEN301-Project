@@ -1,31 +1,49 @@
 KPS.graphs = KPS.graphs || {};
 
+/**
+ * Initialise the KPS.graphs object.
+ * This object stores the chart objects rendered by HighCharts, the refresh functions,
+ * and the graph initialization functions.
+ * This anonymous function is called as soon as this script is loaded.
+ */
 (function (cls, $) {
+	
+	/** 
+	 * Ids used to identify chart objects on the page 
+	 **/
 	var expensesChartId = "expensesChart";
 	var profitsChartId  = "profitsChart";
 	var eventsTimeId 	= "eventsTimeChart";
 	var financesTimeId  = "financesTimeChart";
 	
-	var colors = Highcharts.getOptions().colors;
 	
-	var totalInternational = 0;
-	var totalDomestic = 0;
-	var total = 0;
-	
-	var numberOfEventCategories = 5;
-	
+	/**
+	 * Actual HTML chart components. Wrapped as jQuery objects.
+	 */
 	var expensesChart 		= $("<div id=\""+expensesChartId+"\" class='graph'></div>");
 	var revenueChart 		= $("<div id=\""+profitsChartId+"\"  class='graph'></div>");
 	var eventsTimeChart 	= $("<div id=\""+eventsTimeId+"\"    class='graph'></div>");
 	var financesTimeChart 	= $("<div id=\""+financesTimeId+"\"  class='graph'></div>");
 	
-	var chartRevenue = undefined;
-	var chartExpenses = undefined;
+	/**
+	 * HighChart objects.
+	 */
+	var chartRevenue  	= undefined;
+	var chartExpenses 	= undefined;
 	var chartEventsTime = undefined;
-	var chartFinances = undefined;
+	var chartFinances 	= undefined;
 	
+
+	var numberOfEventCategories = 5;
 	var duration_one_day = 1000*60*60*24;
 	
+	/**
+	 * Functions to initialize/refresh the various charts.
+	 */
+	
+	/**
+	 * Refreshes the expenses chart. Gets chart options, parses data and creates a new HighCharts object
+	 */
 	cls.refreshExpensesChart = function(){
 		var chartOpts = getDonutOpts(expensesChartId,"Expenses","Locations","");
 		resetCounters();
@@ -33,6 +51,10 @@ KPS.graphs = KPS.graphs || {};
 		chartOpts.series[1].data = KPS.graphs.donut.expenditure.outer;
 		chartExpenses = new Highcharts.Chart(chartOpts);
 	};
+	
+	/**
+	 * Refreshes the revenue chart. Gets chart options, parses data and creates a new HighCharts object
+	 */
 	cls.refreshRevenueChart = function(){
 		var chartOpts = getDonutOpts(profitsChartId,"Revenue","Locations",""); 
 		resetCounters();
@@ -40,16 +62,28 @@ KPS.graphs = KPS.graphs || {};
 		chartOpts.series[1].data = KPS.graphs.donut.revenue.outer;
 		chartRevenue = new Highcharts.Chart(chartOpts);
 	};
+	
+	/**
+	 * Refreshes the finances chart. Gets chart options, parses data and creates a new HighCharts object
+	 */
 	cls.refreshFinancesOverTime = function(){
 		var financeData = getFinanceData();
 		var chartOpts = getFinancesOverTimeOpts(financesTimeId,financeData.vals,financeData.cats);
 		chartFinances = new Highcharts.Chart(chartOpts);
 	};
+	
+	/**
+	 * Refreshes the events/time chart. Gets chart options, parses data and creates a new HighCharts object
+	 */
 	cls.refreshEventsTimeChart = function(){
 		var eventTimeData = getTimeCategories();
 		var chartOpts = getEventsOverTimeOpts(eventsTimeId,eventTimeData.cats,eventTimeData.values);
 		chartEventsTime = new Highcharts.Chart(chartOpts);
 	};
+	
+	/**
+	 * Reflows a chart if it already exists. Otherwise does a hard refresh.
+	 */
 	cls.dirtyRefresh = function(){
 		if(! refreshIfExists(chartFinances)   ) cls.refreshFinancesOverTime();
 		if(! refreshIfExists(chartEventsTime) ) cls.refreshEventsTimeChart();
@@ -57,6 +91,10 @@ KPS.graphs = KPS.graphs || {};
 		if(! refreshIfExists(chartRevenue)    ) cls.refreshRevenueChart();
 	};
 	
+	/**
+	 * Refreshes a chart object if it exists.
+	 * @param chart		The chart to refresh
+	 */
 	function refreshIfExists(chart){
 		if(chart && chart){
 			chart.redraw();
@@ -64,6 +102,10 @@ KPS.graphs = KPS.graphs || {};
 		}
 		return false;
 	}
+	
+	/**
+	 * Refreshes all chart objects. Ensures the size matches the page dimensions
+	 */
 	cls.refreshCharts = function(){
 		var chartHeight = $(revenueChart).width()*0.7;
 		
@@ -77,10 +119,16 @@ KPS.graphs = KPS.graphs || {};
 		$("path[d=\"M 5.5 12.5 L 17.5 12.5 17.5 9.5 5.5 9.5 Z M 7.5 9.5 L 7.5 4.5 15.5 4.5 15.5 9.5 Z M 7.5 12.5 L 5.5 16.5 17.5 16.5 15.5 12.5 Z\"]").hide();
 	};
 	
+	/**
+	 * Ties tabbable charts widths to that of the window, so charts reflow appropriately.
+	 */
 	$(window).resize(function(){
 		$(".tab-pane").css({width:$(".tabbable").first().width()});
 	});
 	
+	/**
+	 * Returns a clean date object with all current day-time values for that date set to 0
+	 */
 	function getDay(date) {
 		date.setMilliseconds(0);
 		date.setSeconds(0);
@@ -90,19 +138,29 @@ KPS.graphs = KPS.graphs || {};
 		return date;
 	}
 	
+
+	/**
+	 * Gets current finance data as an options object in an acceptable format for HighCharts
+	 */
 	function loopOverEventsByTime(data, push) {
+
 		var interval = duration_one_day;
 		
 		var lastEvent = {};
 		
 		var eventIdx = 0;
+
 		if(data.length > 0) {
 			var event = data[eventIdx];
+
 			eventIdx++;
 			
 			var start = getDay(new Date(event.timestamp));
 			var end = new Date(start.getTime()+interval);
 			
+			/**
+			 * Loop through and store each revenue/expenditure event as a 'category' for the chart.
+			 */
 			while(event) {
 				var count = 0;
 				while(event && event.timestamp < end.getTime()) {
@@ -156,6 +214,10 @@ KPS.graphs = KPS.graphs || {};
 		return {vals:{'revenue': revenue, 'expenditure': expenditure},cats:categories};
 	}
 	
+	
+	/**
+	 * Gets all event times, as a collection of time categories, and event indices. 
+	 */
 	function getTimeCategories(){
 		var cats = [];
 		var eventCounts = [];
@@ -168,12 +230,22 @@ KPS.graphs = KPS.graphs || {};
 		return {cats:cats,values:eventCounts};
 	}
 	
+	/**
+	 * Resets counters for total international and domestic events.
+	 */
 	function resetCounters(){
 		totalInternational = 0;
 		totalDomestic = 0;
 		total = 0;
 	}
 	
+	/**
+	 * Gets the options in the appropriate format for the donut charts.
+	 * @param container The id of the container to render in
+	 * @param title 	The visible title of the chart
+	 * @param sub		The visible sub-title of the chart.
+	 * @param yaxis		The visible label for the y-axis	(Vertical) 
+	 */
 	function getDonutOpts(container, title, sub, yaxis){
 		  var chartOpts = {
             chart: {
@@ -227,6 +299,12 @@ KPS.graphs = KPS.graphs || {};
 		  return chartOpts;
 	}
 	
+	/**
+	 * Gets options to compare events over time in the appropriate format for a HighCharts chart of type 'line'
+	 * @param container		HTML Container id to render in
+	 * @param categories	Collection of categories the hold the data for the chart
+	 * @param values		Collection of values to show on the chart
+	 */
 	function getEventsOverTimeOpts(container,categories,values){
 		var chartOpts = {
             chart: {
@@ -286,7 +364,11 @@ KPS.graphs = KPS.graphs || {};
 		return chartOpts;
 	}
 	
+	/**
+	 * Returns the number of days up to the date of the current state (Or today if it is showing current data)
+	 */
 	function dayCount() {
+
 		var now;
 		if(KPS.graphs.currentEvent == KPS.graphs.events.length) {
 			now = getDay(new Date());
@@ -306,6 +388,12 @@ KPS.graphs = KPS.graphs || {};
 		return dayCount();
 	}
 	
+	/**
+	 * Gets options to compare finances over time in the appropriate format for a HighCharts chart of type 'line'
+	 * @param container		HTML Container id to render in
+	 * @param financeData	Collection of categories the hold the data for the chart
+	 * @param categories	Collection of values to show on the chart
+	 */
 	function getFinancesOverTimeOpts(container,financeData,categories){
 		var colors = Highcharts.getOptions().colors; //gets the colours so rev and exp can be same colour as the reported values
 		
@@ -397,15 +485,20 @@ KPS.graphs = KPS.graphs || {};
 	}
 
 	
-	
+	/**
+	 * Initialise the charts on document load. 
+	 * Empties the chart sections, appends charts,
+	 * and sets refresh/resize events for each of them.
+	 */
 	$(document).ready(function(){
-		$.getScript("dashboard?chartdata&atevent="+KPS.dashboard.currentEvent, function() {
+		$.getScript("dashboard?chartdata", function() {
 			$revExpSection = $("#dashboard-tab-revenue-expenditure").empty();
 			$noEventsSection = $("#dashboard-tab-no-of-events").empty();
 	
 			$revExpSection.append(financesTimeChart);
 			$revExpSection.append(expensesChart);
 			$revExpSection.append(revenueChart);
+			
 			$noEventsSection.append(eventsTimeChart);
 			
 			$(".activate-graph").click(function(){
@@ -417,7 +510,8 @@ KPS.graphs = KPS.graphs || {};
 						evt.initUIEvent('resize', true, false,window,0);
 						window.dispatchEvent(evt);
 		
-					} else if (document.createEventObject) {
+					}
+					else if (document.createEventObject) {
 					    window.fireEvent('onresize');
 					}
 				}, 1);

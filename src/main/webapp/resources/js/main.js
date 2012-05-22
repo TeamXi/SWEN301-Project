@@ -40,14 +40,11 @@ var waitForFinalEvent = (function () {
 	cls.submitForm = function(form, url, callback) { // TODO: reason if not 200?
 		var values = {};
 		
-		KPS.util.showLoadingBar();
-		
 		$(form).find("input, select").each(function(index, child) {
 			values[child.name] = child.value;
 		});
 		$.post(url, values, function(data) {
-			callback(data);
-			KPS.util.hideLoadingBar();
+			callback(data);	
 		});
 	};
 	
@@ -64,10 +61,11 @@ var waitForFinalEvent = (function () {
         }
 	};
 	
-	cls.showLoadingBar = function(){
+	cls.showLoadingBar = function(text){
 		$loadingBar = $(".loadingOverlay");
 		$loadingBar.css('right',"10%");
 		$loadingBar.css('height',"40px");
+		$("#loadingMessage").html(text);
 		$loadingBar.parent('#loadingMask').fadeIn(500);
 	};
 	cls.hideLoadingBar = function(){
@@ -223,13 +221,18 @@ var waitForFinalEvent = (function () {
 // KPS.util.user
 (function(cls, $, undefined) {
 	cls.login = function(role){
+		
+		KPS.util.showLoadingBar("Signing in...");
 		$.post(KPS.siteRoot+"/login?in", {role: role}, function(data) {
+			KPS.util.hideLoadingBar();
 			KPS.util.redirect(KPS.siteRoot+"/dashboard");
 		});
 	};
 
 	cls.logout = function(){
+		KPS.util.showLoadingBar("Signing out...");
 		$.post(KPS.siteRoot+"/login?out", function(data) {
+			KPS.util.hideLoadingBar();
 			KPS.util.redirect(KPS.siteRoot);
 		});
 	};
@@ -514,7 +517,13 @@ var waitForFinalEvent = (function () {
 	};
 
 	cls.load = function(url, callback) {
-		cls.carrousel.load(url, callback);
+		KPS.util.showLoadingBar("Loading. Please be patient...");
+		cls.carrousel.load(url, function(children) {
+			KPS.util.hideLoadingBar();
+			if(callback) {
+				callback(children);
+			}
+		});
 	};
 	
 	$(document).ready(function() {
