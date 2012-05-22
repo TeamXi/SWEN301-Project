@@ -376,6 +376,19 @@ public class DefaultReport implements Report {
 					}
 				}
 			}
+			
+			int nowMonth = new Date().getMonth();
+			int nowYear = new Date().getYear();
+			
+			while(month < nowMonth || year < nowYear) {
+				month++;
+				if(month >= 12) { // Zero based
+					year++;
+					month = 0;
+				}
+				
+				result.add(new MonthSummary(months[month]+" "+(1900+year), 0, 0, 0, 0, 0));
+			}
 		}
 		
 		return result;
