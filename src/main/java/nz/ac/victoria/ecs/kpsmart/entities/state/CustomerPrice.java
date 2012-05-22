@@ -6,6 +6,8 @@ import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -18,11 +20,14 @@ import org.hibernate.annotations.CascadeType;
 public final class CustomerPrice extends StorageEntity implements Serializable, Price {
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private long uniqueLongID;
+	
 	@Cascade(CascadeType.ALL)
 	@OneToOne
 	private CustomerPriceID uid;
 	
-	@Id
 	private CustomerPricePK primaryKey = new CustomerPricePK();
 	
 	private float pricePerUnitWeight;
@@ -270,5 +275,13 @@ public final class CustomerPrice extends StorageEntity implements Serializable, 
 		return "CustomerPrice [uid=" + uid + ", primaryKey=" + primaryKey
 				+ ", pricePerUnitWeight=" + pricePerUnitWeight
 				+ ", pricePerUnitVolume=" + pricePerUnitVolume + "]";
+	}
+
+	public long getUniqueLongID() {
+		return uniqueLongID;
+	}
+
+	public void setUniqueLongID(long uniqueLongID) {
+		this.uniqueLongID = uniqueLongID;
 	}
 }

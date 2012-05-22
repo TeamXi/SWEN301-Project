@@ -37,7 +37,7 @@ public class CustomerPriceActionBeanTest extends StripesActionBeanTest {
 		
 		assertContains("\"status\":true", trip.getResponse().getOutputString());
 		
-		CustomerPrice expected = new CustomerPrice(new Location("rome", 1, 1, true), Direction.From, Priority.International_Air);
+		CustomerPrice expected = new CustomerPrice(new Location("rome", 1, 1, true), Direction.To, Priority.International_Air);
 		expected.setPricePerUnitVolume(1);
 		expected.setPricePerUnitWeight(1);
 		

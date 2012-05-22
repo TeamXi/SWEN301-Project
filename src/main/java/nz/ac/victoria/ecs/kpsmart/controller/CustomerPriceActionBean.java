@@ -68,7 +68,7 @@ public class CustomerPriceActionBean extends FormActionBean {
 		if(exist == null) {
 			CustomerPrice price = new CustomerPrice(
 					getState().getLocationForName(location), 
-					direction.flip(), 
+					direction, 
 					priority);
 			price.setPricePerUnitVolume(volumePrice);
 			price.setPricePerUnitWeight(weightPrice);
