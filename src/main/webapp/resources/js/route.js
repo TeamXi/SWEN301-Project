@@ -232,11 +232,10 @@ KPS.event.location = KPS.event.location || {};
 				var selectChangeFunc = function() {
 					var location = results[select.value];
 					map.setCenter(location.geometry.location);
-					KPS.util.map.clearMarkers(map);
-					KPS.util.map.addMarker(map, new google.maps.Marker({
-						map: map, 
+					KPS.util.map.removeMarkers(map);
+					KPS.util.map.addMarker(map, {
 						position: location.geometry.location
-					}));
+					});
 				};
 				$(select).empty().unbind().change(selectChangeFunc);
 				for(var n=0;n<results.length;n++) {
