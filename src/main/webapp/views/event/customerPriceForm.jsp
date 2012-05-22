@@ -7,17 +7,26 @@
 		<div class="control-group">
 			<stripes:label for="location" class="control-label">Route</stripes:label>
 			<div class="controls">
-				<span id="tonewzealanddirectiontext">New Zealand to&nbsp;</span><stripes:text
-					class="portEntry"
-					name="location"
-					value="${actionBean.location}"
-					disabled="${actionBean.disabledFormFields['location']}"
-					style="width: 140px" /><span
-					id="tofromswitchbutton">&nbsp;<span
-					class="btn"
-					${actionBean.disabledFormFields['direction']?'disabled':'onclick="KPS.event.customerprice.flipNewToFrom();"'}><i
-					class="icon-random"></i> Switch</span></span>
-					<p class="help-block"></p>
+				<c:choose>
+					<c:when
+						test="${actionBean.direction=='From'}"><stripes:text
+							class="portEntry"
+							name="location"
+							value="${actionBean.location}"
+							disabled="${actionBean.disabledFormFields['location']}"
+							style="width: 140px" /><span
+							id="tonewzealanddirectiontext">&nbsp; to New Zealand</span></c:when><c:otherwise><span
+							id="tonewzealanddirectiontext">New Zealand to&nbsp;</span><stripes:text
+							class="portEntry"
+							name="location"
+							value="${actionBean.location}"
+							disabled="${actionBean.disabledFormFields['location']}"
+							style="width: 140px" /></c:otherwise></c:choose><span
+						id="tofromswitchbutton">&nbsp;<span
+						class="btn"
+						${actionBean.disabledFormFields['direction']?'disabled':'onclick="KPS.event.customerprice.flipNewToFrom();"'}><i
+						class="icon-random"></i> Switch</span></span>
+						<p class="help-block"></p>
 			</div>
 		</div>
 		
