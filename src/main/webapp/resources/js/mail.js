@@ -90,7 +90,7 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 				KPS.modal.carrousel.show(1);
 				
 				// Set up the map & route summary
-				map = setUpMap();
+				var map = setUpMap();
 				KPS.util.map.removePolylines(map);	
 				KPS.util.map.removeMarkers(map);
 				applyRoutesOverlay(map, returnObj.data.summary.route);
