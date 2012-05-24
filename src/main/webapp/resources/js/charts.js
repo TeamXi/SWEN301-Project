@@ -140,10 +140,14 @@ KPS.graphs = KPS.graphs || {};
 	
 
 	/**
-	 * Gets current finance data as an options object in an acceptable format for HighCharts
+	 * Loop over a timestamped dataset in daily increments
+	 * 
+	 * @param data the array of timestapmed objects to loop over, each object must have .timestamp property
+	 * @param push a function that is called with a summary for each day, must have the form function(startDate, eventCountForDay, lastEvent)
+	 * 			Note that last event may be last event seen, not last event on a day (eg if a day has no events)
 	 */
 	function loopOverEventsByTime(data, push) {
-
+		// Spacing of x values on graph
 		var interval = duration_one_day;
 		
 		var lastEvent = {};
@@ -155,14 +159,14 @@ KPS.graphs = KPS.graphs || {};
 
 			eventIdx++;
 			
+			// Get start and end of first time interval
 			var start = getDay(new Date(event.timestamp));
 			var end = new Date(start.getTime()+interval);
 			
-			/**
-			 * Loop through and store each revenue/expenditure event as a 'category' for the chart.
-			 */
+			// Loop through and store all time intervals between first and last event as a 'category' for the chart.
 			while(event) {
 				var count = 0;
+				// While there are events for the current day
 				while(event && event.timestamp < end.getTime()) {
 					lastEvent = event;
 					
@@ -172,14 +176,18 @@ KPS.graphs = KPS.graphs || {};
 					count++;
 				}
 				
+				// Push the day
 				push(start, count, lastEvent);
 				
+				// If there are still events
 				if(event) {
+					// Push empty days until next day which has events on it
 					while(true) {
 						start = new Date(start.getTime()+interval);
 						end = new Date(start.getTime()+interval);
 						
 						if(event.timestamp > end.getTime()) {
+							// Push the day
 							push(start, 0, lastEvent);
 						}
 						else {
@@ -188,13 +196,15 @@ KPS.graphs = KPS.graphs || {};
 					}
 				}
 			}
-						
+			
 			var now = getDay(new Date());
 			
+			// Add empty days until current date
 			while(start < now) {
 				start = new Date(start.getTime()+interval);
 				end = new Date(start.getTime()+interval);
 				
+				// Push the day
 				push(start, 0, lastEvent);
 			}
 		}
@@ -205,6 +215,7 @@ KPS.graphs = KPS.graphs || {};
 		var expenditure = [];
 		var categories = [];
 		
+		// Loop over the revenue/expenditure data, storing dayily summaries
 		loopOverEventsByTime(KPS.graphs.revenueexpenditure, function(date, count, lastEvent) {
 			categories.push(date);
 			revenue.push(lastEvent.revenue);
@@ -222,6 +233,7 @@ KPS.graphs = KPS.graphs || {};
 		var cats = [];
 		var eventCounts = [];
 		
+		// Loop over the events data, storing counts
 		loopOverEventsByTime(KPS.graphs.events, function(date, count, lastEvent) {
 			cats.push(date);
 			eventCounts.push(count);
