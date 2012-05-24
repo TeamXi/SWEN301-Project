@@ -1,10 +1,11 @@
 KPS.graphs = KPS.graphs || {};
 KPS.graphs.monthly = KPS.graphs.monthly || {};
 
-
+//KPS.graphs.monthly.
 (function(cls, $, undefined) {
 	var chart;
 	
+	/** Gets a default options set for the monthly charts of graph type 'Column' **/
 	function getOptions(container) {
 		return {
 			chart: {
@@ -43,10 +44,12 @@ KPS.graphs.monthly = KPS.graphs.monthly || {};
 		};
 	}
 	
+	/** Refreshes the monthly charts**/
 	cls.refresh = function(){
+		
 		var container = document.getElementById('monthly-chart');
 		var html = document.getElementById('monthly-overview-table');
-		
+		/** If charts elements exist.. populate the chart options with data.**/
 		if(container && html) {
 			var chartOpts = getOptions(container);
 			var revIndex = -1;
