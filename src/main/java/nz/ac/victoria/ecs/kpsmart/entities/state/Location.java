@@ -85,11 +85,7 @@ public final class Location extends StorageEntity implements Serializable {
 	}
 	
 	Location() {}
-	public Location(final String name, final double latitude, final double longitude, final boolean international) {
-		assert (latitude <= -180) || (latitude >= 180);
-		assert (longitude <= -180) || (longitude >= 180);
-		assert (name == null) || (name.equals(""));
-		
+	public Location(final String name, final double latitude, final double longitude, final boolean international) {		
 		this.name = name;
 		this.primaryKey.latitude = latitude;
 		this.primaryKey.longitude = longitude;
