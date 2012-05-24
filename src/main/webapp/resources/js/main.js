@@ -84,8 +84,9 @@ $(document).ready(function() {
 	 */
 	cls.showLoadingBar = function(text){
 		$loadingBar = $(".loadingOverlay");
-		$loadingBar.css('right',"10%");
-		$loadingBar.css('height',"40px");
+		if(Modernizr.touch) {
+			$loadingBar.removeClass('active');
+		}
 		$("#loadingMessage").html(text);
 		$loadingBar.parent('#loadingMask').fadeIn(500);
 	};

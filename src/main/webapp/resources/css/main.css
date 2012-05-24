@@ -181,8 +181,8 @@ tr:hover .row-hover-controls {
 .loadingOverlay{
 	top: 20%;
 	left: 10%;
-	right: 90%;
-	height: 0px;
+	right: 10%;
+	height: 40px;
 	position: fixed;
 	border-radius: 5px;
 	box-shadow: 0px 0px 255px 255px rgba(0,0,0,0.3);

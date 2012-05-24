@@ -103,7 +103,7 @@
 			<div class="container content">
 				<stripes:layout-component name="content" />
 			</div>
-			<div id="loadingMask">​
+			<div id="loadingMask" style="display:none">​
 				<p id="loadingMessage">
 					Loading. Please be patient..
 				</p>
