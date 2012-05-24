@@ -187,6 +187,8 @@ KPS.event.maildelivery = KPS.event.maildelivery || {};
 		$(".new-mail-delivery-link").each(function (index, child) {
 			$(child).click(function () {
 				KPS.modal.load(KPS.siteRoot+"/event/mail", function(){
+					summaryMap = null;
+					
 					KPS.data.locations.load(function () {
 						KPS.data.locations.setupPortEntryTypeahead(function (child) {
 							$(child).blur(function () { // TODO: only if child of form
