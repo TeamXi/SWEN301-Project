@@ -20,6 +20,7 @@
 						<div class="hero-unit no-background-color">
 							<h1>Welcome to KPSmart</h1>
 							<p>Please sign in above to begin delivering mail!</p>
+							<small class="copyright">&copy; 2012 Team ξ - Ashleigh Cains, Daniel Hodder, Melby Ruarus, Shreya Patel and Wouter Coppieters.</small>
 						</div>
 					</div>
 				</div>

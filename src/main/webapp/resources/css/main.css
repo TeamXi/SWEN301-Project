@@ -191,3 +191,7 @@ tr:hover .row-hover-controls {
 .none {
 	display: none;
 }
+
+.copyright {
+	color: #bbb;
+}
