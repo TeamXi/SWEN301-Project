@@ -282,7 +282,7 @@ $(document).ready(function() {
 		KPS.util.showLoadingBar("Signing out...");
 		$.post(KPS.siteRoot+"/login?out", function(data) {
 			KPS.util.hideLoadingBar();
-			KPS.util.redirect(KPS.siteRoot);
+			KPS.util.redirect(KPS.siteRoot || "/");
 		});
 	};
 }(KPS.util.user,jQuery));
