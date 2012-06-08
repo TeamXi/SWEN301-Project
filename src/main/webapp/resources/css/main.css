@@ -1,0 +1,197 @@
+@CHARSET "US-ASCII";
+
+.clearfix {
+	clear: both;
+}
+
+.content {
+	padding-top: 90px;
+}
+
+input.validate-error, textarea.validate-error, select.validate-error {
+  border-color: #e9322d;
+  -webkit-box-shadow: 0 0 6px #f8b9b7;
+  -moz-box-shadow: 0 0 6px #f8b9b7;
+  box-shadow: 0 0 6px #f8b9b7;
+}
+.smoothEdge{
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	-webkit-border-radius: 15px;
+}
+.shadow{
+	box-shadow: 2px 2px 4px 4px rgba(0,0,0,0.3);
+	-moz-box-shadow: 2px 2px 4px 4px rgba(0,0,0,0.3);
+	-webkit-box-shadow: 2px 2px 4px 4px rgba(0,0,0,0.3);
+}
+
+.switch-container > *{
+	display: none;
+}
+
+tr .row-hover-controls {
+	float: right;
+	opacity: 0; /* Overridden in touch.css */
+	cursor: pointer;
+}
+
+tr:hover .row-hover-controls {
+	opacity: 1;
+}
+
+.alertSpacer {
+	height: 40px;
+	margin: -15px 0px 10px 0px;
+}
+
+.modal-map {
+	height: 300px;
+	width: 100%;
+}
+#globalMap{
+	height: 700px;
+	width: 900px;
+}
+
+.color-red {
+	color: #B94A48;
+}
+
+.color-green {
+	color: #468847;
+}
+
+.popover-inner {
+	width: auto;
+}
+
+.kps-popover-content {
+	padding: 9px 15px;
+	line-height: 1;
+	background-color: #f5f5f5;
+	border-bottom: 1px solid #eee;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.location-name-hover-map-image {
+	width: 250px;
+	height: 250px;
+}
+
+.hover-icon-white:hover [class^="icon-"], .icon-hover-white:hover [class*=" icon-"] {
+ 	background-image: url("../img/glyphicons-halflings-white.png");
+ }
+
+ 
+.add-button {
+	float: right;
+}
+
+.no-background-color {
+	background-color: transparent;
+}
+
+#critical-routes-hover-map {
+	width: 400px;
+	height: 250px;
+}
+
+/**
+ * From bootstrap docs
+ */
+ 
+.jumbotron p {
+	margin-bottom: 18px;
+	font-weight: 300;
+}
+
+.jumbotron h1 {
+	margin-bottom: 9px;
+	font-size: 81px;
+	font-weight: bold;
+	letter-spacing: -1px;
+	line-height: 1;
+}
+
+.subhead h1 {
+	font-size: 54px;
+}
+
+
+/*
+ *Carrousel
+ */
+.modal-body {
+	overflow-x: hidden;
+	padding: 15px;
+}
+
+.kps-carrousel > .kps-carrousel-body {
+	width: 1000000px;
+}
+
+.kps-carrousel.clip {
+	overflow: hidden;
+}
+
+.kps-carrousel > .kps-carrousel-body > div {
+	float: left;
+	overflow-y: hidden;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+#printButton, #exportButton{
+	display: none;
+}
+#profitsChart{
+	width: 45%;
+	float: left;
+	min-width: 250px;
+}
+#expensesChart{
+	width: 45%;
+	float: right;
+	height: auto;
+	min-width: 250px;
+}
+
+#financesTimeChart, #eventsTimeChart{
+	width: 100%;
+	float: left;
+	height: auto;
+	min-width: 250px;
+}
+#loadingMask{
+ 	background-image:url('../img/black-trans-bg.png');
+	position: fixed;
+	top:0; left:0; right:0; bottom: 0;	
+	display: none;
+}
+#loadingMessage{
+	top: 15%;
+	height: 20px;
+	width: 100%;
+	text-align: center;
+	color: white;
+	position: fixed;
+}
+.loadingOverlay{
+	top: 20%;
+	left: 10%;
+	right: 10%;
+	height: 40px;
+	position: fixed;
+	border-radius: 5px;
+	box-shadow: 0px 0px 255px 255px rgba(0,0,0,0.3);
+}
+
+.none {
+	display: none;
+}
+
+.copyright {
+	color: #bbb;
+}
