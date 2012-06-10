@@ -26,10 +26,10 @@ public final class DijkstraRouteFinder implements RouteFinder {
 	private State state;
 	
 	@Override
-	public List<Route> calculateRoute(Priority priority, Location startPoint, Location endPoint, float weight, float volume) {
-		GraphNode start = this.buildGraph(priority, startPoint);
+	public List<Route> calculateRoute(final Priority priority, final Location startPoint, final Location endPoint, final float weight, final float volume) {
+		final GraphNode start = buildGraph(priority, startPoint, weight, volume);
 		GraphNode goal = null;
-		PriorityQueue<SearchNode> fringe = new PriorityQueue<DijkstraRouteFinder.SearchNode>();
+		final PriorityQueue<SearchNode> fringe = new PriorityQueue<DijkstraRouteFinder.SearchNode>();
 		fringe.add(new SearchNode(null, start, new Weight(0, 0)));
 			
 		for (SearchNode current = fringe.poll(); current != null; current = fringe.poll()) {
@@ -47,15 +47,15 @@ public final class DijkstraRouteFinder implements RouteFinder {
 			current.to.pathTo = current.from;
 			current.to.pathLength = current.costSoFar;
 			
-			for (GraphEdge edge : current.to.edges) {
-				GraphNode neighber = edge.to;
+			for (final GraphEdge edge : current.to.edges) {
+				final GraphNode neighber = edge.to;
 				
 				if (!neighber.visited)
 					fringe.offer(new SearchNode(current.to, neighber, current.costSoFar.add(edge.weight)));
 			}
 		}
 		
-		List<GraphNode> path = new LinkedList<DijkstraRouteFinder.GraphNode>();
+		final List<GraphNode> path = new LinkedList<DijkstraRouteFinder.GraphNode>();
 		
 		for (GraphNode current = goal; current != null; current = current.pathTo)
 			path.add(current);
@@ -66,17 +66,17 @@ public final class DijkstraRouteFinder implements RouteFinder {
 		
 		Collections.reverse(path);
 		
-		List<Route> routes = new ArrayList<Route>(path.size()-1);
+		final List<Route> routes = new ArrayList<Route>(path.size()-1);
 		
 		for (int i=0; i<path.size()-1; i++) {
 			routes.add(Collections.min(
 					this.state.getRoutesBetween(path.get(i).currentLocation, path.get(i+1).currentLocation, priority),
 					new Comparator<Route>() {
 						@Override
-						public int compare(Route o1, Route o2) {
+						public int compare(final Route o1, final Route o2) {
 							return Double.compare(
-									Math.min(o1.getCarrierVolumeUnitCost(), o1.getCarrierWeightUnitCost()), 
-									Math.min(o2.getCarrierVolumeUnitCost(), o2.getCarrierWeightUnitCost())
+									o1.getCost(weight, volume), 
+									o2.getCost(weight, volume)
 							);
 						}
 					}
@@ -92,21 +92,23 @@ public final class DijkstraRouteFinder implements RouteFinder {
 	 * 
 	 * @param p	The priority to use
 	 * @param startPoint	The point to start at
+	 * @param weight	The weight of the package
+	 * @param volume	The volume of the package
 	 * @return
 	 */
-	private GraphNode buildGraph(Priority p, Location startPoint) {
+	private GraphNode buildGraph(final Priority p, final Location startPoint, final float weight, final float volume) {
 		// Create the nodes of the graph
-		Map<Location, GraphNode> nodes = new HashMap<Location, DijkstraRouteFinder.GraphNode>();
-		for (Location l : this.state.getAllLocations())
+		final Map<Location, GraphNode> nodes = new HashMap<Location, DijkstraRouteFinder.GraphNode>();
+		for (final Location l : this.state.getAllLocations())
 			// Create the node for this location
 			nodes.put(l, new GraphNode(l));
 		
 		// Create the edges
-		Map<Route, GraphEdge> edges = new HashMap<Route, DijkstraRouteFinder.GraphEdge>();
-		for (Route r : this.state.getAllRoutesForPriority(p)) {
+		final Map<Route, GraphEdge> edges = new HashMap<Route, DijkstraRouteFinder.GraphEdge>();
+		for (final Route r : this.state.getAllRoutesForPriority(p)) {
 			// Create the edge for this route
-			GraphEdge edge = new GraphEdge(
-					new Weight(r.getCarrierVolumeUnitCost(), r.getCarrierWeightUnitCost()), 
+			final GraphEdge edge = new GraphEdge(
+					new Weight(r.getCarrierVolumeUnitCost() * volume, r.getCarrierWeightUnitCost() * weight), 
 					nodes.get(r.getStartPoint()), 
 					nodes.get(r.getEndPoint()),
 					r
@@ -139,7 +141,7 @@ public final class DijkstraRouteFinder implements RouteFinder {
 		}
 
 		@Override
-		public int compareTo(SearchNode o) {
+		public int compareTo(final SearchNode o) {
 			return this.costSoFar.compareTo(o.costSoFar);
 		}
 	}
@@ -182,22 +184,22 @@ public final class DijkstraRouteFinder implements RouteFinder {
 		
 		public final double weightCost;
 		
-		public Weight(double volumeCost, double weightCost) {
+		public Weight(final double volumeCost, final double weightCost) {
 			this.volumeCost = volumeCost;
 			this.weightCost = weightCost;
 		}
 
-		public static Weight add(Weight w1, Weight w2) {
+		public static Weight add(final Weight w1, final Weight w2) {
 			return new Weight(w1.volumeCost+w2.volumeCost, w1.weightCost+w2.weightCost);
 		}
 		
-		public Weight add(Weight w) {
+		public Weight add(final Weight w) {
 			return add(this, w);
 		}
 
 		@Override
-		public int compareTo(Weight o) {
-			return Double.compare(Math.min(this.volumeCost, this.weightCost), Math.min(o.volumeCost, o.weightCost));
+		public int compareTo(final Weight o) {
+			return Double.compare(this.volumeCost + this.weightCost, o.volumeCost + o.weightCost);
 		}
 	}
 	
